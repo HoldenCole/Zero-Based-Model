@@ -1,0 +1,15 @@
+Model Instructions
+
+____________________________
+
+
+
+Building a model for naphtha that shows each refinery per pad in the United States to start and then expanding to Europe and Asian pacific. For example, we would be able to see every refinery and pad three which would include every unit it’s capacity utilization rates how much naphtha comes from each unit and yields. And then using the refinery outage information with the turnaround schedule and scenario analysis forecast for unplanned outages, but looking at planned first, we would look at future balance per pad and per region. Each refinery has its own box that shows the detailed information about it mentioned above. All the NAPA that usually comes off each unit, then gets adds up, which then shows you about the naphtha balance at risk.
+
+
+
+It is called a zero based model. Start with pad three and then expand from there. Know about the flows between NASA even when companies use it for themselves so we know who to go to and how to trade. Be able to fold together the market Intel outages and ship tracking information. As soon as an outage happens, it immediately goes into the model and we can look for the marginal barrel. We want to know how does this refinery think about margins. Put together the market Intel about how “x refinery is down and has to do this which means this” how does that affect the marginal barrel and make money. Lots of places to adjust the model manually so when an outage happens or on an import export happens. So we will have general assumptions that is going across the board per pad and then as we get more information we can go in there and manually update it.C the general assumptions will be for everything from yield to how much Naphtha that comes off each unit and how the outage would impact the balance for the US. 
+
+
+
+Start with building the foundation of how the model should look and I will send a sheet that shows the refinery capacity for the US. I have also attached a picture that shows how the box is and what I mean by each refinery having its own box.
