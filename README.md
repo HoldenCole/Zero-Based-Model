@@ -108,10 +108,44 @@ python -m naphtha_model boxes --padd 3            # all boxes in a PADD
 python -m naphtha_model balance --padd 3          # forward weekly PADD balance
 python -m naphtha_model risk --padd 3             # balance at risk from outages
 python -m naphtha_model scenario data/scenarios/example_scenario.yaml
-python -m naphtha_model export --out naphtha_model.xlsx   # Excel workbook
+python -m naphtha_model export --out naphtha_model.xlsx   # THE desk workbook
+python -m naphtha_model export --dump --out flat.xlsx     # flat value dump
 
 pytest                                            # run the test suite
 ```
+
+## The desk workbook (primary output)
+
+`export` builds a **live, formula-driven Excel model** — not a value dump.
+Once generated, the desk drives it entirely inside Excel; Python only
+regenerates it when the underlying data/ files change.
+
+- **Boxes** — every refinery's whiteboard box: unit rows with capacity
+  (blue input), utilization and per-cut yields (grey formulas that read the
+  Assumptions tab), orange **manual override** cells that beat the
+  assumptions (clear the cell to revert), and a forward weekly net-naphtha
+  strip that prorates outages by overlap days automatically.
+- **Assumptions** — per-PADD utilization and yield matrices (blue inputs).
+  Edit a yield and every box, balance and chart moves.
+- **Outages** — one table for planned / unplanned / scenario rows. Add a row
+  the moment an outage hits; the weekly strips and balance update instantly.
+  `category = scenario` rows only count when the **scenario toggle**
+  (Model!B5) is YES — flip it to layer the what-if on and off.
+- **Flows** — ship-tracking cargo table (imports/exports/transfers, vessel,
+  counterparty). Cargoes hit the balance in the week of their date; scenario
+  cargoes obey the same toggle.
+- **Balance** — per-PADD weekly supply / flows / demand / balance / at-risk,
+  all SUMIFS over the input tabs.
+- **Dashboard** — live charts: supply forecast (base vs outage-adjusted vs
+  demand), balance, supply-at-risk bars, cargo-flow bars, and per-refinery
+  forecast lines. They move when any input or the scenario toggle changes.
+- **Checks** — 11 automated data-quality checks (dangling IDs, impossible
+  yields/utilizations/dates, invalid flows, negative supply) with PASS/FAIL
+  status and an overall ALL CHECKS PASS cell.
+
+The Excel formulas are verified in the test suite by recalculating the
+workbook headlessly (LibreOffice) and comparing every balance number against
+the Python engine.
 
 All commands accept `--start YYYY-MM-DD` and `--weeks N` to move the forward
 window.
@@ -119,7 +153,9 @@ window.
 ## Status / roadmap
 
 - [x] Foundation: schema, assumption hierarchy, engine, balances, boxes,
-      scenarios, CLI, tests (this commit)
+      scenarios, CLI, tests
+- [x] Desk workbook: live formula-driven Excel model with charts, scenario
+      toggle, manual overrides, and data checks
 - [ ] Load the real US refinery capacity sheet (replaces placeholder rows in
       `data/reference/`) — see `docs/data_intake.md` for the expected columns
 - [ ] Populate the PADD 3 turnaround schedule

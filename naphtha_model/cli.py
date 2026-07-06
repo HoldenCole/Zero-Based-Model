@@ -47,8 +47,12 @@ def main(argv: list[str] | None = None) -> int:
     p_scn = sub.add_parser("scenario", help="run a scenario YAML against the base case")
     p_scn.add_argument("path")
 
-    p_exp = sub.add_parser("export", help="export the model to an Excel workbook")
+    p_exp = sub.add_parser("export", help="build the live desk Excel workbook")
     p_exp.add_argument("--out", default="naphtha_model.xlsx")
+    p_exp.add_argument(
+        "--dump", action="store_true",
+        help="flat value dump instead of the formula-driven desk workbook",
+    )
 
     args = parser.parse_args(argv)
     data = load_all()
@@ -105,8 +109,20 @@ def main(argv: list[str] | None = None) -> int:
             print()
 
     elif args.command == "export":
-        balances = us_balance(data.refineries, axis, data.book, data.outages, data.flows, data.demand)
-        path = export_workbook(data, axis, balances, Path(args.out))
+        if args.dump:
+            balances = us_balance(
+                data.refineries, axis, data.book, data.outages, data.flows, data.demand
+            )
+            path = export_workbook(data, axis, balances, Path(args.out))
+        else:
+            from .config import DATA_DIR
+            from .workbook import build_desk_workbook
+
+            scenario_dir = DATA_DIR / "scenarios"
+            scenarios = [
+                load_scenario(p) for p in sorted(scenario_dir.glob("*.yaml"))
+            ] if scenario_dir.exists() else []
+            path = build_desk_workbook(data, axis, Path(args.out), scenarios=scenarios)
         print(f"wrote {path}")
 
     return 0
