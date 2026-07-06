@@ -1,0 +1,2 @@
+outage_id,refinery_id,unit_id,start,end,offline_pct,outage_type,source,confidence,notes
+TAR-2026-001,MOTIVA_PAR,FCC-1,2026-07-13,2026-08-07,100,planned,turnaround schedule,high,EXAMPLE planned FCC turnaround - replace with real TAR schedule

@@ -1,0 +1,4 @@
+refinery_id,name,owner,city,state,padd,region,crude_capacity_kbd,status,notes
+MOTIVA_PAR,Motiva Port Arthur,Saudi Aramco,Port Arthur,TX,3,US,626,operating,PLACEHOLDER row - replace with capacity sheet
+XOM_BAYTOWN,ExxonMobil Baytown,ExxonMobil,Baytown,TX,3,US,588,operating,PLACEHOLDER row - replace with capacity sheet
+MPC_GALV_BAY,Galveston Bay Refinery,Marathon Petroleum,Texas City,TX,3,US,631,operating,PLACEHOLDER row - replace with capacity sheet

@@ -1,0 +1,2 @@
+outage_id,refinery_id,unit_id,start,end,offline_pct,outage_type,source,confidence,notes
+UNP-2026-001,XOM_BAYTOWN,CDU-2,2026-07-08,2026-07-15,50,unplanned,market intel,medium,EXAMPLE unplanned rate cut - add live outages here the moment they hit

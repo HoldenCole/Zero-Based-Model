@@ -1,0 +1,24 @@
+# Global (across-the-board) assumptions — the bottom of the hierarchy.
+# Resolution order everywhere in the model:
+#   manual override (data/overrides) > PADD default (padd_overrides.yaml) > this file.
+#
+# ALL NUMBERS BELOW ARE ILLUSTRATIVE PLACEHOLDERS to be replaced with desk
+# assumptions. Yields are fractions of unit THROUGHPUT, signed:
+#   positive = the unit makes naphtha, negative = the unit consumes it
+#   (reformer feed is heavy naphtha, isom feed is light naphtha).
+
+cuts: [LVN, HVN]        # light / heavy virgin naphtha; add cuts here as needed
+
+utilization:
+  default: 0.90         # fraction of nameplate run when nothing is wrong
+
+yields:
+  CDU:          {LVN: 0.05, HVN: 0.13}   # straight-run naphtha off crude
+  VDU:          {LVN: 0.00, HVN: 0.01}   # small naphtha slip
+  FCC:          {LVN: 0.02, HVN: 0.04}   # cat naphtha routed to the naphtha pool
+  COKER:        {LVN: 0.02, HVN: 0.08}   # coker naphtha
+  HYDROCRACKER: {LVN: 0.05, HVN: 0.15}   # HC naphtha
+  SPLITTER:     {LVN: 0.25, HVN: 0.35}   # condensate splitter
+  REFORMER:     {LVN: 0.00, HVN: -1.00}  # eats heavy naphtha 1:1 as feed
+  ISOM:         {LVN: -1.00, HVN: 0.00}  # eats light naphtha 1:1 as feed
+  ALKY:         {LVN: 0.00, HVN: 0.00}   # no naphtha make; kept for the box

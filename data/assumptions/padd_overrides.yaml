@@ -1,0 +1,13 @@
+# Per-PADD assumption overrides. Anything set here beats global.yaml;
+# anything NOT set here falls through to global.yaml.
+# PLACEHOLDER numbers — replace with desk views per PADD.
+
+3:                      # Gulf Coast — start here
+  utilization: 0.93
+  yields:
+    CDU: {LVN: 0.055, HVN: 0.135}   # lighter USGC slates run a touch more naphtha
+
+# 1: {utilization: 0.88}
+# 2: {utilization: 0.91}
+# 4: {}
+# 5: {}
