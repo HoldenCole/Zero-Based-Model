@@ -1001,7 +1001,228 @@ class DeskWorkbook:
         ws.column_dimensions["A"].width = 90
 
 
+class SimpleWorkbook(DeskWorkbook):
+    """The pared-down three-sheet model: Boxes, Assumptions, Data.
+
+    - Boxes: one box per refinery; net naphtha = capacity x utilization x
+      signed yields, live against the Assumptions sheet. No forward strip,
+      no outage math — that stays in the Python engine for now.
+    - Assumptions: per-PADD utilization/yield inputs plus the yield-mode
+      cut split.
+    - Data: the imported registry + 2024 yields. Typing a crude capacity
+      here lights up that refinery's box (yield-mode rows read it live).
+    """
+
+    def build(self, out_path: Path) -> Path:
+        self._sheet_assumptions()
+        self._simple_share_block()
+        self._sheet_data()
+        self._simple_boxes()
+        if "Sheet" in self.wb.sheetnames:
+            del self.wb["Sheet"]
+        self.wb._sheets = [self.wb[n] for n in ("Boxes", "Assumptions", "Data")]
+        out_path = Path(out_path)
+        self.wb.save(out_path)
+        return out_path
+
+    def _simple_share_block(self) -> None:
+        """Yield-mode cut split inputs, placed right of the lookup tables."""
+        ws = self.wb["Assumptions"]
+        ws["A1"] = (
+            "Assumptions — blue cells are inputs. Yields are % of unit throughput; "
+            "consumers (reformer/isom) are NEGATIVE. Edits flow straight into the Boxes sheet."
+        )
+        col = 6 + len(self.cuts) + 10
+        _hdr(ws, 3, col, "Yield-mode cut split")
+        _hdr(ws, 3, col + 1, "share")
+        shares = (self.book.global_cfg.get("yield_mode") or {}).get("cut_shares") or {}
+        self.share_refs: dict[str, str] = {}
+        for i, cut in enumerate(self.cuts):
+            row = 4 + i
+            ws.cell(row=row, column=col, value=cut).font = FONT_SMALL
+            cell = ws.cell(row=row, column=col + 1, value=float(shares.get(cut, 0.0)))
+            _style(cell, fill=FILL_INPUT, fmt="0%")
+            self.share_refs[cut] = f"Assumptions!${get_column_letter(col + 1)}${row}"
+        note = ws.cell(row=4 + len(self.cuts) + 1, column=col,
+                       value="how a yield-mode refinery's 2024 net yield splits across cuts")
+        note.font = FONT_SMALL
+
+    def _sheet_data(self) -> None:
+        from .loaders import load_yields_2024
+
+        ws = self.wb.create_sheet("Data")
+        _banner(
+            ws, 1,
+            "Imported data — refinery registry + 2024 net yields (% of crude). "
+            "Type a crude capacity (blue) and that refinery's box lights up. "
+            "Re-import: python -m naphtha_model ingest-yields <file>",
+            15,
+        )
+        headers = ["refinery_id", "name", "owner", "padd", "state", "city",
+                   "crude_capacity_kbd", "status", "gasoil_diesel", "gasoline",
+                   "hfo", "kero_jet", "lpg", "naphtha", "total"]
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, 2, c, h)
+        yields = load_yields_2024()
+        y_keys = ["gasoil_diesel_pct", "gasoline_pct", "hfo_pct", "kero_jet_pct",
+                  "lpg_pct", "naphtha_pct", "total_pct"]
+        r = 3
+        for ref in sorted(self.data.refineries,
+                          key=lambda x: (x.padd, -x.crude_capacity_kbd, x.name)):
+            y = yields.get(ref.refinery_id, {})
+            _style(ws.cell(row=r, column=1, value=ref.refinery_id))
+            _style(ws.cell(row=r, column=2, value=ref.name))
+            _style(ws.cell(row=r, column=3, value=ref.owner))
+            _style(ws.cell(row=r, column=4, value=ref.padd))
+            _style(ws.cell(row=r, column=5, value=ref.state))
+            _style(ws.cell(row=r, column=6, value=ref.city))
+            _style(ws.cell(row=r, column=7, value=ref.crude_capacity_kbd),
+                   fill=FILL_INPUT, fmt="0")
+            _style(ws.cell(row=r, column=8, value=ref.status))
+            for j, key in enumerate(y_keys):
+                v = y.get(key)
+                _style(ws.cell(row=r, column=9 + j,
+                               value=float(v) / 100.0 if v not in (None, "") else None),
+                       fmt="0.00%")
+            r += 1
+        self.data_last_row = r - 1
+        widths = [22, 30, 30, 6, 13, 15, 10, 9, 12, 9, 8, 9, 8, 9, 8]
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = "A3"
+
+    def _simple_boxes(self) -> None:
+        ws = self.wb.create_sheet("Boxes")
+        last_col = self.c_base
+        _banner(
+            ws, 1,
+            "Refinery boxes — net naphtha = capacity x utilization x signed yields. "
+            "Blue = input, orange = manual override (clear to fall back to the "
+            "Assumptions sheet), grey = formula. Yield-mode rows read the Data sheet.",
+            last_col,
+        )
+        labels = {
+            self.c_type: "row", self.c_rid: "refinery_id", self.c_padd: "padd",
+            self.c_uid: "unit", self.c_utype: "type", self.c_cap: "cap kbd",
+            self.c_utilov: "util ovr", self.c_util: "util",
+            self.c_ysum: "Σ yield", self.c_base: "net naphtha kbd",
+        }
+        for i, cut in enumerate(self.cuts):
+            labels[self._cut_ovr_col(i)] = f"{cut} ovr"
+            labels[self._cut_yld_col(i)] = f"{cut} yield"
+        for col, text in labels.items():
+            _hdr(ws, 2, col, text)
+
+        util_val, util_padd = self.assump_refs["util"]
+        y_val, y_padd, y_ut, y_cut = self.assump_refs["yield"]
+        data_id = f"Data!$A$3:$A${self.data_last_row}"
+        data_cap = f"Data!$G$3:$G${self.data_last_row}"
+        data_naph = f"Data!$N$3:$N${self.data_last_row}"
+        day1 = self.axis[0]
+        row = 3
+        for ref in sorted(self.data.refineries,
+                          key=lambda x: (x.padd, -x.crude_capacity_kbd, x.name)):
+            crude = (f"crude {ref.crude_capacity_kbd:,.0f} kbd"
+                     if ref.crude_capacity_kbd else "crude: pending capacity sheet")
+            _banner(ws, row,
+                    f"  {ref.name}  [{ref.refinery_id}]   —   {ref.owner}   —   "
+                    f"PADD {ref.padd}   —   {crude}", last_col)
+            row += 1
+            first_unit = row
+            for unit in ref.units:
+                est = unit.unit_id == "CRUDE-EST"
+                ws.cell(row=row, column=self.c_type, value="UNIT").font = FONT_SMALL
+                _style(ws.cell(row=row, column=self.c_rid, value=ref.refinery_id))
+                _style(ws.cell(row=row, column=self.c_padd, value=ref.padd))
+                _style(ws.cell(row=row, column=self.c_uid, value=unit.unit_id))
+                _style(ws.cell(row=row, column=self.c_utype,
+                               value="est. yield" if est else unit.unit_type))
+                if est:
+                    _style(ws.cell(row=row, column=self.c_cap,
+                                   value=f"=SUMIFS({data_cap},{data_id},$B{row})"),
+                           fill=FILL_CALC, fmt="0")
+                else:
+                    _style(ws.cell(row=row, column=self.c_cap, value=unit.capacity_kbd),
+                           fill=FILL_INPUT, fmt="0")
+
+                ov_util = self.book._find_override(ref, unit, day1, "utilization")
+                _style(ws.cell(row=row, column=self.c_utilov,
+                               value=ov_util.value if ov_util else None),
+                       fill=FILL_OVERRIDE, fmt="0.0%")
+                _style(ws.cell(
+                    row=row, column=self.c_util,
+                    value=(f'=IF($G{row}<>"",$G{row},'
+                           f"SUMIFS({util_val},{util_padd},$C{row}))"),
+                ), fill=FILL_CALC, fmt="0.0%")
+
+                for i, cut in enumerate(self.cuts):
+                    oc = get_column_letter(self._cut_ovr_col(i))
+                    if est:
+                        # 2024 net yield (Data sheet) split by the cut shares
+                        _style(ws.cell(row=row, column=self._cut_ovr_col(i)),
+                               fill=FILL_OVERRIDE, fmt="0.0%")
+                        formula = (
+                            f'=IF(${oc}{row}<>"",${oc}{row},'
+                            f"SUMIFS({data_naph},{data_id},$B{row})"
+                            f"*{self.share_refs[cut]})"
+                        )
+                    else:
+                        ov = self.book._find_override(ref, unit, day1, "yield", cut=cut)
+                        _style(ws.cell(row=row, column=self._cut_ovr_col(i),
+                                       value=ov.value if ov else None),
+                               fill=FILL_OVERRIDE, fmt="0.0%")
+                        formula = (
+                            f'=IF(${oc}{row}<>"",${oc}{row},'
+                            f"SUMIFS({y_val},{y_padd},$C{row},{y_ut},$E{row},"
+                            f'{y_cut},"{cut}"))'
+                        )
+                    _style(ws.cell(row=row, column=self._cut_yld_col(i), value=formula),
+                           fill=FILL_CALC, fmt="0.00%")
+
+                ysum = "+".join(
+                    f"{get_column_letter(self._cut_yld_col(i))}{row}"
+                    for i in range(len(self.cuts))
+                )
+                _style(ws.cell(row=row, column=self.c_ysum, value=f"={ysum}"),
+                       fill=FILL_CALC, fmt="0.00%")
+                cap_l = get_column_letter(self.c_cap)
+                util_l = get_column_letter(self.c_util)
+                ysum_l = get_column_letter(self.c_ysum)
+                _style(ws.cell(row=row, column=self.c_base,
+                               value=f"=${cap_l}{row}*${util_l}{row}*${ysum_l}{row}"),
+                       fill=FILL_CALC, fmt="0.0")
+                row += 1
+
+            ws.cell(row=row, column=self.c_type, value="TOTAL").font = FONT_HDR
+            _style(ws.cell(row=row, column=self.c_rid, value=ref.refinery_id),
+                   fill=FILL_TOTAL, bold=True)
+            _style(ws.cell(row=row, column=self.c_padd, value=ref.padd),
+                   fill=FILL_TOTAL, bold=True)
+            _style(ws.cell(row=row, column=self.c_uid, value="NET NAPHTHA"),
+                   fill=FILL_TOTAL, bold=True)
+            base_l = get_column_letter(self.c_base)
+            _style(ws.cell(row=row, column=self.c_base,
+                           value=f"=SUM({base_l}{first_unit}:{base_l}{row - 1})"),
+                   fill=FILL_TOTAL, fmt="0.0", bold=True)
+            self.refinery_total_rows[ref.refinery_id] = row
+            row += 2
+
+        widths = {1: 7, 2: 22, 3: 5, 4: 12, 5: 12, 6: 8, 7: 8, 8: 7}
+        for i in range(len(self.cuts)):
+            widths[self._cut_ovr_col(i)] = 8
+            widths[self._cut_yld_col(i)] = 9
+        widths[self.c_ysum] = 9
+        widths[self.c_base] = 14
+        for col, w in widths.items():
+            ws.column_dimensions[get_column_letter(col)].width = w
+        ws.freeze_panes = "A3"
+
+
 def build_desk_workbook(
     data: ModelData, axis: list[date], out_path: Path, scenarios=None
 ) -> Path:
     return DeskWorkbook(data, axis, scenarios=scenarios).build(out_path)
+
+
+def build_simple_workbook(data: ModelData, axis: list[date], out_path: Path) -> Path:
+    return SimpleWorkbook(data, axis).build(out_path)

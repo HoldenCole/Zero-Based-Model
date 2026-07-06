@@ -122,6 +122,20 @@ pytest                                            # run the test suite
 Once generated, the desk drives it entirely inside Excel; Python only
 regenerates it when the underlying data/ files change.
 
+**The default is the simple three-sheet model** (current desk preference):
+
+- **Boxes** — one box per refinery: units, capacity, utilization, signed
+  yields, orange manual-override cells, bold net-naphtha total. Yield-mode
+  refineries read their crude capacity and 2024 net yield live from Data.
+- **Assumptions** — per-PADD utilization/yield inputs plus the yield-mode
+  cut split.
+- **Data** — the imported registry + 2024 yields. Type a crude capacity and
+  that refinery's box lights up.
+
+`export --full` builds the extended workbook described below (forward
+weekly strips, PADD balances, outage/scenario machinery, dashboard charts,
+data checks) — same data, more surface:
+
 - **Boxes** — every refinery's whiteboard box: unit rows with capacity
   (blue input), utilization and per-cut yields (grey formulas that read the
   Assumptions tab), orange **manual override** cells that beat the

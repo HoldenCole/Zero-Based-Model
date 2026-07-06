@@ -60,6 +60,11 @@ def main(argv: list[str] | None = None) -> int:
     p_exp = sub.add_parser("export", help="build the live desk Excel workbook")
     p_exp.add_argument("--out", default="naphtha_model.xlsx")
     p_exp.add_argument(
+        "--full", action="store_true",
+        help="full workbook (balance, dashboard, outages, scenario toggle, checks) "
+             "instead of the simple three-sheet model",
+    )
+    p_exp.add_argument(
         "--dump", action="store_true",
         help="flat value dump instead of the formula-driven desk workbook",
     )
@@ -167,7 +172,7 @@ def main(argv: list[str] | None = None) -> int:
                 data.refineries, axis, data.book, data.outages, data.flows, data.demand
             )
             path = export_workbook(data, axis, balances, Path(args.out))
-        else:
+        elif args.full:
             from .config import DATA_DIR
             from .workbook import build_desk_workbook
 
@@ -176,6 +181,10 @@ def main(argv: list[str] | None = None) -> int:
                 load_scenario(p) for p in sorted(scenario_dir.glob("*.yaml"))
             ] if scenario_dir.exists() else []
             path = build_desk_workbook(data, axis, Path(args.out), scenarios=scenarios)
+        else:
+            from .workbook import build_simple_workbook
+
+            path = build_simple_workbook(data, axis, Path(args.out))
         print(f"wrote {path}")
 
     return 0
