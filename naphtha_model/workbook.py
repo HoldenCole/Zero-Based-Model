@@ -64,8 +64,8 @@ BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
 OUT_LO, OUT_HI = 2, 201        # Outages data rows
 FLOW_LO, FLOW_HI = 2, 300      # Flows data rows
 DEM_LO, DEM_HI = 2, 100        # Demand data rows
-REF_LO, REF_HI = 2, 100        # Refineries registry rows
-BOX_LO, BOX_HI = 4, 600        # Boxes data rows
+REF_LO, REF_HI = 2, 300        # Refineries registry rows
+BOX_LO, BOX_HI = 4, 1200       # Boxes data rows
 
 
 def _banner(ws, row: int, text: str, span: int) -> None:
@@ -171,6 +171,8 @@ class DeskWorkbook:
         self._sheet_intel()
         self._sheet_boxes()
         self._sheet_balance()
+        self._sheet_calibration()
+        self._sheet_yields_2024()
         self._sheet_dashboard()
         self._sheet_checks()
         self._sheet_readme()
@@ -178,9 +180,9 @@ class DeskWorkbook:
         if "Sheet" in self.wb.sheetnames:
             del self.wb["Sheet"]
         order = [
-            "README", "Dashboard", "Boxes", "Balance", "Assumptions",
-            "Outages", "Flows", "Demand", "Refineries", "Intel",
-            "Checks", "Model",
+            "README", "Dashboard", "Boxes", "Balance", "Calibration",
+            "Assumptions", "Outages", "Flows", "Demand", "Refineries",
+            "Yields_2024", "Intel", "Checks", "Model",
         ]
         self.wb._sheets = [self.wb[name] for name in order]
         out_path = Path(out_path)
@@ -669,6 +671,117 @@ class DeskWorkbook:
             ws.column_dimensions[get_column_letter(2 + k)].width = 9
         ws.freeze_panes = "B2"
 
+    # ---------------------------------------------------------- Calibration
+
+    def _sheet_calibration(self) -> None:
+        """Model-implied net naphtha yield vs 2024 actual, live formulas."""
+        ws = self.wb.create_sheet("Calibration")
+        _banner(
+            ws, 1,
+            "Calibration — model-implied net naphtha yield vs 2024 actuals. Big deltas "
+            "mean the unit yield assumptions need tuning (or the 2024 number reflects a "
+            "different naphtha definition). Yield-mode refineries match by construction.",
+            10,
+        )
+        headers = ["refinery_id", "name", "padd", "crude kbd", "PADD util",
+                   "model net kbd", "implied yield", "2024 actual", "delta (pts)", "mode"]
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, 3, c, h)
+
+        util_val, util_padd = self.assump_refs["util"]
+        box_type = f"Boxes!$A${BOX_LO}:$A${BOX_HI}"
+        box_rid = f"Boxes!$B${BOX_LO}:$B${BOX_HI}"
+        base_l = get_column_letter(self.c_base)
+        r = 4
+        for ref in sorted(self.data.refineries, key=lambda x: (x.padd, -x.crude_capacity_kbd)):
+            if ref.naphtha_yield_pct is None:
+                continue
+            mode = ("yield-mode" if any(u.unit_id == "CRUDE-EST" for u in ref.units)
+                    else "unit-detail")
+            _style(ws.cell(row=r, column=1, value=ref.refinery_id))
+            _style(ws.cell(row=r, column=2, value=ref.name))
+            _style(ws.cell(row=r, column=3, value=ref.padd))
+            _style(ws.cell(row=r, column=4, value=ref.crude_capacity_kbd), fmt="0")
+            _style(ws.cell(row=r, column=5,
+                           value=f"=SUMIFS({util_val},{util_padd},$C{r})"),
+                   fill=FILL_CALC, fmt="0.0%")
+            _style(ws.cell(
+                row=r, column=6,
+                value=(f'=SUMIFS(Boxes!${base_l}${BOX_LO}:${base_l}${BOX_HI},'
+                       f'{box_type},"TOTAL",{box_rid},$A{r})'),
+            ), fill=FILL_CALC, fmt="0.0")
+            _style(ws.cell(row=r, column=7,
+                           value=f'=IF($D{r}*$E{r}=0,"",$F{r}/($D{r}*$E{r}))'),
+                   fill=FILL_CALC, fmt="0.00%")
+            _style(ws.cell(row=r, column=8, value=ref.naphtha_yield_pct / 100.0),
+                   fmt="0.00%")
+            _style(ws.cell(row=r, column=9, value=f'=IF($G{r}="","",$G{r}-$H{r})'),
+                   fill=FILL_CALC, fmt="+0.00%;-0.00%")
+            _style(ws.cell(row=r, column=10, value=mode))
+            r += 1
+        last = r - 1
+
+        # flag deltas larger than +/-2 points
+        ws.conditional_formatting.add(
+            f"I4:I{last}",
+            CellIsRule(operator="greaterThan", formula=["0.02"], fill=FILL_FAIL))
+        ws.conditional_formatting.add(
+            f"I4:I{last}",
+            CellIsRule(operator="lessThan", formula=["-0.02"], fill=FILL_FAIL))
+
+        # PADD averages of 2024 actual net naphtha yield
+        s = last + 3
+        _banner(ws, s, "PADD simple-average 2024 net naphtha yield", 3)
+        _hdr(ws, s + 1, 1, "PADD")
+        _hdr(ws, s + 1, 2, "avg 2024 yield")
+        _hdr(ws, s + 1, 3, "refineries")
+        for i, padd in enumerate(self.padds):
+            row = s + 2 + i
+            _style(ws.cell(row=row, column=1, value=padd))
+            _style(ws.cell(row=row, column=2,
+                           value=f"=AVERAGEIF($C$4:$C${last},$A{row},$H$4:$H${last})"),
+                   fill=FILL_CALC, fmt="0.00%")
+            _style(ws.cell(row=row, column=3,
+                           value=f"=COUNTIF($C$4:$C${last},$A{row})"),
+                   fill=FILL_CALC, fmt="0")
+
+        widths = [22, 34, 6, 10, 9, 12, 12, 11, 11, 12]
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = "A4"
+
+    # ----------------------------------------------------------- Yields_2024
+
+    def _sheet_yields_2024(self) -> None:
+        """Full 2024 estimated-output reference table (all products)."""
+        ws = self.wb.create_sheet("Yields_2024")
+        _banner(ws, 1, "2024 estimated refinery yields (% of crude) — reference; "
+                       "re-ingest via: python -m naphtha_model ingest-yields <file>", 13)
+        from .loaders import load_yields_2024
+
+        rows = load_yields_2024()
+        headers = ["refinery_id", "padd", "state", "city", "operator", "owners",
+                   "gasoil_diesel", "gasoline", "hfo", "kero_jet", "lpg",
+                   "naphtha", "total"]
+        keys = ["refinery_id", "padd", "state", "city", "operator", "owners",
+                "gasoil_diesel_pct", "gasoline_pct", "hfo_pct", "kero_jet_pct",
+                "lpg_pct", "naphtha_pct", "total_pct"]
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, 2, c, h)
+        for i, row in enumerate(rows.values(), start=3):
+            for c, key in enumerate(keys, start=1):
+                v = row.get(key, "")
+                if key.endswith("_pct"):
+                    v = float(v) / 100.0 if v not in ("", None) else None
+                elif key == "padd":
+                    v = int(v)
+                _style(ws.cell(row=i, column=c, value=v),
+                       fmt="0.00%" if key.endswith("_pct") else None)
+        widths = [22, 6, 14, 16, 26, 30, 12, 10, 8, 10, 8, 10, 8]
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = "A3"
+
     # ------------------------------------------------------------ Dashboard
 
     def _line(self, title: str, y_title: str) -> LineChart:
@@ -694,7 +807,7 @@ class DeskWorkbook:
                        "Flows or flip the scenario toggle (Model!B5) and these move.", 20)
         bal = self.wb["Balance"]
         boxes = self.wb["Boxes"]
-        padd = self.padds[0] if self.padds else 3
+        padd = 3 if 3 in self.balance_rows else self.padds[0]
         idx = self.balance_rows[padd]
         cats = Reference(bal, min_col=2, max_col=1 + self.weeks,
                          min_row=self.balance_week_row[padd],
@@ -735,10 +848,14 @@ class DeskWorkbook:
         ch4.set_categories(cats)
         ws.add_chart(ch4, "L21")
 
-        ch5 = self._line("Net naphtha by refinery (kbd/week)", "kbd")
+        ch5 = self._line("Net naphtha by refinery — top 10 by crude capacity (kbd/week)", "kbd")
         box_cats = Reference(boxes, min_col=self.c_net0,
                              max_col=self.c_net0 + self.weeks - 1, min_row=2, max_row=2)
-        for ref in self.data.refineries:
+        top = sorted(
+            (r for r in self.data.refineries if r.crude_capacity_kbd > 0),
+            key=lambda r: -r.crude_capacity_kbd,
+        )[:10]
+        for ref in top:
             total_row = self.refinery_total_rows[ref.refinery_id]
             ref_vals = Reference(boxes, min_col=self.c_net0,
                                  max_col=self.c_net0 + self.weeks - 1,

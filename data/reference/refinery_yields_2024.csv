@@ -1,0 +1,124 @@
+refinery_id,padd,state,city,operator,owners,gasoil_diesel_pct,gasoline_pct,hfo_pct,kero_jet_pct,lpg_pct,naphtha_pct,total_pct
+PBF_DELAWARE_CITY,1,Delaware,Delaware City,PBF Energy Company LLC,PBF Energy Company LLC,28.8664,62.6601,0.6596,11.8778,2.7567,0.0,106.8205
+PHILLIPS_LINDEN,1,New Jersey,Linden,Phillips 66 Co.,Phillips 66 Co.,32.0086,51.3787,0.1038,9.7992,2.4308,0.0,95.721
+PBF_PAULSBORO,1,New Jersey,Paulsboro,PBF Energy Company LLC,PBF Energy Company LLC,37.3933,27.2644,2.4194,19.9112,0.9816,0.0,87.9698
+AMERICAN_BRADFORD,1,Pennsylvania,Bradford,American Refining Group,American Refining Group,24.0976,36.8069,0.0,0.0,0.557,0.0,61.4615
+MONROE_TRAINER,1,Pennsylvania,Trainer,Monroe Energy,Delta Airlines,19.063,57.2953,1.2446,19.6579,1.4049,0.0,98.6657
+UNITED_WARREN,1,Pennsylvania,Warren,United Refining,United Refining,17.4032,45.0898,0.1753,0.0,0.0756,0.0,62.7437
+ERGON_NEWELL,1,West Virginia,Newell,Ergon,Ergon,27.6305,34.0546,0.0,0.0,0.1903,0.0,61.8754
+EXXONMOBIL_JOLIET,2,Illinois,Joliet,ExxonMobil,ExxonMobil,27.7571,57.1539,0.2654,6.6733,0.3918,0.1772,92.4187
+CITGO_LEMONT,2,Illinois,Lemont,Citgo,PDVSA,29.9464,50.7616,0.081,13.0942,0.2889,0.595,94.7672
+MARATHON_ROBINSON,2,Illinois,Robinson,Marathon Petroleum,Marathon Petroleum,39.5003,53.7607,1.0142,2.1377,0.5884,0.261,97.2624
+CENOVUS_WOOD_RIVER,2,Illinois,Wood River,Cenovus,Cenovus (50%) / Phillips 66 Co. (50%),6.4308,36.1823,1.0296,3.4763,0.3792,0.1431,47.6413
+COUNTRYMARK_MOUNT_VERNON,2,Indiana,Mount Vernon,Countrymark Cooperative Inc.,Countrymark Cooperative Inc.,27.5814,46.9008,0.1351,15.0118,0.2167,0.0118,89.8573
+BP_WHITING,2,Indiana,Whiting,BP,BP,23.2409,57.3591,1.0617,6.9983,1.8035,0.217,90.6804
+CVR_COFFEYVILLE,2,Kansas,Coffeyville,CVR Energy,Icahn Enterprises (80%) / Other Investors (20%),31.5972,37.9308,0.1787,6.8641,0.3074,0.1004,76.9787
+HF_EL_DORADO_KS,2,Kansas,El Dorado (KS),HF Sinclair,HF Sinclair,21.2953,67.3224,1.426,4.8543,0.6962,0.3144,95.9088
+NCRA_MCPHERSON,2,Kansas,McPherson,NCRA,CHS,26.6878,56.7835,0.4982,12.1657,0.4316,0.2883,96.8549
+MARATHON_CATLETTSBURG,2,Kentucky,Catlettsburg,Marathon Petroleum,Marathon Petroleum,47.8289,43.4757,0.1486,2.0455,0.9076,0.1714,94.5778
+SOMERSET_SOMERSET,2,Kentucky,Somerset,Somerset Refinery,Continental Refining Company,34.9199,45.1466,2.5532,8.3103,0.7549,0.2096,91.8945
+MARATHON_DETROIT,2,Michigan,Detroit,Marathon Petroleum,Marathon Petroleum,34.0967,49.0704,0.7616,1.0936,1.1926,0.1459,86.361
+FLINT_ROSEMOUNT,2,Minnesota,Rosemount,Flint Hills Resources,Koch Industries,11.5114,66.6609,2.2427,11.2758,1.4163,1.0141,94.1212
+MARATHON_SAINT_PAUL_PARK,2,Minnesota,Saint Paul Park,Marathon Petroleum,Marathon Petroleum,20.93,54.5693,1.1134,12.7933,0.7335,0.0164,90.156
+MARATHON_MANDAN,2,North Dakota,Mandan,Marathon Petroleum,Marathon Petroleum,43.9423,42.772,1.1106,7.0643,0.3674,0.416,95.6726
+MARATHON_CANTON,2,Ohio,Canton,Marathon Petroleum,Marathon Petroleum,47.3389,40.001,0.1688,2.0935,0.2659,0.4758,90.344
+CENOVUS_LIMA,2,Ohio,Lima,Cenovus,Cenovus,20.8956,56.7905,0.1856,16.7952,0.7396,0.5404,95.9469
+CENOVUS_TOLEDO,2,Ohio,Toledo,Cenovus,Cenovus,3.7569,75.274,1.6172,10.7308,0.8028,0.2121,92.3936
+PBF_TOLEDO,2,Ohio,Toledo,PBF Energy Company LLC,PBF Energy Company LLC,22.7272,55.4835,0.3474,18.1237,0.8708,0.3831,97.9357
+VALERO_ARDMORE,2,Oklahoma,Ardmore,Valero,Valero,49.2831,42.1308,0.6997,0.0,0.0098,0.0158,92.1392
+PHILLIPS_PONCA_CITY,2,Oklahoma,Ponca City,Phillips 66 Co.,Phillips 66 Co.,36.6507,48.5868,0.6727,8.1784,0.2253,0.1036,94.4176
+HF_TULSA,2,Oklahoma,Tulsa,HF Sinclair,HF Sinclair,50.9566,30.2954,0.3985,5.6125,0.4819,1.4038,89.1486
+CVR_WYNNEWOOD,2,Oklahoma,Wynnewood,CVR Energy,Icahn Enterprises (80%) / Other Investors (20%),17.764,41.5458,0.3776,15.0803,0.4015,0.2848,75.454
+VALERO_MEMPHIS,2,Tennessee,Memphis,Valero,Valero,54.0363,42.6441,0.0731,0.0,0.437,0.3239,97.5143
+CENOVUS_SUPERIOR,2,Wisconsin,Superior,Cenovus,Cenovus,25.8986,38.9313,0.7497,14.8205,0.6698,0.2883,81.3582
+GOODWAY_ATMORE,3,Alabama,Atmore,Goodway Refining,Goodway Refining,42.9329,7.3165,2.9337,7.0023,0.0,5.7377,65.9231
+VERTEX_MOBILE,3,Alabama,Mobile,Vertex Energy Inc.,Vertex Energy Inc.,17.7058,43.9033,15.3936,23.0735,0.6176,0.0,100.6939
+HUNT_TUSCALOOSA,3,Alabama,Tuscaloosa,Hunt Refining Consolidated,Hunt Refining Consolidated,43.4917,34.5385,0.3574,3.6317,2.139,0.308,84.4663
+DELEK_EL_DORADO_AR,3,Arkansas,El Dorado (AR),Delek Group,Delek Group,40.34,47.5627,0.7422,1.3435,0.7036,0.8023,91.4942
+CROSS_SMACKOVER,3,Arkansas,Smackover,Cross Oil and Ref.Co.,Cross Oil and Ref.Co.,40.6383,7.6489,0.0,2.503,-0.9791,3.4216,53.2326
+EXXONMOBIL_BATON_ROUGE,3,Louisiana,Baton Rouge,ExxonMobil,ExxonMobil,28.46,56.8909,0.356,10.8793,2.6229,0.9407,100.1498
+PBF_CHALMETTE,3,Louisiana,Chalmette,PBF Energy Company LLC,PBF Energy Company LLC,37.363,59.8032,1.9126,0.0,1.9554,0.0,101.0341
+SHELL_CONVENT,3,Louisiana,Convent,Shell,Shell,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+CALUMET_COTTON_VALLEY,3,Louisiana,Cotton Valley,Calumet Lubricants Co.,Calumet Lubricants Co.,45.3142,8.596,2.5344,4.2477,-0.8027,6.5992,66.4875
+MARATHON_GARYVILLE,3,Louisiana,Garyville,Marathon Petroleum,Marathon Petroleum,45.8336,49.1212,0.3555,0.0,2.9851,0.1977,98.493
+DELEK_KROTZ_SPRINGS,3,Louisiana,Krotz Springs,Delek Group,Delek Group,21.3711,51.0205,0.3372,22.578,0.0295,0.8662,96.2025
+CALCASIEU_LAKE_CHARLES,3,Louisiana,Lake Charles,Calcasieu Refining Co.,TransWorld Oil,31.1396,12.1784,17.0369,29.4263,1.2351,8.8491,99.8654
+CITGO_LAKE_CHARLES,3,Louisiana,Lake Charles,Citgo,PDVSA,22.2284,47.6438,0.3516,22.1989,2.3067,0.6716,95.401
+VALERO_MERAUX,3,Louisiana,Meraux,Valero,Valero,40.6057,34.3784,7.5484,13.1051,1.3595,0.0,96.9972
+SHELL_NORCO,3,Louisiana,Norco,Shell,Shell,36.9059,59.5072,0.3113,11.8014,0.8717,0.0902,109.4877
+PLACID_PORT_ALLEN,3,Louisiana,Port Allen,Placid Refining,Placid Refining,26.8586,44.4066,3.7123,17.464,1.5311,0.0,93.9727
+CALUMET_PRINCETON,3,Louisiana,Princeton,Calumet Lubricants Co.,Calumet Lubricants Co.,34.1568,8.3579,0.0,5.2205,-1.5673,5.9992,52.17
+VALERO_SAINT_CHARLES,3,Louisiana,Saint Charles,Valero,Valero,61.5668,129.8121,0.316,0.0,-2.4284,0.0,189.2666
+SHELL_SAINT_ROSE,3,Louisiana,Saint Rose,Shell Oil Co. USA,Shell,24.8537,3.6875,7.5868,8.6676,-0.3411,0.1364,44.5944
+CALUMET_SHREVEPORT,3,Louisiana,Shreveport,Calumet Lubricants Co.,Calumet Lubricants Co.,29.839,29.4843,0.0,3.0803,-0.2215,0.0,62.1823
+PHILLIPS_WESTLAKE,3,Louisiana,Westlake,Phillips 66 Co.,Phillips 66 Co.,31.5462,36.7467,2.545,16.352,1.8966,0.815,89.9015
+CHEVRON_PASCAGOULA,3,Mississippi,Pascagoula,Chevron,Chevron,28.7417,41.8473,0.3869,18.5057,2.5618,2.9496,94.993
+HUNT_SANDERSVILLE,3,Mississippi,Sandersville,Hunt Refining Consolidated,Hunt Refining Consolidated,35.9598,8.2904,1.8897,3.0569,-1.0272,2.8532,51.0246
+ERGON_VICKSBURG,3,Mississippi,Vicksburg,Ergon,Ergon,17.077,7.0315,0.0008,2.6369,-1.2448,1.1187,26.6193
+HF_ARTESIA,3,New Mexico,Artesia,HF Sinclair,HF Sinclair,38.747,53.7395,2.2453,0.0,0.9494,1.0624,96.7436
+XOM_BAYTOWN,3,Texas,Baytown,ExxonMobil,ExxonMobil,30.2334,53.2094,0.3543,5.2782,2.5773,0.5712,92.2239
+EXXONMOBIL_BEAUMONT,3,Texas,Beaumont,ExxonMobil,ExxonMobil,23.8924,38.4458,6.9187,20.4725,1.7905,1.7309,93.2508
+ALON_BIG_SPRINGS,3,Texas,Big Springs,Alon,Delek Group,27.6801,56.1952,0.3322,11.696,0.8336,0.0,96.7371
+WRB_BORGER,3,Texas,Borger,WRB Refining,Cenovus (50%) / Phillips 66 Co. (50%),16.2333,27.0181,2.0806,3.2517,-0.0814,0.1021,48.6044
+BUCKEYE_CORPUS_CHRISTI,3,Texas,Corpus Christi,Buckeye Partners,Buckeye Partners (80%) / Trafigura (20%),20.9113,36.9389,0.8896,12.579,0.5306,0.704,72.5534
+CITGO_CORPUS_CHRISTI,3,Texas,Corpus Christi,Citgo,PDVSA,42.2158,54.5632,0.3574,0.0,2.0524,1.035,100.2238
+FLINT_CORPUS_CHRISTI,3,Texas,Corpus Christi,Flint Hills Resources,Koch Industries,27.8743,39.4957,0.3838,19.8456,2.6986,2.5336,92.8316
+VALERO_CORPUS_CHRISTI,3,Texas,Corpus Christi,Valero,Valero,26.3274,57.5665,0.1007,14.3351,0.1649,0.7865,99.2811
+PEMEX_DEER_PARK,3,Texas,Deer Park,PEMEX,PEMEX,30.6532,51.6228,0.3653,13.6363,2.1048,1.8313,100.2137
+MARATHON_EL_PASO,3,Texas,El Paso,Marathon Petroleum,Marathon Petroleum,20.5383,46.9657,5.6662,18.6622,-0.6245,0.4522,91.6601
+KINDER_HOUSTON,3,Texas,Houston,Kinder Morgan,Kinder Morgan,25.7837,47.1439,1.0564,14.9315,0.9444,1.0428,90.9025
+LYONDELLBASELL_HOUSTON,3,Texas,Houston,LyondellBasell Refining,Access Industries,33.6599,42.0847,2.0254,3.7415,2.3197,3.5638,87.3951
+VALERO_HOUSTON,3,Texas,Houston,Valero,Valero,30.1428,41.2325,4.2713,14.5476,-1.2555,4.0042,92.943
+BLUE_NIXON,3,Texas,Nixon,Blue Dolphin Energy,Blue Dolphin Energy,36.3456,0.0,7.3994,18.064,0.8919,7.6588,70.3598
+CHEVRON_PASADENA,3,Texas,Pasadena,Chevron,Chevron,39.5379,49.7175,0.3382,0.0,0.2623,0.3667,90.2226
+BASF_PORT_ARTHUR,3,Texas,Port Arthur,BASF FINA Petrochemicals,BASF (60%) / Total (40%),14.2189,7.3676,1.051,14.1698,0.9918,19.4225,57.2215
+MOTIVA_PAR,3,Texas,Port Arthur,Motiva,Saudi Aramco,27.1759,39.8699,0.3444,11.5527,1.7008,0.0361,80.6798
+TOTAL_PORT_ARTHUR,3,Texas,Port Arthur,Total,Total,43.3829,49.6059,0.364,7.234,4.2162,0.464,105.2668
+VALERO_PORT_ARTHUR,3,Texas,Port Arthur,Valero,Valero,34.9707,42.8718,0.3681,13.0599,2.2231,1.6109,95.1046
+LAZARUS_SAN_ANTONIO,3,Texas,San Antonio,Lazarus Energy,Starlight Relativity Acquisition Co. LLC,30.4606,36.7749,3.6324,10.2987,1.4718,0.2046,82.843
+VALERO_SUNRAY,3,Texas,Sunray,Valero,Valero,30.1291,59.0812,0.1658,5.9199,0.8832,0.0,96.1791
+PHILLIPS_SWEENY,3,Texas,Sweeny,Phillips 66 Co.,Phillips 66 Co.,36.4807,51.5578,0.374,6.3764,3.3251,1.7331,99.847
+MPC_GALV_BAY,3,Texas,Texas City,Marathon Petroleum,Marathon Petroleum,22.1018,58.8114,1.7278,9.565,-1.2318,0.3629,91.3371
+VALERO_TEXAS_CITY,3,Texas,Texas City,Valero,Valero,40.265,44.6027,0.3848,5.7356,2.8643,2.4883,96.3408
+MARATHON_TEXAS_CITY_GALVESTON_BAY,3,Texas,Texas City (Galveston Bay),Marathon Petroleum,Marathon Petroleum,46.2257,40.0925,2.8332,3.2129,1.5216,4.1964,98.0822
+VALERO_THREE_RIVERS,3,Texas,Three Rivers,Valero,Valero,37.6837,55.6462,0.2712,7.2761,0.9213,0.3392,102.1378
+DELEK_TYLER,3,Texas,Tyler,Delek Refining Ltd.,Delek Group,38.6015,42.3062,2.9762,7.3276,0.2922,0.1145,91.618
+SUNCOR_DENVER,4,Colorado,Denver,Suncor,Suncor,35.1623,46.4713,1.0519,11.4136,-0.5589,0.2181,93.7585
+PAR_BILLINGS,4,Montana,Billings,Par Petroleum,Par Petroleum,29.0164,57.9892,0.1147,5.1463,-0.3161,0.0607,92.0112
+PHILLIPS_BILLINGS,4,Montana,Billings,Phillips 66 Co.,Phillips 66 Co.,20.6148,70.8599,2.1939,2.2072,-0.2983,0.2102,95.7878
+MONTANA_GREAT_FALLS,4,Montana,Great Falls,Montana Refining Co.,Calumet Lubricants Co.,30.9768,42.8469,0.5883,4.9243,-0.0698,-0.0004,79.266
+CHS_LAUREL,4,Montana,Laurel,CHS,CHS,25.2542,59.4196,3.1141,3.949,-0.1713,0.1502,91.7157
+BIG_NORTH_SLATERVILLE_CANAL,4,Utah,North Slaterville Canal,Big West Oil Co,Flying J,32.0812,53.7939,2.9751,10.7187,-0.187,0.0064,99.3883
+CHEVRON_SALT_LAKE_CITY,4,Utah,Salt Lake City,Chevron,Chevron,39.7096,47.4627,3.6584,7.891,0.0162,0.0904,98.8286
+MARATHON_SALT_LAKE_CITY,4,Utah,Salt Lake City,Marathon Petroleum,Marathon Petroleum,44.2593,46.4356,2.8389,4.6315,0.2077,0.0053,98.3782
+HF_WOODS_CROSS,4,Utah,Woods Cross,HF Sinclair,HF Sinclair,40.1415,55.3244,2.5584,0.0,0.3234,0.0052,98.3526
+SILVER_WOODS_CROSS,4,Utah,Woods Cross,Silver Eagle Refining,Silver Eagle Refining,46.4598,15.9771,3.3965,0.0,0.1484,0.0,65.9819
+HF_CASPER,4,Wyoming,Casper,HF Sinclair,HF Sinclair,49.6774,49.9014,0.0712,0.4889,-0.5282,0.0,99.6107
+SLATE_DOUGLAS,4,Wyoming,Douglas,Slate,Slate,37.5865,37.6853,1.883,5.6385,0.0,0.0,82.7984
+WYOMING_EVANSTON,4,Wyoming,Evanston,Wyoming Refining,Silver Eagle Refining,48.0779,13.5541,8.3067,5.8593,0.0,0.0,75.7981
+PAR_NEWCASTLE,4,Wyoming,Newcastle,Par Petroleum,Par Petroleum,44.4493,53.644,0.1048,0.5358,0.214,0.0,98.9479
+SINCLAIR_SINCLAIR,4,Wyoming,Sinclair,Sinclair,Sinclair,36.6417,53.1999,0.218,9.7106,-0.4258,0.6728,100.0171
+CONOCOPHILLIPS_ANCHORAGE,5,Alaska,Anchorage,ConocoPhillips,Phillips Petroleum,20.74,32.6149,23.9697,15.5583,0.265,0.0244,93.1729
+MARATHON_NIKISKI,5,Alaska,Nikiski,Marathon Petroleum,Marathon Petroleum,10.9631,35.4587,20.7415,35.698,0.7786,0.2593,103.8994
+PETRO_NORTH_POLE,5,Alaska,North Pole,Petro Star Inc.,Petro Star Inc.,7.9803,0.0,0.0,28.6199,0.0,0.0,36.6002
+BP_PRUDHOE_BAY,5,Alaska,Prudhoe Bay,BP,BP,28.9795,0.0,0.0,1.3923,0.0,0.0,30.3708
+PETRO_VALDEZ,5,Alaska,Valdez,Petro Star Inc.,Petro Star Inc.,8.3851,0.0,0.0,28.6891,0.0,0.0,37.0742
+KERN_BAKERSFIELD,5,California,Bakersfield,Kern Oil,Kern Oil,15.4252,23.3653,14.7569,19.8035,-0.1804,0.0,73.1714
+SAN_BAKERSFIELD,5,California,Bakersfield,San Joaquin Refining,San Joaquin Refining,13.8155,20.4411,12.8041,18.5724,-0.4491,0.0,65.1841
+VALERO_BENICIA,5,California,Benicia,Valero,Valero,22.7784,67.6343,1.2873,10.1721,0.4105,0.0439,102.3265
+MARATHON_CARSON,5,California,Carson,Marathon Petroleum,Marathon Petroleum,20.1981,56.6462,0.2984,22.5839,0.1472,0.0001,99.8739
+CHEVRON_EL_SEGUNDO,5,California,El Segundo,Chevron,Chevron,19.2272,48.526,8.2898,18.9701,0.2815,0.059,95.3534
+MARATHON_LOS_ANGELES,5,California,Los Angeles,Marathon Petroleum,Marathon Petroleum,26.4219,48.2103,0.48,26.9748,1.1184,0.09,103.2953
+PHILLIPS_LOS_ANGELES,5,California,Los Angeles,Phillips 66 Co.,Phillips 66 Co.,23.6233,68.8377,0.4597,12.0232,0.7836,0.0102,105.7378
+VALERO_LOS_ANGELES,5,California,Los Angeles,Valero,Valero,27.538,77.0338,0.4334,1.4074,-0.6875,0.0,105.725
+PBF_MARTINEZ,5,California,Martinez,PBF Energy Company LLC,PBF Energy Company LLC,23.5715,58.4921,0.2139,22.8967,0.5984,0.0,105.7726
+CHEVRON_RICHMOND,5,California,Richmond,Chevron,Chevron,15.0528,55.0218,0.5406,25.124,-0.0156,0.0012,95.7249
+LUNDAYTHAGARD_SOUTH_GATE,5,California,South Gate,Lunday-Thagard Oil Co.,Lunday-Thagard Oil Co.,15.6687,16.9549,16.339,20.1004,-0.5519,0.0,68.5111
+PBF_TORRANCE,5,California,Torrance,PBF Energy Company LLC,PBF Energy Company LLC,11.8726,68.9007,1.7247,15.367,2.3254,0.1327,100.3231
+PAR_EWA_BEACH,5,Hawaii,Ewa Beach,Par Petroleum,Par Petroleum,18.1748,32.4677,15.8243,23.0458,0.0,0.0,89.5126
+FORELAND_TONOPAH,5,Nevada,Tonopah,Foreland Corp,Energy Income Fund,14.7387,14.3284,15.5302,17.2063,0.0,0.0,61.8035
+HF_ANACORTES,5,Washington,Anacortes,HF Sinclair,HF Sinclair,18.9541,64.6314,0.4459,18.885,0.74,0.0,103.6564
+MARATHON_ANACORTES,5,Washington,Anacortes,Marathon Petroleum,Marathon Petroleum,14.4005,59.0003,6.2911,21.9241,-0.0174,0.0,101.5987
+BP_FERNDALE,5,Washington,Ferndale,BP,BP,22.2178,43.6207,4.2946,28.0827,0.8301,0.1779,99.2238
+PHILLIPS_FERNDALE,5,Washington,Ferndale,Phillips 66 Co.,Phillips 66 Co.,25.6814,53.7851,4.954,15.784,0.4546,0.1016,100.7606
+PAR_TACOMA,5,Washington,Tacoma,Par Petroleum,Par Petroleum,1.1295,40.1806,31.4159,20.7682,0.4532,0.111,94.0588

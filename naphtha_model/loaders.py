@@ -104,9 +104,15 @@ def load_refineries(data_dir: Path = DATA_DIR) -> list[Refinery]:
     return list(refineries.values())
 
 
-def load_assumptions(data_dir: Path = DATA_DIR) -> AssumptionBook:
+def _read_global_cfg(data_dir: Path) -> dict:
     with (data_dir / "assumptions" / "global.yaml").open(encoding="utf-8") as fh:
-        global_cfg = yaml.safe_load(fh)
+        return yaml.safe_load(fh)
+
+
+def load_assumptions(
+    data_dir: Path = DATA_DIR, extra_overrides: list[Override] | None = None
+) -> AssumptionBook:
+    global_cfg = _read_global_cfg(data_dir)
 
     padd_path = data_dir / "assumptions" / "padd_overrides.yaml"
     padd_cfg: dict = {}
@@ -128,7 +134,7 @@ def load_assumptions(data_dir: Path = DATA_DIR) -> AssumptionBook:
         )
         for row in _read_csv(data_dir / "overrides" / "refinery_overrides.csv")
     ]
-    return AssumptionBook(global_cfg, padd_cfg, overrides)
+    return AssumptionBook(global_cfg, padd_cfg, overrides + list(extra_overrides or []))
 
 
 def load_outages(data_dir: Path = DATA_DIR) -> list[Outage]:
@@ -207,10 +213,67 @@ def load_intel(data_dir: Path = DATA_DIR) -> list[IntelNote]:
     ]
 
 
+def load_yields_2024(data_dir: Path = DATA_DIR) -> dict[str, dict]:
+    """2024 actual product yields keyed by refinery_id (empty if not ingested)."""
+    rows = _read_csv(data_dir / "reference" / "refinery_yields_2024.csv")
+    return {row["refinery_id"]: row for row in rows}
+
+
+def _apply_yields_2024(
+    refineries: list[Refinery], yields24: dict[str, dict], global_cfg: dict
+) -> list[Override]:
+    """Attach 2024 net naphtha yields; give unit-less refineries a synthetic
+    CRUDE-EST unit (yield-mode: crude x utilization x 2024 net yield, split
+    across cuts by global.yaml yield_mode.cut_shares). Returns the synthetic
+    yield overrides for the AssumptionBook."""
+    shares: dict = (global_cfg.get("yield_mode") or {}).get("cut_shares") or {}
+    cuts = list(global_cfg.get("cuts", []))
+    if shares:
+        if set(shares) != set(cuts):
+            raise ValueError(
+                f"yield_mode.cut_shares must cover every cut {cuts}, got {list(shares)}"
+            )
+        if abs(sum(shares.values()) - 1.0) > 1e-6:
+            raise ValueError("yield_mode.cut_shares must sum to 1")
+
+    synth: list[Override] = []
+    for r in refineries:
+        y = yields24.get(r.refinery_id)
+        if y is None:
+            continue
+        r.naphtha_yield_pct = float(y["naphtha_pct"])
+        if r.units or not shares:
+            continue
+        r.units.append(
+            ProcessUnit(
+                refinery_id=r.refinery_id,
+                unit_id="CRUDE-EST",
+                unit_type="CDU",
+                capacity_kbd=r.crude_capacity_kbd,
+                notes="yield-mode: 2024 net naphtha yield applied to crude runs",
+            )
+        )
+        for cut, share in shares.items():
+            synth.append(
+                Override(
+                    refinery_id=r.refinery_id,
+                    unit_id="CRUDE-EST",
+                    field_name="yield",
+                    cut=cut,
+                    value=float(share) * r.naphtha_yield_pct / 100.0,
+                    source="2024 actual net yield",
+                )
+            )
+    return synth
+
+
 def load_all(data_dir: Path = DATA_DIR) -> ModelData:
+    refineries = load_refineries(data_dir)
+    global_cfg = _read_global_cfg(data_dir)
+    synth = _apply_yields_2024(refineries, load_yields_2024(data_dir), global_cfg)
     return ModelData(
-        refineries=load_refineries(data_dir),
-        book=load_assumptions(data_dir),
+        refineries=refineries,
+        book=load_assumptions(data_dir, extra_overrides=synth),
         outages=load_outages(data_dir),
         flows=load_flows(data_dir),
         demand=load_demand(data_dir),

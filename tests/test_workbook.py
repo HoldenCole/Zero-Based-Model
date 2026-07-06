@@ -23,8 +23,9 @@ from naphtha_model.workbook import build_desk_workbook
 AXIS = build_axis(date(2026, 7, 6), 8)
 
 EXPECTED_SHEETS = [
-    "README", "Dashboard", "Boxes", "Balance", "Assumptions",
-    "Outages", "Flows", "Demand", "Refineries", "Intel", "Checks", "Model",
+    "README", "Dashboard", "Boxes", "Balance", "Calibration", "Assumptions",
+    "Outages", "Flows", "Demand", "Refineries", "Yields_2024", "Intel",
+    "Checks", "Model",
 ]
 
 
@@ -47,12 +48,12 @@ def test_boxes_are_formula_driven(built):
     data, out = built
     wb = openpyxl.load_workbook(out)
     ws = wb["Boxes"]
-    unit_rows = [r for r in range(4, 200) if ws.cell(row=r, column=1).value == "UNIT"]
+    unit_rows = [r for r in range(4, 1300) if ws.cell(row=r, column=1).value == "UNIT"]
     assert len(unit_rows) == sum(len(r.units) for r in data.refineries)
     r = unit_rows[0]
     assert str(ws.cell(row=r, column=8).value).startswith("=IF(")     # util
     assert "SUMPRODUCT" in str(ws.cell(row=r, column=23).value)       # offline wk1
-    total_rows = [r for r in range(4, 200) if ws.cell(row=r, column=1).value == "TOTAL"]
+    total_rows = [r for r in range(4, 1300) if ws.cell(row=r, column=1).value == "TOTAL"]
     assert len(total_rows) == len(data.refineries)
 
 
@@ -97,15 +98,21 @@ def test_excel_formulas_match_engine(built, tmp_path):
     recalc = tmp_path / Path(out).name
     wb = openpyxl.load_workbook(recalc, data_only=True)
     bal = wb["Balance"]
-    # PADD 3 block: week header row 4, supply 5, base 6, risk 7, balance 10
+    # locate the PADD 3 block: banner, week hdr, supply, base, risk, flows,
+    # demand, balance
+    banner = next(
+        r for r in range(1, 200)
+        if str(bal.cell(row=r, column=1).value or "").startswith("PADD 3 ")
+    )
+    supply_row, risk_row, balance_row = banner + 2, banner + 4, banner + 7
     weeks = padd_balance(
         3, data.refineries, AXIS, data.book, data.outages, data.flows, data.demand
     )
     for k, w in enumerate(weeks):
         col = 2 + k
-        assert bal.cell(row=5, column=col).value == pytest.approx(w.supply_kbd, abs=0.05)
-        assert bal.cell(row=7, column=col).value == pytest.approx(w.at_risk_kbd, abs=0.05)
-        assert bal.cell(row=10, column=col).value == pytest.approx(w.balance_kbd, abs=0.05)
+        assert bal.cell(row=supply_row, column=col).value == pytest.approx(w.supply_kbd, abs=0.05)
+        assert bal.cell(row=risk_row, column=col).value == pytest.approx(w.at_risk_kbd, abs=0.05)
+        assert bal.cell(row=balance_row, column=col).value == pytest.approx(w.balance_kbd, abs=0.05)
     # every data check must pass
     checks = wb["Checks"]
     statuses = [checks.cell(row=r, column=3).value for r in range(4, 20)]

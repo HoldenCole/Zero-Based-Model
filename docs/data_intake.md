@@ -1,4 +1,23 @@
-# Data intake: the refinery capacity sheet
+# Data intake
+
+## 2024 yields workbook (ingested)
+
+`python -m naphtha_model ingest-yields <file.xlsx>` parses the desk's
+"Estimated Refinery Outputs" workbook (pivot layout: PADD/state/city
+forward-filled, JV owner rows folded in) and:
+
+- writes `data/reference/refinery_yields_2024.csv` (all product yields),
+- merges every refinery into `data/reference/refineries.csv` — existing rows
+  keep their id/capacity/units; new ones arrive as **yield-mode**
+  (`crude_capacity_kbd = 0` until the capacity sheet lands).
+
+Yield-mode refineries get a synthetic `CRUDE-EST` unit at load time:
+net naphtha = crude capacity x utilization x 2024 net yield, split across
+cuts by `yield_mode.cut_shares` in `data/assumptions/global.yaml`. As soon
+as a capacity number is filled in, that refinery contributes to the balance
+— no code needed. Re-running ingest with an updated workbook is idempotent.
+
+# The refinery capacity sheet (pending)
 
 When the US refinery capacity sheet arrives, it replaces the PLACEHOLDER rows
 in `data/reference/refineries.csv` and `data/reference/units.csv`. Any format

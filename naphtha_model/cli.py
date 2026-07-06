@@ -47,6 +47,16 @@ def main(argv: list[str] | None = None) -> int:
     p_scn = sub.add_parser("scenario", help="run a scenario YAML against the base case")
     p_scn.add_argument("path")
 
+    p_ing = sub.add_parser(
+        "ingest-yields", help="ingest an 'Estimated Refinery Outputs' yields workbook"
+    )
+    p_ing.add_argument("path")
+
+    p_cal = sub.add_parser(
+        "calibrate", help="model-implied net naphtha yield vs 2024 actuals"
+    )
+    p_cal.add_argument("--padd", type=int)
+
     p_exp = sub.add_parser("export", help="build the live desk Excel workbook")
     p_exp.add_argument("--out", default="naphtha_model.xlsx")
     p_exp.add_argument(
@@ -55,6 +65,15 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     args = parser.parse_args(argv)
+
+    if args.command == "ingest-yields":
+        from .ingest import ingest_yields
+
+        result = ingest_yields(Path(args.path))
+        for k, v in result.items():
+            print(f"{k}: {v}")
+        return 0
+
     data = load_all()
     axis = build_axis(_parse_start(args.start), args.weeks)
 
@@ -107,6 +126,40 @@ def main(argv: list[str] | None = None) -> int:
             print("  " + " | ".join(f"{w.month}/{w.day} {v:+.1f}" for w, v in delta.items()))
             print(render_padd_balance(p, result.case[p]))
             print()
+
+    elif args.command == "calibrate":
+        from .engine import refinery_day
+
+        day = axis[0]
+        rows = []
+        for r in data.refineries:
+            if args.padd is not None and r.padd != args.padd:
+                continue
+            if r.naphtha_yield_pct is None:
+                continue
+            mode = "yield-mode" if any(u.unit_id == "CRUDE-EST" for u in r.units) else "unit-detail"
+            if r.crude_capacity_kbd > 0 and r.units:
+                snap = refinery_day(r, day, data.book, [], include_outages=False)
+                util = data.book.utilization(r, r.units[0], day).value
+                implied = snap.net_kbd / (r.crude_capacity_kbd * util) * 100
+                delta = implied - r.naphtha_yield_pct
+            else:
+                implied = delta = None
+            rows.append((r, mode, implied, delta))
+
+        rows.sort(key=lambda x: -abs(x[3]) if x[3] is not None else 1)
+        print(f"{'refinery':<22} {'PADD':<5} {'crude':>7} {'mode':<12} "
+              f"{'2024 act%':>9} {'model%':>8} {'delta':>7}")
+        print("-" * 78)
+        for r, mode, implied, delta in rows:
+            imp = f"{implied:8.2f}" if implied is not None else "     n/a"
+            dl = f"{delta:+7.2f}" if delta is not None else "    n/a"
+            print(f"{r.refinery_id:<22} {r.padd:<5} {r.crude_capacity_kbd:>7,.0f} "
+                  f"{mode:<12} {r.naphtha_yield_pct:>9.2f} {imp} {dl}")
+        print("\nPADD simple-average 2024 net naphtha yield (% of crude):")
+        for p in sorted({r.padd for r, *_ in rows}):
+            ys = [r.naphtha_yield_pct for r, *_ in rows if r.padd == p]
+            print(f"  PADD {p}: {sum(ys) / len(ys):.2f}%  ({len(ys)} refineries)")
 
     elif args.command == "export":
         if args.dump:

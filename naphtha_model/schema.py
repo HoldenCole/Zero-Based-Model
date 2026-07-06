@@ -43,6 +43,7 @@ class Refinery:
     status: str = "operating"
     notes: str = ""
     units: list[ProcessUnit] = field(default_factory=list)
+    naphtha_yield_pct: float | None = None  # 2024 actual net yield (% of crude)
 
     def __post_init__(self) -> None:
         if self.region == "US" and self.padd not in PADDS:

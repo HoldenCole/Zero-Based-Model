@@ -110,6 +110,8 @@ python -m naphtha_model risk --padd 3             # balance at risk from outages
 python -m naphtha_model scenario data/scenarios/example_scenario.yaml
 python -m naphtha_model export --out naphtha_model.xlsx   # THE desk workbook
 python -m naphtha_model export --dump --out flat.xlsx     # flat value dump
+python -m naphtha_model ingest-yields data/raw/estimated_refinery_outputs_2024.xlsx
+python -m naphtha_model calibrate --padd 3                # model vs 2024 actuals
 
 pytest                                            # run the test suite
 ```
@@ -142,6 +144,10 @@ regenerates it when the underlying data/ files change.
 - **Checks** — 11 automated data-quality checks (dangling IDs, impossible
   yields/utilizations/dates, invalid flows, negative supply) with PASS/FAIL
   status and an overall ALL CHECKS PASS cell.
+- **Calibration** — model-implied net naphtha yield vs 2024 actuals per
+  refinery (deltas over ±2 pts flag red) plus PADD averages. This is how the
+  desk tunes the unit yield assumptions.
+- **Yields_2024** — the full 2024 estimated-output reference table.
 
 The Excel formulas are verified in the test suite by recalculating the
 workbook headlessly (LibreOffice) and comparing every balance number against
@@ -156,8 +162,12 @@ window.
       scenarios, CLI, tests
 - [x] Desk workbook: live formula-driven Excel model with charts, scenario
       toggle, manual overrides, and data checks
-- [ ] Load the real US refinery capacity sheet (replaces placeholder rows in
-      `data/reference/`) — see `docs/data_intake.md` for the expected columns
+- [x] 2024 yields ingested: all 123 US refineries in the registry with
+      actual net naphtha yields, yield-mode fallback, calibration view
+- [ ] Load the real US refinery capacity sheet — fills `crude_capacity_kbd`
+      in `data/reference/refineries.csv` (yield-mode refineries light up
+      automatically) and unit detail where available; see
+      `docs/data_intake.md`
 - [ ] Populate the PADD 3 turnaround schedule
 - [ ] Wire in ship-tracking / fixture feed into `data/flows/`
 - [ ] Refinery margin lens ("how does this refinery think about margins")

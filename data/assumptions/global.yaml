@@ -12,6 +12,13 @@ cuts: [LVN, HVN]        # light / heavy virgin naphtha; add cuts here as needed
 utilization:
   default: 0.90         # fraction of nameplate run when nothing is wrong
 
+# Yield-mode: refineries with no unit detail yet get a synthetic CRUDE-EST
+# unit; their 2024 actual net naphtha yield (data/reference/
+# refinery_yields_2024.csv) is applied to crude runs and split across the
+# cuts by these shares (must cover every cut and sum to 1).
+yield_mode:
+  cut_shares: {LVN: 0.35, HVN: 0.65}
+
 yields:
   CDU:          {LVN: 0.05, HVN: 0.13}   # straight-run naphtha off crude
   VDU:          {LVN: 0.00, HVN: 0.01}   # small naphtha slip
