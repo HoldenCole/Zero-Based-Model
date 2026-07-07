@@ -1,21 +1,13 @@
-# Example what-if: layer hypothetical outages/flows on the base case without
-# touching live data. Run with:
+# HYPOTHETICAL what-if template (not live data). Run with:
 #   python -m naphtha_model scenario data/scenarios/example_scenario.yaml
-name: MOTIVA_CDU_TRIP
-description: Motiva PAR loses CDU-1 for three weeks; one replacement cargo pulled in.
+name: BASF_SPLITTER_OUTAGE
+description: What-if template - BASF FINA Port Arthur splitter down for three weeks.
 outages:
-  - outage_id: SCN-MOTIVA-CDU1
-    refinery_id: MOTIVA_PAR
-    unit_id: CDU-1
+  - outage_id: SCN-BASF-ALL
+    refinery_id: BASF_PORT_ARTHUR
+    unit_id: ""            # blank = whole refinery
     start: 2026-07-13
     end: 2026-08-02
     offline_pct: 100
     outage_type: unplanned
-    notes: hypothetical full CDU trip
-flows:
-  - date: 2026-07-20
-    padd: 3
-    direction: import
-    volume_kbd: 10
-    counterparty: NWE
-    notes: replacement cargo transatlantic
+    notes: hypothetical full-site outage at the biggest US merchant naphtha source

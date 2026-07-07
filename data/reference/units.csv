@@ -1,21 +1,25 @@
 refinery_id,unit_id,unit_type,capacity_kbd,notes
-MOTIVA_PAR,CDU-1,CDU,350,PLACEHOLDER capacity
-MOTIVA_PAR,CDU-2,CDU,276,PLACEHOLDER capacity
-MOTIVA_PAR,VDU-1,VDU,150,PLACEHOLDER capacity
-MOTIVA_PAR,FCC-1,FCC,95,PLACEHOLDER capacity
-MOTIVA_PAR,COKER-1,COKER,95,PLACEHOLDER capacity
-MOTIVA_PAR,REF-1,REFORMER,85,PLACEHOLDER capacity
-MOTIVA_PAR,ISOM-1,ISOM,20,PLACEHOLDER capacity
-XOM_BAYTOWN,CDU-1,CDU,300,PLACEHOLDER capacity
-XOM_BAYTOWN,CDU-2,CDU,288,PLACEHOLDER capacity
-XOM_BAYTOWN,VDU-1,VDU,220,PLACEHOLDER capacity
-XOM_BAYTOWN,FCC-1,FCC,200,PLACEHOLDER capacity
-XOM_BAYTOWN,HCU-1,HYDROCRACKER,50,PLACEHOLDER capacity
-XOM_BAYTOWN,REF-1,REFORMER,100,PLACEHOLDER capacity
-XOM_BAYTOWN,ISOM-1,ISOM,15,PLACEHOLDER capacity
-MPC_GALV_BAY,CDU-1,CDU,330,PLACEHOLDER capacity
-MPC_GALV_BAY,CDU-2,CDU,301,PLACEHOLDER capacity
-MPC_GALV_BAY,FCC-1,FCC,140,PLACEHOLDER capacity
-MPC_GALV_BAY,COKER-1,COKER,100,PLACEHOLDER capacity
-MPC_GALV_BAY,REF-1,REFORMER,105,PLACEHOLDER capacity
-MPC_GALV_BAY,ISOM-1,ISOM,20,PLACEHOLDER capacity
+MOTIVA_PAR,CDU,CDU,656.4,EIA Refinery Capacity Report 2026 (Jan 1 2026) - atmospheric crude b/cd
+MOTIVA_PAR,VDU,VDU,336.6,EIA RCR 2026 - vacuum distillation charge
+MOTIVA_PAR,FCC,FCC,89.7,EIA RCR 2026 - cat cracking fresh feed
+MOTIVA_PAR,HCU,HYDROCRACKER,107.3,EIA RCR 2026 - gas oil hydrocracking charge
+MOTIVA_PAR,COKER,COKER,158.0,EIA RCR 2026 - delayed coking charge
+MOTIVA_PAR,REF,REFORMER,121.8,EIA RCR 2026 - cat reforming (low pressure) charge
+MOTIVA_PAR,ISOM,ISOM,58.5,EIA RCR 2026 - isopentane/isohexane isomerization (b/sd production basis)
+MOTIVA_PAR,ALKY,ALKY,23.0,EIA RCR 2026 - alkylates production (b/sd)
+XOM_BAYTOWN,CDU,CDU,564.5,EIA Refinery Capacity Report 2026 (Jan 1 2026) - atmospheric crude b/cd
+XOM_BAYTOWN,VDU,VDU,297.0,EIA RCR 2026 - vacuum distillation charge
+XOM_BAYTOWN,FCC,FCC,204.5,EIA RCR 2026 - cat cracking fresh feed
+XOM_BAYTOWN,HCU,HYDROCRACKER,27.5,EIA RCR 2026 - distillate hydrocracking charge
+XOM_BAYTOWN,COKER-D,COKER,51.5,EIA RCR 2026 - delayed coking charge
+XOM_BAYTOWN,COKER-F,COKER,39.8,EIA RCR 2026 - fluid coking charge
+XOM_BAYTOWN,REF,REFORMER,122.9,EIA RCR 2026 - cat reforming (low pressure) charge
+XOM_BAYTOWN,ALKY,ALKY,42.6,EIA RCR 2026 - alkylates production (b/sd)
+MPC_GALV_BAY,CDU,CDU,631.0,EIA Refinery Capacity Report 2026 (Jan 1 2026) - atmospheric crude b/cd
+MPC_GALV_BAY,VDU,VDU,259.5,EIA RCR 2026 - vacuum distillation charge
+MPC_GALV_BAY,FCC,FCC,208.6,EIA RCR 2026 - cat cracking fresh feed
+MPC_GALV_BAY,HCU-D,HYDROCRACKER,75.5,EIA RCR 2026 - distillate hydrocracking charge
+MPC_GALV_BAY,HCU-R,HYDROCRACKER,82.7,EIA RCR 2026 - residual hydrocracking charge
+MPC_GALV_BAY,COKER,COKER,30.9,EIA RCR 2026 - delayed coking charge
+MPC_GALV_BAY,REF,REFORMER,139.7,EIA RCR 2026 - cat reforming (low pressure) charge
+MPC_GALV_BAY,ALKY,ALKY,67.0,EIA RCR 2026 - alkylates production (b/sd)

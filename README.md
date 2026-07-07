@@ -191,7 +191,16 @@ window.
 - [ ] Refinery margin lens ("how does this refinery think about margins")
 - [ ] Europe, then Asia-Pacific regions
 
-> **Placeholder data warning:** every capacity, yield, and utilization number
-> currently in `data/` is an illustrative placeholder so the model runs
-> end-to-end. Do not trade off these numbers until the real capacity sheet
-> and desk assumptions are loaded.
+## Data provenance
+
+- **Real:** refinery registry & 2024 net product yields (desk's Estimated
+  Refinery Outputs file); site-level monthly nameplate capacities (desk's EA
+  file, stamped 2026-07); unit-level capacities for Motiva Port Arthur /
+  ExxonMobil Baytown / Galveston Bay (EIA Refinery Capacity Report 2026,
+  Jan 1 2026, in `data/raw/eia_refcap26.xlsx`).
+- **Assumptions (desk-tunable, clearly labeled):** per-unit-type naphtha
+  yields and utilization in `data/assumptions/` — these drive the three
+  unit-detail refineries and are the reason their Calibration deltas are
+  non-zero. Tune them against the 2024 actuals in the Calibration view.
+- **Empty until sourced:** unit detail for the other 120 refineries
+  (yield-mode meanwhile), outages, flows, demand, intel.
