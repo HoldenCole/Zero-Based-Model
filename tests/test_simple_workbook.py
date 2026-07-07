@@ -84,7 +84,9 @@ def test_boxes_match_engine_and_capacity_lights_up(built, tmp_path):
 
     r = data.refinery("EXXONMOBIL_BATON_ROUGE")
     util = data.book.utilization(r, r.units[0], day).value
-    assert base["EXXONMOBIL_BATON_ROUGE"] == pytest.approx(0.0, abs=0.01)
+    assert base["EXXONMOBIL_BATON_ROUGE"] == pytest.approx(
+        r.crude_capacity_kbd * util * r.naphtha_yield_pct / 100, abs=0.01
+    )
     assert cap["EXXONMOBIL_BATON_ROUGE"] == pytest.approx(
         500 * util * r.naphtha_yield_pct / 100, abs=0.01
     )

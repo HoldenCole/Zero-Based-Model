@@ -52,6 +52,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_ing.add_argument("path")
 
+    p_cap = sub.add_parser(
+        "ingest-capacity", help="ingest EA site-level monthly nameplate capacities"
+    )
+    p_cap.add_argument("path")
+    p_cap.add_argument("--as-of", default="2026-07", help="month to stamp (YYYY-MM)")
+
     p_cal = sub.add_parser(
         "calibrate", help="model-implied net naphtha yield vs 2024 actuals"
     )
@@ -77,6 +83,21 @@ def main(argv: list[str] | None = None) -> int:
         result = ingest_yields(Path(args.path))
         for k, v in result.items():
             print(f"{k}: {v}")
+        return 0
+
+    if args.command == "ingest-capacity":
+        from .ingest import ingest_capacity
+
+        result = ingest_capacity(Path(args.path), as_of=args.as_of)
+        for k, v in result.items():
+            if isinstance(v, dict):
+                print(f"{k}:")
+                for kk, vv in sorted(v.items(), key=lambda x: -x[1]):
+                    print(f"    {vv:8.1f}  {kk}")
+            elif isinstance(v, list):
+                print(f"{k} ({len(v)}): {', '.join(v)}")
+            else:
+                print(f"{k}: {v}")
         return 0
 
     data = load_all()

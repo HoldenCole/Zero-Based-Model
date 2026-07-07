@@ -1,124 +1,124 @@
 refinery_id,name,owner,city,state,padd,region,crude_capacity_kbd,status,notes
-MOTIVA_PAR,Motiva Port Arthur,Saudi Aramco,Port Arthur,TX,3,US,626,operating,PLACEHOLDER row - replace with capacity sheet
-XOM_BAYTOWN,ExxonMobil Baytown,ExxonMobil,Baytown,TX,3,US,588,operating,PLACEHOLDER row - replace with capacity sheet
-MPC_GALV_BAY,Galveston Bay Refinery,Marathon Petroleum,Texas City,TX,3,US,631,operating,PLACEHOLDER row - replace with capacity sheet
-PBF_DELAWARE_CITY,PBF Energy Company LLC Delaware City,PBF Energy Company LLC,Delaware City,Delaware,1,US,0,operating,yield-mode; awaiting capacity sheet
-PHILLIPS_LINDEN,Phillips 66 Co. Linden,Phillips 66 Co.,Linden,New Jersey,1,US,0,operating,yield-mode; awaiting capacity sheet
-PBF_PAULSBORO,PBF Energy Company LLC Paulsboro,PBF Energy Company LLC,Paulsboro,New Jersey,1,US,0,operating,yield-mode; awaiting capacity sheet
-AMERICAN_BRADFORD,American Refining Group Bradford,American Refining Group,Bradford,Pennsylvania,1,US,0,operating,yield-mode; awaiting capacity sheet
-MONROE_TRAINER,Monroe Energy Trainer,Delta Airlines,Trainer,Pennsylvania,1,US,0,operating,yield-mode; awaiting capacity sheet
-UNITED_WARREN,United Refining Warren,United Refining,Warren,Pennsylvania,1,US,0,operating,yield-mode; awaiting capacity sheet
-ERGON_NEWELL,Ergon Newell,Ergon,Newell,West Virginia,1,US,0,operating,yield-mode; awaiting capacity sheet
-EXXONMOBIL_JOLIET,ExxonMobil Joliet,ExxonMobil,Joliet,Illinois,2,US,0,operating,yield-mode; awaiting capacity sheet
-CITGO_LEMONT,Citgo Lemont,PDVSA,Lemont,Illinois,2,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_ROBINSON,Marathon Petroleum Robinson,Marathon Petroleum,Robinson,Illinois,2,US,0,operating,yield-mode; awaiting capacity sheet
-CENOVUS_WOOD_RIVER,Cenovus Wood River,Cenovus (50%) / Phillips 66 Co. (50%),Wood River,Illinois,2,US,0,operating,yield-mode; awaiting capacity sheet
-COUNTRYMARK_MOUNT_VERNON,Countrymark Cooperative Inc. Mount Vernon,Countrymark Cooperative Inc.,Mount Vernon,Indiana,2,US,0,operating,yield-mode; awaiting capacity sheet
-BP_WHITING,BP Whiting,BP,Whiting,Indiana,2,US,0,operating,yield-mode; awaiting capacity sheet
-CVR_COFFEYVILLE,CVR Energy Coffeyville,Icahn Enterprises (80%) / Other Investors (20%),Coffeyville,Kansas,2,US,0,operating,yield-mode; awaiting capacity sheet
-HF_EL_DORADO_KS,HF Sinclair El Dorado (KS),HF Sinclair,El Dorado (KS),Kansas,2,US,0,operating,yield-mode; awaiting capacity sheet
-NCRA_MCPHERSON,NCRA McPherson,CHS,McPherson,Kansas,2,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_CATLETTSBURG,Marathon Petroleum Catlettsburg,Marathon Petroleum,Catlettsburg,Kentucky,2,US,0,operating,yield-mode; awaiting capacity sheet
-SOMERSET_SOMERSET,Somerset Refinery Somerset,Continental Refining Company,Somerset,Kentucky,2,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_DETROIT,Marathon Petroleum Detroit,Marathon Petroleum,Detroit,Michigan,2,US,0,operating,yield-mode; awaiting capacity sheet
-FLINT_ROSEMOUNT,Flint Hills Resources Rosemount,Koch Industries,Rosemount,Minnesota,2,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_SAINT_PAUL_PARK,Marathon Petroleum Saint Paul Park,Marathon Petroleum,Saint Paul Park,Minnesota,2,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_MANDAN,Marathon Petroleum Mandan,Marathon Petroleum,Mandan,North Dakota,2,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_CANTON,Marathon Petroleum Canton,Marathon Petroleum,Canton,Ohio,2,US,0,operating,yield-mode; awaiting capacity sheet
-CENOVUS_LIMA,Cenovus Lima,Cenovus,Lima,Ohio,2,US,0,operating,yield-mode; awaiting capacity sheet
-CENOVUS_TOLEDO,Cenovus Toledo,Cenovus,Toledo,Ohio,2,US,0,operating,yield-mode; awaiting capacity sheet
-PBF_TOLEDO,PBF Energy Company LLC Toledo,PBF Energy Company LLC,Toledo,Ohio,2,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_ARDMORE,Valero Ardmore,Valero,Ardmore,Oklahoma,2,US,0,operating,yield-mode; awaiting capacity sheet
-PHILLIPS_PONCA_CITY,Phillips 66 Co. Ponca City,Phillips 66 Co.,Ponca City,Oklahoma,2,US,0,operating,yield-mode; awaiting capacity sheet
-HF_TULSA,HF Sinclair Tulsa,HF Sinclair,Tulsa,Oklahoma,2,US,0,operating,yield-mode; awaiting capacity sheet
-CVR_WYNNEWOOD,CVR Energy Wynnewood,Icahn Enterprises (80%) / Other Investors (20%),Wynnewood,Oklahoma,2,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_MEMPHIS,Valero Memphis,Valero,Memphis,Tennessee,2,US,0,operating,yield-mode; awaiting capacity sheet
-CENOVUS_SUPERIOR,Cenovus Superior,Cenovus,Superior,Wisconsin,2,US,0,operating,yield-mode; awaiting capacity sheet
-GOODWAY_ATMORE,Goodway Refining Atmore,Goodway Refining,Atmore,Alabama,3,US,0,operating,yield-mode; awaiting capacity sheet
-VERTEX_MOBILE,Vertex Energy Inc. Mobile,Vertex Energy Inc.,Mobile,Alabama,3,US,0,operating,yield-mode; awaiting capacity sheet
-HUNT_TUSCALOOSA,Hunt Refining Consolidated Tuscaloosa,Hunt Refining Consolidated,Tuscaloosa,Alabama,3,US,0,operating,yield-mode; awaiting capacity sheet
-DELEK_EL_DORADO_AR,Delek Group El Dorado (AR),Delek Group,El Dorado (AR),Arkansas,3,US,0,operating,yield-mode; awaiting capacity sheet
-CROSS_SMACKOVER,Cross Oil and Ref.Co. Smackover,Cross Oil and Ref.Co.,Smackover,Arkansas,3,US,0,operating,yield-mode; awaiting capacity sheet
-EXXONMOBIL_BATON_ROUGE,ExxonMobil Baton Rouge,ExxonMobil,Baton Rouge,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-PBF_CHALMETTE,PBF Energy Company LLC Chalmette,PBF Energy Company LLC,Chalmette,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-SHELL_CONVENT,Shell Convent,Shell,Convent,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-CALUMET_COTTON_VALLEY,Calumet Lubricants Co. Cotton Valley,Calumet Lubricants Co.,Cotton Valley,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_GARYVILLE,Marathon Petroleum Garyville,Marathon Petroleum,Garyville,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-DELEK_KROTZ_SPRINGS,Delek Group Krotz Springs,Delek Group,Krotz Springs,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-CALCASIEU_LAKE_CHARLES,Calcasieu Refining Co. Lake Charles,TransWorld Oil,Lake Charles,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-CITGO_LAKE_CHARLES,Citgo Lake Charles,PDVSA,Lake Charles,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_MERAUX,Valero Meraux,Valero,Meraux,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-SHELL_NORCO,Shell Norco,Shell,Norco,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-PLACID_PORT_ALLEN,Placid Refining Port Allen,Placid Refining,Port Allen,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-CALUMET_PRINCETON,Calumet Lubricants Co. Princeton,Calumet Lubricants Co.,Princeton,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_SAINT_CHARLES,Valero Saint Charles,Valero,Saint Charles,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-SHELL_SAINT_ROSE,Shell Oil Co. USA Saint Rose,Shell,Saint Rose,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-CALUMET_SHREVEPORT,Calumet Lubricants Co. Shreveport,Calumet Lubricants Co.,Shreveport,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-PHILLIPS_WESTLAKE,Phillips 66 Co. Westlake,Phillips 66 Co.,Westlake,Louisiana,3,US,0,operating,yield-mode; awaiting capacity sheet
-CHEVRON_PASCAGOULA,Chevron Pascagoula,Chevron,Pascagoula,Mississippi,3,US,0,operating,yield-mode; awaiting capacity sheet
-HUNT_SANDERSVILLE,Hunt Refining Consolidated Sandersville,Hunt Refining Consolidated,Sandersville,Mississippi,3,US,0,operating,yield-mode; awaiting capacity sheet
-ERGON_VICKSBURG,Ergon Vicksburg,Ergon,Vicksburg,Mississippi,3,US,0,operating,yield-mode; awaiting capacity sheet
-HF_ARTESIA,HF Sinclair Artesia,HF Sinclair,Artesia,New Mexico,3,US,0,operating,yield-mode; awaiting capacity sheet
-EXXONMOBIL_BEAUMONT,ExxonMobil Beaumont,ExxonMobil,Beaumont,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-ALON_BIG_SPRINGS,Alon Big Springs,Delek Group,Big Springs,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-WRB_BORGER,WRB Refining Borger,Cenovus (50%) / Phillips 66 Co. (50%),Borger,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-BUCKEYE_CORPUS_CHRISTI,Buckeye Partners Corpus Christi,Buckeye Partners (80%) / Trafigura (20%),Corpus Christi,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-CITGO_CORPUS_CHRISTI,Citgo Corpus Christi,PDVSA,Corpus Christi,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-FLINT_CORPUS_CHRISTI,Flint Hills Resources Corpus Christi,Koch Industries,Corpus Christi,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_CORPUS_CHRISTI,Valero Corpus Christi,Valero,Corpus Christi,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-PEMEX_DEER_PARK,PEMEX Deer Park,PEMEX,Deer Park,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_EL_PASO,Marathon Petroleum El Paso,Marathon Petroleum,El Paso,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-KINDER_HOUSTON,Kinder Morgan Houston,Kinder Morgan,Houston,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-LYONDELLBASELL_HOUSTON,LyondellBasell Refining Houston,Access Industries,Houston,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_HOUSTON,Valero Houston,Valero,Houston,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-BLUE_NIXON,Blue Dolphin Energy Nixon,Blue Dolphin Energy,Nixon,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-CHEVRON_PASADENA,Chevron Pasadena,Chevron,Pasadena,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-BASF_PORT_ARTHUR,BASF FINA Petrochemicals Port Arthur,BASF (60%) / Total (40%),Port Arthur,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-TOTAL_PORT_ARTHUR,Total Port Arthur,Total,Port Arthur,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_PORT_ARTHUR,Valero Port Arthur,Valero,Port Arthur,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-LAZARUS_SAN_ANTONIO,Lazarus Energy San Antonio,Starlight Relativity Acquisition Co. LLC,San Antonio,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_SUNRAY,Valero Sunray,Valero,Sunray,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-PHILLIPS_SWEENY,Phillips 66 Co. Sweeny,Phillips 66 Co.,Sweeny,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_TEXAS_CITY,Valero Texas City,Valero,Texas City,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_TEXAS_CITY_GALVESTON_BAY,Marathon Petroleum Texas City (Galveston Bay),Marathon Petroleum,Texas City (Galveston Bay),Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_THREE_RIVERS,Valero Three Rivers,Valero,Three Rivers,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-DELEK_TYLER,Delek Refining Ltd. Tyler,Delek Group,Tyler,Texas,3,US,0,operating,yield-mode; awaiting capacity sheet
-SUNCOR_DENVER,Suncor Denver,Suncor,Denver,Colorado,4,US,0,operating,yield-mode; awaiting capacity sheet
-PAR_BILLINGS,Par Petroleum Billings,Par Petroleum,Billings,Montana,4,US,0,operating,yield-mode; awaiting capacity sheet
-PHILLIPS_BILLINGS,Phillips 66 Co. Billings,Phillips 66 Co.,Billings,Montana,4,US,0,operating,yield-mode; awaiting capacity sheet
-MONTANA_GREAT_FALLS,Montana Refining Co. Great Falls,Calumet Lubricants Co.,Great Falls,Montana,4,US,0,operating,yield-mode; awaiting capacity sheet
-CHS_LAUREL,CHS Laurel,CHS,Laurel,Montana,4,US,0,operating,yield-mode; awaiting capacity sheet
-BIG_NORTH_SLATERVILLE_CANAL,Big West Oil Co North Slaterville Canal,Flying J,North Slaterville Canal,Utah,4,US,0,operating,yield-mode; awaiting capacity sheet
-CHEVRON_SALT_LAKE_CITY,Chevron Salt Lake City,Chevron,Salt Lake City,Utah,4,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_SALT_LAKE_CITY,Marathon Petroleum Salt Lake City,Marathon Petroleum,Salt Lake City,Utah,4,US,0,operating,yield-mode; awaiting capacity sheet
-HF_WOODS_CROSS,HF Sinclair Woods Cross,HF Sinclair,Woods Cross,Utah,4,US,0,operating,yield-mode; awaiting capacity sheet
-SILVER_WOODS_CROSS,Silver Eagle Refining Woods Cross,Silver Eagle Refining,Woods Cross,Utah,4,US,0,operating,yield-mode; awaiting capacity sheet
-HF_CASPER,HF Sinclair Casper,HF Sinclair,Casper,Wyoming,4,US,0,operating,yield-mode; awaiting capacity sheet
-SLATE_DOUGLAS,Slate Douglas,Slate,Douglas,Wyoming,4,US,0,operating,yield-mode; awaiting capacity sheet
-WYOMING_EVANSTON,Wyoming Refining Evanston,Silver Eagle Refining,Evanston,Wyoming,4,US,0,operating,yield-mode; awaiting capacity sheet
-PAR_NEWCASTLE,Par Petroleum Newcastle,Par Petroleum,Newcastle,Wyoming,4,US,0,operating,yield-mode; awaiting capacity sheet
-SINCLAIR_SINCLAIR,Sinclair Sinclair,Sinclair,Sinclair,Wyoming,4,US,0,operating,yield-mode; awaiting capacity sheet
-CONOCOPHILLIPS_ANCHORAGE,ConocoPhillips Anchorage,Phillips Petroleum,Anchorage,Alaska,5,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_NIKISKI,Marathon Petroleum Nikiski,Marathon Petroleum,Nikiski,Alaska,5,US,0,operating,yield-mode; awaiting capacity sheet
-PETRO_NORTH_POLE,Petro Star Inc. North Pole,Petro Star Inc.,North Pole,Alaska,5,US,0,operating,yield-mode; awaiting capacity sheet
-BP_PRUDHOE_BAY,BP Prudhoe Bay,BP,Prudhoe Bay,Alaska,5,US,0,operating,yield-mode; awaiting capacity sheet
-PETRO_VALDEZ,Petro Star Inc. Valdez,Petro Star Inc.,Valdez,Alaska,5,US,0,operating,yield-mode; awaiting capacity sheet
-KERN_BAKERSFIELD,Kern Oil Bakersfield,Kern Oil,Bakersfield,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-SAN_BAKERSFIELD,San Joaquin Refining Bakersfield,San Joaquin Refining,Bakersfield,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_BENICIA,Valero Benicia,Valero,Benicia,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_CARSON,Marathon Petroleum Carson,Marathon Petroleum,Carson,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-CHEVRON_EL_SEGUNDO,Chevron El Segundo,Chevron,El Segundo,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_LOS_ANGELES,Marathon Petroleum Los Angeles,Marathon Petroleum,Los Angeles,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-PHILLIPS_LOS_ANGELES,Phillips 66 Co. Los Angeles,Phillips 66 Co.,Los Angeles,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-VALERO_LOS_ANGELES,Valero Los Angeles,Valero,Los Angeles,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-PBF_MARTINEZ,PBF Energy Company LLC Martinez,PBF Energy Company LLC,Martinez,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-CHEVRON_RICHMOND,Chevron Richmond,Chevron,Richmond,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-LUNDAYTHAGARD_SOUTH_GATE,Lunday-Thagard Oil Co. South Gate,Lunday-Thagard Oil Co.,South Gate,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-PBF_TORRANCE,PBF Energy Company LLC Torrance,PBF Energy Company LLC,Torrance,California,5,US,0,operating,yield-mode; awaiting capacity sheet
-PAR_EWA_BEACH,Par Petroleum Ewa Beach,Par Petroleum,Ewa Beach,Hawaii,5,US,0,operating,yield-mode; awaiting capacity sheet
-FORELAND_TONOPAH,Foreland Corp Tonopah,Energy Income Fund,Tonopah,Nevada,5,US,0,operating,yield-mode; awaiting capacity sheet
-HF_ANACORTES,HF Sinclair Anacortes,HF Sinclair,Anacortes,Washington,5,US,0,operating,yield-mode; awaiting capacity sheet
-MARATHON_ANACORTES,Marathon Petroleum Anacortes,Marathon Petroleum,Anacortes,Washington,5,US,0,operating,yield-mode; awaiting capacity sheet
-BP_FERNDALE,BP Ferndale,BP,Ferndale,Washington,5,US,0,operating,yield-mode; awaiting capacity sheet
-PHILLIPS_FERNDALE,Phillips 66 Co. Ferndale,Phillips 66 Co.,Ferndale,Washington,5,US,0,operating,yield-mode; awaiting capacity sheet
-PAR_TACOMA,Par Petroleum Tacoma,Par Petroleum,Tacoma,Washington,5,US,0,operating,yield-mode; awaiting capacity sheet
+MOTIVA_PAR,Motiva Port Arthur,Saudi Aramco,Port Arthur,TX,3,US,639.7,operating,capacity: EA nameplate 2026-07
+XOM_BAYTOWN,ExxonMobil Baytown,ExxonMobil,Baytown,TX,3,US,580.2,operating,capacity: EA nameplate 2026-07
+MPC_GALV_BAY,Galveston Bay Refinery,Marathon Petroleum,Texas City,TX,3,US,665,operating,capacity: EA nameplate 2026-07
+PBF_DELAWARE_CITY,PBF Energy Company LLC Delaware City,PBF Energy Company LLC,Delaware City,Delaware,1,US,180,operating,capacity: EA nameplate 2026-07
+PHILLIPS_LINDEN,Phillips 66 Co. Linden,Phillips 66 Co.,Linden,New Jersey,1,US,258,operating,capacity: EA nameplate 2026-07
+PBF_PAULSBORO,PBF Energy Company LLC Paulsboro,PBF Energy Company LLC,Paulsboro,New Jersey,1,US,100,operating,capacity: EA nameplate 2026-07
+AMERICAN_BRADFORD,American Refining Group Bradford,American Refining Group,Bradford,Pennsylvania,1,US,11.8,operating,capacity: EA nameplate 2026-07
+MONROE_TRAINER,Monroe Energy Trainer,Delta Airlines,Trainer,Pennsylvania,1,US,185,operating,capacity: EA nameplate 2026-07
+UNITED_WARREN,United Refining Warren,United Refining,Warren,Pennsylvania,1,US,70,operating,capacity: EA nameplate 2026-07
+ERGON_NEWELL,Ergon Newell,Ergon,Newell,West Virginia,1,US,22.3,operating,capacity: EA nameplate 2026-07
+EXXONMOBIL_JOLIET,ExxonMobil Joliet,ExxonMobil,Joliet,Illinois,2,US,252,operating,capacity: EA nameplate 2026-07
+CITGO_LEMONT,Citgo Lemont,PDVSA,Lemont,Illinois,2,US,194.12,operating,capacity: EA nameplate 2026-07
+MARATHON_ROBINSON,Marathon Petroleum Robinson,Marathon Petroleum,Robinson,Illinois,2,US,278,operating,capacity: EA nameplate 2026-07
+CENOVUS_WOOD_RIVER,Cenovus Wood River,Cenovus (50%) / Phillips 66 Co. (50%),Wood River,Illinois,2,US,356,operating,capacity: EA nameplate 2026-07
+COUNTRYMARK_MOUNT_VERNON,Countrymark Cooperative Inc. Mount Vernon,Countrymark Cooperative Inc.,Mount Vernon,Indiana,2,US,30.8,operating,capacity: EA nameplate 2026-07
+BP_WHITING,BP Whiting,BP,Whiting,Indiana,2,US,435,operating,capacity: EA nameplate 2026-07
+CVR_COFFEYVILLE,CVR Energy Coffeyville,Icahn Enterprises (80%) / Other Investors (20%),Coffeyville,Kansas,2,US,132,operating,capacity: EA nameplate 2026-07
+HF_EL_DORADO_KS,HF Sinclair El Dorado (KS),HF Sinclair,El Dorado (KS),Kansas,2,US,135,operating,capacity: EA nameplate 2026-07
+NCRA_MCPHERSON,NCRA McPherson,CHS,McPherson,Kansas,2,US,117.1,operating,capacity: EA nameplate 2026-07
+MARATHON_CATLETTSBURG,Marathon Petroleum Catlettsburg,Marathon Petroleum,Catlettsburg,Kentucky,2,US,316,operating,capacity: EA nameplate 2026-07
+SOMERSET_SOMERSET,Somerset Refinery Somerset,Continental Refining Company,Somerset,Kentucky,2,US,0,shut,capacity: EA nameplate 2026-07
+MARATHON_DETROIT,Marathon Petroleum Detroit,Marathon Petroleum,Detroit,Michigan,2,US,140,operating,capacity: EA nameplate 2026-07
+FLINT_ROSEMOUNT,Flint Hills Resources Rosemount,Koch Industries,Rosemount,Minnesota,2,US,375,operating,capacity: EA nameplate 2026-07
+MARATHON_SAINT_PAUL_PARK,Marathon Petroleum Saint Paul Park,Marathon Petroleum,Saint Paul Park,Minnesota,2,US,111,operating,capacity: EA nameplate 2026-07
+MARATHON_MANDAN,Marathon Petroleum Mandan,Marathon Petroleum,Mandan,North Dakota,2,US,75.5,operating,capacity: EA nameplate 2026-07
+MARATHON_CANTON,Marathon Petroleum Canton,Marathon Petroleum,Canton,Ohio,2,US,100,operating,capacity: EA nameplate 2026-07
+CENOVUS_LIMA,Cenovus Lima,Cenovus,Lima,Ohio,2,US,185,operating,capacity: EA nameplate 2026-07
+CENOVUS_TOLEDO,Cenovus Toledo,Cenovus,Toledo,Ohio,2,US,160,operating,capacity: EA nameplate 2026-07
+PBF_TOLEDO,PBF Energy Company LLC Toledo,PBF Energy Company LLC,Toledo,Ohio,2,US,180,operating,capacity: EA nameplate 2026-07
+VALERO_ARDMORE,Valero Ardmore,Valero,Ardmore,Oklahoma,2,US,86,operating,capacity: EA nameplate 2026-07
+PHILLIPS_PONCA_CITY,Phillips 66 Co. Ponca City,Phillips 66 Co.,Ponca City,Oklahoma,2,US,225,operating,capacity: EA nameplate 2026-07
+HF_TULSA,HF Sinclair Tulsa,HF Sinclair,Tulsa,Oklahoma,2,US,125,operating,capacity: EA nameplate 2026-07
+CVR_WYNNEWOOD,CVR Energy Wynnewood,Icahn Enterprises (80%) / Other Investors (20%),Wynnewood,Oklahoma,2,US,75,operating,capacity: EA nameplate 2026-07
+VALERO_MEMPHIS,Valero Memphis,Valero,Memphis,Tennessee,2,US,180,operating,capacity: EA nameplate 2026-07
+CENOVUS_SUPERIOR,Cenovus Superior,Cenovus,Superior,Wisconsin,2,US,50,operating,capacity: EA nameplate 2026-07
+GOODWAY_ATMORE,Goodway Refining Atmore,Goodway Refining,Atmore,Alabama,3,US,4.1,operating,capacity: EA nameplate 2026-07
+VERTEX_MOBILE,Vertex Energy Inc. Mobile,Vertex Energy Inc.,Mobile,Alabama,3,US,91.2,operating,capacity: EA nameplate 2026-07
+HUNT_TUSCALOOSA,Hunt Refining Consolidated Tuscaloosa,Hunt Refining Consolidated,Tuscaloosa,Alabama,3,US,40,operating,capacity: EA nameplate 2026-07
+DELEK_EL_DORADO_AR,Delek Group El Dorado (AR),Delek Group,El Dorado (AR),Arkansas,3,US,80,operating,capacity: EA nameplate 2026-07
+CROSS_SMACKOVER,Cross Oil and Ref.Co. Smackover,Cross Oil and Ref.Co.,Smackover,Arkansas,3,US,7.7,operating,capacity: EA nameplate 2026-07
+EXXONMOBIL_BATON_ROUGE,ExxonMobil Baton Rouge,ExxonMobil,Baton Rouge,Louisiana,3,US,540.2,operating,capacity: EA nameplate 2026-07
+PBF_CHALMETTE,PBF Energy Company LLC Chalmette,PBF Energy Company LLC,Chalmette,Louisiana,3,US,185,operating,capacity: EA nameplate 2026-07
+SHELL_CONVENT,Shell Convent,Shell,Convent,Louisiana,3,US,0,shut,capacity: EA nameplate 2026-07
+CALUMET_COTTON_VALLEY,Calumet Lubricants Co. Cotton Valley,Calumet Lubricants Co.,Cotton Valley,Louisiana,3,US,14,operating,capacity: EA nameplate 2026-07
+MARATHON_GARYVILLE,Marathon Petroleum Garyville,Marathon Petroleum,Garyville,Louisiana,3,US,628,operating,capacity: EA nameplate 2026-07
+DELEK_KROTZ_SPRINGS,Delek Group Krotz Springs,Delek Group,Krotz Springs,Louisiana,3,US,74,operating,capacity: EA nameplate 2026-07
+CALCASIEU_LAKE_CHARLES,Calcasieu Refining Co. Lake Charles,TransWorld Oil,Lake Charles,Louisiana,3,US,105,operating,capacity: EA nameplate 2026-07
+CITGO_LAKE_CHARLES,Citgo Lake Charles,PDVSA,Lake Charles,Louisiana,3,US,483,operating,capacity: EA nameplate 2026-07
+VALERO_MERAUX,Valero Meraux,Valero,Meraux,Louisiana,3,US,125,operating,capacity: EA nameplate 2026-07
+SHELL_NORCO,Shell Norco,Shell,Norco,Louisiana,3,US,250,operating,capacity: EA nameplate 2026-07
+PLACID_PORT_ALLEN,Placid Refining Port Allen,Placid Refining,Port Allen,Louisiana,3,US,75,operating,capacity: EA nameplate 2026-07
+CALUMET_PRINCETON,Calumet Lubricants Co. Princeton,Calumet Lubricants Co.,Princeton,Louisiana,3,US,8.655,operating,capacity: EA nameplate 2026-07
+VALERO_SAINT_CHARLES,Valero Saint Charles,Valero,Saint Charles,Louisiana,3,US,215,operating,capacity: EA nameplate 2026-07
+SHELL_SAINT_ROSE,Shell Oil Co. USA Saint Rose,Shell,Saint Rose,Louisiana,3,US,0,shut,capacity: EA nameplate 2026-07
+CALUMET_SHREVEPORT,Calumet Lubricants Co. Shreveport,Calumet Lubricants Co.,Shreveport,Louisiana,3,US,57,operating,capacity: EA nameplate 2026-07
+PHILLIPS_WESTLAKE,Phillips 66 Co. Westlake,Phillips 66 Co.,Westlake,Louisiana,3,US,281,operating,capacity: EA nameplate 2026-07
+CHEVRON_PASCAGOULA,Chevron Pascagoula,Chevron,Pascagoula,Mississippi,3,US,370,operating,capacity: EA nameplate 2026-07
+HUNT_SANDERSVILLE,Hunt Refining Consolidated Sandersville,Hunt Refining Consolidated,Sandersville,Mississippi,3,US,12.5,operating,capacity: EA nameplate 2026-07
+ERGON_VICKSBURG,Ergon Vicksburg,Ergon,Vicksburg,Mississippi,3,US,27.3,operating,capacity: EA nameplate 2026-07
+HF_ARTESIA,HF Sinclair Artesia,HF Sinclair,Artesia,New Mexico,3,US,100,operating,capacity: EA nameplate 2026-07
+EXXONMOBIL_BEAUMONT,ExxonMobil Beaumont,ExxonMobil,Beaumont,Texas,3,US,634.4,operating,capacity: EA nameplate 2026-07
+ALON_BIG_SPRINGS,Alon Big Springs,Delek Group,Big Springs,Texas,3,US,73,operating,capacity: EA nameplate 2026-07
+WRB_BORGER,WRB Refining Borger,Cenovus (50%) / Phillips 66 Co. (50%),Borger,Texas,3,US,154,operating,capacity: EA nameplate 2026-07
+BUCKEYE_CORPUS_CHRISTI,Buckeye Partners Corpus Christi,Buckeye Partners (80%) / Trafigura (20%),Corpus Christi,Texas,3,US,65,operating,capacity: EA nameplate 2026-07
+CITGO_CORPUS_CHRISTI,Citgo Corpus Christi,PDVSA,Corpus Christi,Texas,3,US,175.5,operating,capacity: EA nameplate 2026-07
+FLINT_CORPUS_CHRISTI,Flint Hills Resources Corpus Christi,Koch Industries,Corpus Christi,Texas,3,US,330,operating,capacity: EA nameplate 2026-07
+VALERO_CORPUS_CHRISTI,Valero Corpus Christi,Valero,Corpus Christi,Texas,3,US,290,operating,capacity: EA nameplate 2026-07
+PEMEX_DEER_PARK,PEMEX Deer Park,PEMEX,Deer Park,Texas,3,US,340,operating,capacity: EA nameplate 2026-07
+MARATHON_EL_PASO,Marathon Petroleum El Paso,Marathon Petroleum,El Paso,Texas,3,US,133,operating,capacity: EA nameplate 2026-07
+KINDER_HOUSTON,Kinder Morgan Houston,Kinder Morgan,Houston,Texas,3,US,121,operating,capacity: EA nameplate 2026-07
+LYONDELLBASELL_HOUSTON,LyondellBasell Refining Houston,Access Industries,Houston,Texas,3,US,0,shut,capacity: EA nameplate 2026-07
+VALERO_HOUSTON,Valero Houston,Valero,Houston,Texas,3,US,205,operating,capacity: EA nameplate 2026-07
+BLUE_NIXON,Blue Dolphin Energy Nixon,Blue Dolphin Energy,Nixon,Texas,3,US,15,operating,capacity: EA nameplate 2026-07
+CHEVRON_PASADENA,Chevron Pasadena,Chevron,Pasadena,Texas,3,US,125,operating,capacity: EA nameplate 2026-07
+BASF_PORT_ARTHUR,BASF FINA Petrochemicals Port Arthur,BASF (60%) / Total (40%),Port Arthur,Texas,3,US,75,operating,capacity: EA nameplate 2026-07
+TOTAL_PORT_ARTHUR,Total Port Arthur,Total,Port Arthur,Texas,3,US,238,operating,capacity: EA nameplate 2026-07
+VALERO_PORT_ARTHUR,Valero Port Arthur,Valero,Port Arthur,Texas,3,US,435,operating,capacity: EA nameplate 2026-07
+LAZARUS_SAN_ANTONIO,Lazarus Energy San Antonio,Starlight Relativity Acquisition Co. LLC,San Antonio,Texas,3,US,21,operating,capacity: EA nameplate 2026-07
+VALERO_SUNRAY,Valero Sunray,Valero,Sunray,Texas,3,US,195,operating,capacity: EA nameplate 2026-07
+PHILLIPS_SWEENY,Phillips 66 Co. Sweeny,Phillips 66 Co.,Sweeny,Texas,3,US,277.9,operating,capacity: EA nameplate 2026-07
+VALERO_TEXAS_CITY,Valero Texas City,Valero,Texas City,Texas,3,US,260,operating,capacity: EA nameplate 2026-07
+MARATHON_TEXAS_CITY_GALVESTON_BAY,Marathon Petroleum Texas City (Galveston Bay),Marathon Petroleum,Texas City (Galveston Bay),Texas,3,US,50,operating,EA yields component of the Galveston Bay complex; capacity carried on MPC_GALV_BAY
+VALERO_THREE_RIVERS,Valero Three Rivers,Valero,Three Rivers,Texas,3,US,97.5,operating,capacity: EA nameplate 2026-07
+DELEK_TYLER,Delek Refining Ltd. Tyler,Delek Group,Tyler,Texas,3,US,75,operating,capacity: EA nameplate 2026-07
+SUNCOR_DENVER,Suncor Denver,Suncor,Denver,Colorado,4,US,98,operating,capacity: EA nameplate 2026-07
+PAR_BILLINGS,Par Petroleum Billings,Par Petroleum,Billings,Montana,4,US,62.9,operating,capacity: EA nameplate 2026-07
+PHILLIPS_BILLINGS,Phillips 66 Co. Billings,Phillips 66 Co.,Billings,Montana,4,US,66,operating,capacity: EA nameplate 2026-07
+MONTANA_GREAT_FALLS,Montana Refining Co. Great Falls,Calumet Lubricants Co.,Great Falls,Montana,4,US,17,operating,capacity: EA nameplate 2026-07
+CHS_LAUREL,CHS Laurel,CHS,Laurel,Montana,4,US,61.1,operating,capacity: EA nameplate 2026-07
+BIG_NORTH_SLATERVILLE_CANAL,Big West Oil Co North Slaterville Canal,Flying J,North Slaterville Canal,Utah,4,US,33,operating,capacity: EA nameplate 2026-07
+CHEVRON_SALT_LAKE_CITY,Chevron Salt Lake City,Chevron,Salt Lake City,Utah,4,US,55,operating,capacity: EA nameplate 2026-07
+MARATHON_SALT_LAKE_CITY,Marathon Petroleum Salt Lake City,Marathon Petroleum,Salt Lake City,Utah,4,US,72.5,operating,capacity: EA nameplate 2026-07
+HF_WOODS_CROSS,HF Sinclair Woods Cross,HF Sinclair,Woods Cross,Utah,4,US,45,operating,capacity: EA nameplate 2026-07
+SILVER_WOODS_CROSS,Silver Eagle Refining Woods Cross,Silver Eagle Refining,Woods Cross,Utah,4,US,15.7,operating,capacity: EA nameplate 2026-07
+HF_CASPER,HF Sinclair Casper,HF Sinclair,Casper,Wyoming,4,US,30,operating,capacity: EA nameplate 2026-07
+SLATE_DOUGLAS,Slate Douglas,Slate,Douglas,Wyoming,4,US,0,shut,capacity: EA nameplate 2026-07
+WYOMING_EVANSTON,Wyoming Refining Evanston,Silver Eagle Refining,Evanston,Wyoming,4,US,3.4,operating,capacity: EA nameplate 2026-07
+PAR_NEWCASTLE,Par Petroleum Newcastle,Par Petroleum,Newcastle,Wyoming,4,US,20,operating,capacity: EA nameplate 2026-07
+SINCLAIR_SINCLAIR,Sinclair Sinclair,Sinclair,Sinclair,Wyoming,4,US,94,operating,capacity: EA nameplate 2026-07
+CONOCOPHILLIPS_ANCHORAGE,ConocoPhillips Anchorage,Phillips Petroleum,Anchorage,Alaska,5,US,16,operating,capacity: EA nameplate 2026-07
+MARATHON_NIKISKI,Marathon Petroleum Nikiski,Marathon Petroleum,Nikiski,Alaska,5,US,68,operating,capacity: EA nameplate 2026-07
+PETRO_NORTH_POLE,Petro Star Inc. North Pole,Petro Star Inc.,North Pole,Alaska,5,US,22,operating,capacity: EA nameplate 2026-07
+BP_PRUDHOE_BAY,BP Prudhoe Bay,BP,Prudhoe Bay,Alaska,5,US,16,operating,capacity: EA nameplate 2026-07
+PETRO_VALDEZ,Petro Star Inc. Valdez,Petro Star Inc.,Valdez,Alaska,5,US,60,operating,capacity: EA nameplate 2026-07
+KERN_BAKERSFIELD,Kern Oil Bakersfield,Kern Oil,Bakersfield,California,5,US,27,operating,capacity: EA nameplate 2026-07
+SAN_BAKERSFIELD,San Joaquin Refining Bakersfield,San Joaquin Refining,Bakersfield,California,5,US,25,operating,capacity: EA nameplate 2026-07
+VALERO_BENICIA,Valero Benicia,Valero,Benicia,California,5,US,0,shut,capacity: EA nameplate 2026-07
+MARATHON_CARSON,Marathon Petroleum Carson,Marathon Petroleum,Carson,California,5,US,281,operating,capacity: EA nameplate 2026-07
+CHEVRON_EL_SEGUNDO,Chevron El Segundo,Chevron,El Segundo,California,5,US,290.5,operating,capacity: EA nameplate 2026-07
+MARATHON_LOS_ANGELES,Marathon Petroleum Los Angeles,Marathon Petroleum,Los Angeles,California,5,US,103.5,operating,capacity: EA nameplate 2026-07
+PHILLIPS_LOS_ANGELES,Phillips 66 Co. Los Angeles,Phillips 66 Co.,Los Angeles,California,5,US,0,shut,capacity: EA nameplate 2026-07
+VALERO_LOS_ANGELES,Valero Los Angeles,Valero,Los Angeles,California,5,US,90,operating,capacity: EA nameplate 2026-07
+PBF_MARTINEZ,PBF Energy Company LLC Martinez,PBF Energy Company LLC,Martinez,California,5,US,158,operating,capacity: EA nameplate 2026-07
+CHEVRON_RICHMOND,Chevron Richmond,Chevron,Richmond,California,5,US,257.2,operating,capacity: EA nameplate 2026-07
+LUNDAYTHAGARD_SOUTH_GATE,Lunday-Thagard Oil Co. South Gate,Lunday-Thagard Oil Co.,South Gate,California,5,US,8.5,operating,capacity: EA nameplate 2026-07
+PBF_TORRANCE,PBF Energy Company LLC Torrance,PBF Energy Company LLC,Torrance,California,5,US,166.2,operating,capacity: EA nameplate 2026-07
+PAR_EWA_BEACH,Par Petroleum Ewa Beach,Par Petroleum,Ewa Beach,Hawaii,5,US,94,operating,capacity: EA nameplate 2026-07
+FORELAND_TONOPAH,Foreland Corp Tonopah,Energy Income Fund,Tonopah,Nevada,5,US,5,operating,capacity: EA nameplate 2026-07
+HF_ANACORTES,HF Sinclair Anacortes,HF Sinclair,Anacortes,Washington,5,US,149,operating,capacity: EA nameplate 2026-07
+MARATHON_ANACORTES,Marathon Petroleum Anacortes,Marathon Petroleum,Anacortes,Washington,5,US,122,operating,capacity: EA nameplate 2026-07
+BP_FERNDALE,BP Ferndale,BP,Ferndale,Washington,5,US,251,operating,capacity: EA nameplate 2026-07
+PHILLIPS_FERNDALE,Phillips 66 Co. Ferndale,Phillips 66 Co.,Ferndale,Washington,5,US,105,operating,capacity: EA nameplate 2026-07
+PAR_TACOMA,Par Petroleum Tacoma,Par Petroleum,Tacoma,Washington,5,US,42,operating,capacity: EA nameplate 2026-07

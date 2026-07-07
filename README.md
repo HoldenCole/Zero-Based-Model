@@ -178,10 +178,14 @@ window.
       toggle, manual overrides, and data checks
 - [x] 2024 yields ingested: all 123 US refineries in the registry with
       actual net naphtha yields, yield-mode fallback, calibration view
-- [ ] Load the real US refinery capacity sheet — fills `crude_capacity_kbd`
-      in `data/reference/refineries.csv` (yield-mode refineries light up
-      automatically) and unit detail where available; see
-      `docs/data_intake.md`
+- [x] EA site-level nameplate capacities ingested (monthly 2023-2026,
+      `ingest-capacity`): all 123 refineries carry real crude capacity,
+      shut sites stamped, per-PADD sums reconciled to the EA PADD series
+- [ ] Add the unmatched splitter/asphalt sites (Channelview, Magellan &
+      Kinder splitters, ~120 kbd) as SPLITTER units with the desk
+- [ ] Replace the placeholder unit-level detail for Motiva PAR / Baytown /
+      Galveston Bay with real unit capacities and tune yields via the
+      calibration view
 - [ ] Populate the PADD 3 turnaround schedule
 - [ ] Wire in ship-tracking / fixture feed into `data/flows/`
 - [ ] Refinery margin lens ("how does this refinery think about margins")

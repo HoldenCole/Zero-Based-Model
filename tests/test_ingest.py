@@ -43,20 +43,51 @@ def test_yield_mode_math():
     data = load_all()
     r = data.refinery("EXXONMOBIL_BATON_ROUGE")
     assert [u.unit_id for u in r.units] == ["CRUDE-EST"]
-    # no capacity yet -> zero production but the machinery is live
+    assert r.crude_capacity_kbd > 0  # EA nameplate ingested
     day = date(2026, 7, 6)
     snap = refinery_day(r, day, data.book, [])
-    assert snap.net_kbd == 0.0
-    # simulate the capacity sheet landing
-    object.__setattr__(r.units[0], "capacity_kbd", 500.0)
-    snap = refinery_day(r, day, data.book, [])
     util = data.book.utilization(r, r.units[0], day).value
-    expected = 500.0 * util * r.naphtha_yield_pct / 100.0
+    expected = r.crude_capacity_kbd * util * r.naphtha_yield_pct / 100.0
     assert snap.net_kbd == pytest.approx(expected)
     # cut split follows global.yaml yield_mode.cut_shares
     prod = snap.production_kbd
     assert prod["LVN"] == pytest.approx(expected * 0.35)
     assert prod["HVN"] == pytest.approx(expected * 0.65)
+
+
+def test_capacity_ingestion_state():
+    """Registry state after EA capacity ingestion: every refinery stamped,
+    shut sites at zero, per-PADD sums close to EA PADD nameplate."""
+    import csv
+
+    from naphtha_model.ingest import COMPONENT_NOTES
+
+    data = load_all()
+    stamped = [r for r in data.refineries
+               if r.refinery_id not in COMPONENT_NOTES]
+    operating = [r for r in stamped if r.crude_capacity_kbd > 0]
+    assert len(operating) >= 100
+    for rid in ("MOTIVA_PAR", "XOM_BAYTOWN", "MPC_GALV_BAY"):
+        assert data.refinery(rid).crude_capacity_kbd > 500
+    assert data.refinery("SHELL_CONVENT").crude_capacity_kbd == 0
+    assert data.refinery("SHELL_CONVENT").status == "shut"
+
+    # monthly series present for every site
+    monthly = DATA_DIR / "reference" / "site_capacity_monthly.csv"
+    rows = list(csv.DictReader(monthly.open()))
+    assert len({r["site"] for r in rows}) == 150
+
+    # reconcile vs the EA PADD nameplate series (gap = known unmatched
+    # splitter/asphalt sites, < 200 kbd nationally)
+    padd_raw = DATA_DIR / "raw" / "ea_padd_capacity_2023_2026.csv"
+    if padd_raw.exists():
+        ea = {}
+        for r in csv.DictReader(padd_raw.open(encoding="utf-8-sig")):
+            if (r["source"] == "Energy Aspects" and r["date"] == "2026-07-01"
+                    and "nameplate capacity for PADD" in r["series_label"]):
+                ea[int(r["sub_region"].split("_")[1])] = float(r["value"])
+        reg_total = sum(r.crude_capacity_kbd for r in data.refineries)
+        assert sum(ea.values()) - reg_total == pytest.approx(174.0, abs=1.0)
 
 
 def test_calibration_inputs_available():

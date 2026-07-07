@@ -186,3 +186,178 @@ def ingest_yields(xlsx_path: Path, data_dir: Path = DATA_DIR) -> dict:
     return {"refineries": len(records), "matched_existing": matched,
             "added_to_registry": added, "yields_csv": str(yields_path),
             "registry_csv": str(registry_path)}
+
+
+# ------------------------------------------------------------------ capacity
+#
+# EA site-level monthly nameplate capacity (kb/d), 2023-2026. Site names are
+# city-based with parenthetical disambiguators; the alias map below resolves
+# every site that automatic matching (exact city, then operator hint, then
+# name-contains) cannot. None = site is not in the registry (shut before the
+# 2024 yields vintage, or a splitter/topping asset not yet modelled) — its
+# monthly series is still written to site_capacity_monthly.csv for reference.
+
+SITE_ALIASES: dict[str, str | None] = {
+    "Anacortes": "MARATHON_ANACORTES",            # ex-Tesoro/Andeavor plant
+    "Anacortes (Puget Sound)": "HF_ANACORTES",    # ex-Shell Puget Sound
+    "Bakersfield": None,                          # ex-Big West, converted/shut
+    "Bakersfield (SJR)": "SAN_BAKERSFIELD",       # San Joaquin Refining
+    "Bayway": "PHILLIPS_LINDEN",                  # P66 Bayway, Linden NJ
+    "Billings": "PAR_BILLINGS",                   # ex-ExxonMobil Billings
+    "Cherry Point": "BP_FERNDALE",                # BP Cherry Point
+    "Corpus Christi (Bill Greehey)": "VALERO_CORPUS_CHRISTI",
+    "Corpus Christi (Trigeant)": None,            # asphalt, not in registry
+    "Corpus Christi Splitter (Magellan)": None,   # splitter, not in registry yet
+    "Channelview Splitter": None,                 # splitter, not in registry yet
+    "Eagle Springs (Ely)": "FORELAND_TONOPAH",    # Foreland, NV
+    "Ferndale": "PHILLIPS_FERNDALE",
+    "Galena Park": "KINDER_HOUSTON",              # Kinder Morgan splitters
+    "Galveston Bay": "MPC_GALV_BAY",
+    "Houston Splitter": None,                     # splitter, not in registry yet
+    "Kapolei (Ewa Beach -East Plant)": "PAR_EWA_BEACH",
+    "Kenai": "MARATHON_NIKISKI",
+    "Kuparuk Topping Unit": "CONOCOPHILLIPS_ANCHORAGE",
+    "Lake Charles (Pelican)": None,
+    "Lake Charles (Westlake - P66)": "PHILLIPS_WESTLAKE",
+    "Los Angeles (Wilmington and Carson)": "PHILLIPS_LOS_ANGELES",  # shut 2025
+    "McKee (Sunray)": "VALERO_SUNRAY",
+    "Navajo (Artesia)": "HF_ARTESIA",
+    "North Pole (FHR)": None,                     # FHR North Pole, shut
+    "North Salt Lake": "BIG_NORTH_SLATERVILLE_CANAL",  # Big West Oil
+    "Paulsboro": None,                            # asphalt plant, not PBF
+    "Paulsboro (PBF)": "PBF_PAULSBORO",
+    "Pine Bend (Rosemount)": "FLINT_ROSEMOUNT",
+    "Port Arthur (Total)": "TOTAL_PORT_ARTHUR",
+    "Saraland": "VERTEX_MOBILE",                  # Vertex Saraland (Mobile AL)
+    "Sinclair, WY": "SINCLAIR_SINCLAIR",
+    "Wilmington (Marathon)": "MARATHON_LOS_ANGELES",
+    "Wilmington (Valero)": "VALERO_LOS_ANGELES",
+    "Wilmington Asphalt Refinery": None,
+    "Woods Cross": "HF_WOODS_CROSS",
+    # shut sites with no registry row (pre-2024 closures):
+    "Alliance (Belle Chasse)": None, "Bloomfield": None, "Brownsville": None,
+    "Cheyenne": None, "Davis": None, "Dickinson": None,
+    "Gallup": None, "Golden Eagle (Martinez)": None, "Paramount": None,
+    "Par West (Barbers Point, ex-Island Energy)": None, "Perth Amboy": None,
+    "Philadelphia Complex": None, "Rodeo": None, "Santa Maria": None,
+    "Santa Maria (Arroyo Grande)": None, "Savannah": None, "Southland": None,
+}
+
+# registry rows that are duplicate/component entities in the EA yields data;
+# their capacity is carried on the primary row
+COMPONENT_NOTES = {
+    "MARATHON_TEXAS_CITY_GALVESTON_BAY":
+        "EA yields component of the Galveston Bay complex; "
+        "capacity carried on MPC_GALV_BAY",
+}
+
+_STATE_SUFFIX = re.compile(
+    r",\s*(mt|wv|tx|la|ca|wy|ut|nd|mn|ks|ok|pa|nj|wa|ak|hi|nm|co|nv|mi|oh|il|in|"
+    r"ky|tn|wi|al|ar|ms|de|ga|sc|va|md|mo)$"
+)
+
+_HINT_ALIASES = {"p66": "phillips", "cvx": "chevron", "mpc": "marathon",
+                 "fhr": "flint", "basf total": "basf"}
+
+
+def _norm(s: str) -> str:
+    s = _STATE_SUFFIX.sub("", s.lower().strip())
+    s = re.sub(r"[^a-z0-9 ]+", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def match_site(site: str, registry: list[dict]) -> str | None:
+    """Resolve an EA site name to a registry refinery_id (None = no match)."""
+    if site in SITE_ALIASES:
+        return SITE_ALIASES[site]
+    m = re.match(r"^(.*?)\s*(?:\((.*)\))?$", site)
+    base, hint = _norm(m.group(1)), _norm(m.group(2) or "")
+    hint = _HINT_ALIASES.get(hint, hint)
+
+    exact = [r for r in registry if _norm(r["city"]) == base]
+    if len(exact) == 1:
+        return exact[0]["refinery_id"]
+    cands = exact or [
+        r for r in registry
+        if base in _norm(r["name"]) or (_norm(r["city"]) and _norm(r["city"]) in base)
+    ]
+    if len(cands) > 1 and hint:
+        hinted = [r for r in cands
+                  if hint.split()[0] in _norm(r["name"] + " " + r["owner"])]
+        if len(hinted) == 1:
+            return hinted[0]["refinery_id"]
+        cands = hinted or cands
+    if len(cands) == 1:
+        return cands[0]["refinery_id"]
+    return None
+
+
+def ingest_capacity(
+    csv_path: Path, data_dir: Path = DATA_DIR, as_of: str = "2026-07"
+) -> dict:
+    """Load EA site nameplate capacities: stamp the as-of month into the
+    registry (multi-site refineries are summed), write the full monthly
+    series to data/reference/site_capacity_monthly.csv."""
+    registry_path = data_dir / "reference" / "refineries.csv"
+    registry = _read_registry(registry_path)
+
+    with Path(csv_path).open(newline="", encoding="utf-8-sig") as fh:
+        rows = list(csv.DictReader(fh))
+
+    sites = sorted({r["refinery"] for r in rows})
+    site_to_rid = {s: match_site(s, registry) for s in sites}
+
+    monthly_path = data_dir / "reference" / "site_capacity_monthly.csv"
+    with monthly_path.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["site", "refinery_id", "month", "capacity_kbd"])
+        for r in sorted(rows, key=lambda r: (r["refinery"], r["date"])):
+            w.writerow([r["refinery"], site_to_rid[r["refinery"]] or "",
+                        r["date"][:7], r["value"]])
+
+    # as-of capacity per refinery (sum of its matched sites)
+    per_rid: dict[str, float] = {}
+    for r in rows:
+        if r["date"][:7] != as_of:
+            continue
+        rid = site_to_rid[r["refinery"]]
+        if rid:
+            per_rid[rid] = per_rid.get(rid, 0.0) + float(r["value"])
+
+    stamped = 0
+    for row in registry:
+        rid = row["refinery_id"]
+        if rid in per_rid:
+            row["crude_capacity_kbd"] = f"{per_rid[rid]:g}"
+            row["status"] = "operating" if per_rid[rid] > 0 else "shut"
+            row["notes"] = f"capacity: EA nameplate {as_of}"
+            stamped += 1
+        if rid in COMPONENT_NOTES:
+            row["notes"] = COMPONENT_NOTES[rid]
+
+    reg_fields = ["refinery_id", "name", "owner", "city", "state", "padd",
+                  "region", "crude_capacity_kbd", "status", "notes"]
+    with registry_path.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=reg_fields)
+        w.writeheader()
+        for row in registry:
+            w.writerow({k: row.get(k, "") for k in reg_fields})
+
+    unmatched = {s: v for s, v in (
+        (s, sum(float(r["value"]) for r in rows
+                if r["refinery"] == s and r["date"][:7] == as_of))
+        for s in sites if site_to_rid[s] is None
+    ) if v > 0}
+    unstamped = [row["refinery_id"] for row in registry
+                 if row["refinery_id"] not in per_rid
+                 and row["refinery_id"] not in COMPONENT_NOTES]
+    return {
+        "sites": len(sites),
+        "matched_sites": sum(1 for v in site_to_rid.values() if v),
+        "refineries_stamped": stamped,
+        "us_total_kbd": round(sum(per_rid.values()), 1),
+        "unmatched_active_sites": unmatched,
+        "registry_without_capacity": unstamped,
+        "monthly_csv": str(monthly_path),
+        "as_of": as_of,
+    }
