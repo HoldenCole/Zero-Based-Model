@@ -3,4 +3,5 @@ __pycache__/
 .pytest_cache/
 *.xlsx
 !data/raw/*.xlsx
+!dist/*.xlsx
 .venv/

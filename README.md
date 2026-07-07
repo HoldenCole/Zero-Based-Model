@@ -13,6 +13,21 @@ Scope today: **PADD 3** first, then the rest of the US, then Europe and
 Asia-Pacific (the schema already carries a `region` field so expansion is
 additive, not a rebuild).
 
+## Download the Excel model
+
+A pre-built copy lives in the repo at **[`dist/US_Naphtha_Model.xlsx`](dist/US_Naphtha_Model.xlsx)**.
+On GitHub, open that file and click **Download** (or the raw/download button)
+to pull the latest workbook without running anything.
+
+To refresh it after editing any `data/` file:
+
+```bash
+./build_workbook.sh          # simple 3-sheet model
+./build_workbook.sh --full   # extended workbook (balances, dashboard, checks)
+```
+
+then commit `dist/US_Naphtha_Model.xlsx`.
+
 ---
 
 ## How the model computes naphtha (the "model cut")
