@@ -1,4 +1,4 @@
-"""The three-sheet simple workbook (current default export)."""
+"""The desk workbook (default export): one tab per methodology step."""
 
 import shutil
 import subprocess
@@ -33,10 +33,34 @@ def _totals(path) -> dict[str, float]:
     }
 
 
-def test_exactly_three_sheets(built):
+def test_tab_layout(built):
     _, out = built
     wb = openpyxl.load_workbook(out)
-    assert wb.sheetnames == ["Boxes", "Assumptions", "Data"]
+    assert wb.sheetnames == ["Data", "Boxes", "Assumptions", "Nameplate",
+                             "Effective", "CrudeSlate", "BlendEcon", "KitWalk"]
+
+
+def test_new_tabs_are_wired(built):
+    data, out = built
+    wb = openpyxl.load_workbook(out)
+    # Nameplate pivots live off Boxes
+    assert str(wb["Nameplate"].cell(row=3, column=5).value).startswith("=SUMIFS(Boxes!")
+    # KitWalk has one row per unit-detail refinery, formulas over Boxes/Data
+    kw = wb["KitWalk"]
+    rids = [kw.cell(row=r, column=1).value for r in range(3, 300)
+            if kw.cell(row=r, column=1).value]
+    unit_detail = [r for r in data.refineries
+                   if r.units and r.units[0].unit_id != "CRUDE-EST"]
+    assert len(rids) == len(unit_detail)
+    assert "SUMPRODUCT" in str(kw.cell(row=3, column=3).value)
+    # BlendEcon reads the Assumptions price/freight inputs
+    be = wb["BlendEcon"]
+    formulas = " ".join(str(be.cell(row=r, column=4).value) for r in range(4, 14))
+    assert "Assumptions!" in formulas
+    # CrudeSlate carries slate rows and flags naphtha buyers
+    cs = wb["CrudeSlate"]
+    col8 = [cs.cell(row=r, column=8).value for r in range(3, 2500)]
+    assert "BUYER" in col8
 
 
 def test_every_refinery_has_a_box(built):

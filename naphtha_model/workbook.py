@@ -127,15 +127,16 @@ class DeskWorkbook:
 
         # effective capacity (demonstrated max annual throughput) if ingested
         self.eff_caps: dict[tuple[str, str], float] = {}
+        self.eff_years: dict[tuple[str, str], str] = {}
         eff_path = DATA_DIR / "reference" / "effective_capacity.csv"
         if eff_path.exists():
             import csv as _csv
 
             with eff_path.open() as fh:
                 for row in _csv.DictReader(fh):
-                    self.eff_caps[(row["refinery_id"], row["unit_id"])] = float(
-                        row["effective_kbd"]
-                    )
+                    key = (row["refinery_id"], row["unit_id"])
+                    self.eff_caps[key] = float(row["effective_kbd"])
+                    self.eff_years[key] = row["effective_year"]
 
         # populated as sheets are built
         self.assump_refs: dict = {}
@@ -1018,25 +1019,42 @@ class DeskWorkbook:
 
 
 class SimpleWorkbook(DeskWorkbook):
-    """The pared-down three-sheet model: Boxes, Assumptions, Data.
+    """The desk workbook, one tab per methodology step:
 
-    - Boxes: one box per refinery; net naphtha = capacity x utilization x
-      signed yields, live against the Assumptions sheet. No forward strip,
-      no outage math — that stays in the Python engine for now.
-    - Assumptions: per-PADD utilization/yield inputs plus the yield-mode
-      cut split.
-    - Data: the imported registry + 2024 yields. Typing a crude capacity
-      here lights up that refinery's box (yield-mode rows read it live).
+    Data        imported registry + 2024 yields (+ crude capacity inputs)
+    Boxes       every refinery, unit by unit (nameplate, eff cap, actual
+                utilization, yields, net naphtha)
+    Assumptions per-PADD utilization/yield inputs, yield-mode cut split,
+                plus the logistics & blending-economics input blocks
+    Nameplate   stated unit capacities pivoted refinery x unit (live from
+                Boxes)
+    Effective   demonstrated capacities (max annual throughput 2017-2024
+                excl. 2020) with PADD nameplate/effective/running rollup
+    CrudeSlate  actual crude diet per refinery + purchased feedstocks
+                (incl. merchant naphtha buyers)
+    BlendEcon   blend value spreads, arbs, max-light/max-heavy slate
+                scenarios - driven by the Assumptions price/freight inputs
+    KitWalk     the naphtha path per refinery: CDU -> SR naphtha -> NHT ->
+                reformer -> net, against the 2024 actual (yield tuning)
     """
+
+    TAB_ORDER = ["Data", "Boxes", "Assumptions", "Nameplate", "Effective",
+                 "CrudeSlate", "BlendEcon", "KitWalk"]
 
     def build(self, out_path: Path) -> Path:
         self._sheet_assumptions()
         self._simple_share_block()
+        self._econ_assumption_blocks()
         self._sheet_data()
         self._simple_boxes()
+        self._sheet_nameplate()
+        self._sheet_effective()
+        self._sheet_crudeslate()
+        self._sheet_blendecon()
+        self._sheet_kitwalk()
         if "Sheet" in self.wb.sheetnames:
             del self.wb["Sheet"]
-        self.wb._sheets = [self.wb[n] for n in ("Boxes", "Assumptions", "Data")]
+        self.wb._sheets = [self.wb[n] for n in self.TAB_ORDER]
         out_path = Path(out_path)
         self.wb.save(out_path)
         return out_path
@@ -1236,6 +1254,427 @@ class SimpleWorkbook(DeskWorkbook):
         for col, w in widths.items():
             ws.column_dimensions[get_column_letter(col)].width = w
         ws.freeze_panes = "A3"
+        self.box_last = row - 1
+
+    # ----------------------------------------------- Assumptions: econ blocks
+
+    def _econ_assumption_blocks(self) -> None:
+        """Price, logistics and blend-scenario inputs (blue, to be filled by
+        the desk) that drive the BlendEcon tab."""
+        ws = self.wb["Assumptions"]
+        col = 6 + len(self.cuts) + 10           # same column as the share block
+        cl, vl = get_column_letter(col), get_column_letter(col + 1)
+        r = 4 + len(self.cuts) + 3
+
+        def block(title, rows, fmt):
+            nonlocal r
+            _hdr(ws, r, col, title)
+            _hdr(ws, r, col + 1, fmt[1])
+            refs = {}
+            for label in rows:
+                r += 1
+                ws.cell(row=r, column=col, value=label).font = FONT_SMALL
+                _style(ws.cell(row=r, column=col + 1), fill=FILL_INPUT, fmt=fmt[0])
+                refs[label] = f"Assumptions!${vl}${r}"
+            r += 2
+            return refs
+
+        self.price_refs = block(
+            "Prices ($/bbl) — fill to activate BlendEcon",
+            ["Gasoline (RBOB)", "Naphtha USGC (HVN)", "Naphtha LVN USGC",
+             "Naphtha NWE (CIF)", "Naphtha Asia (C+F Japan)", "Reformate",
+             "WTI", "Brent", "WCS diff to WTI", "Condensate diff"],
+            ("0.00", "$/bbl"),
+        )
+        self.freight_refs = block(
+            "Logistics / freight ($/bbl)",
+            ["USGC -> Asia", "USGC -> NWE", "NWE -> USGC",
+             "USGC -> USAC (Jones Act)", "PADD3 -> PADD2 pipeline",
+             "Storage ($/bbl/month)"],
+            ("0.00", "$/bbl"),
+        )
+        self.blend_refs = block(
+            "Blend scenario assumptions",
+            ["Max-light: naphtha yield uplift (pts on crude)",
+             "Max-heavy: naphtha yield reduction (pts on crude)",
+             "Max slate shift (% of crude runs)"],
+            ("0.00", "value"),
+        )
+        ws.column_dimensions[cl].width = 40
+        ws.column_dimensions[vl].width = 10
+
+    # -------------------------------------------------------- Nameplate tab
+
+    UNIT_COLS = ["CDU", "VDU", "FCC", "RCC", "COKER", "FCOKER", "DHCU",
+                 "RHCU", "REF", "CCR", "ISOM", "ALKY", "NSPL", "NHT"]
+
+    def _grid_refineries(self):
+        return sorted(self.data.refineries,
+                      key=lambda x: (x.padd, -x.crude_capacity_kbd, x.name))
+
+    def _sheet_nameplate(self) -> None:
+        """Stated capacity pivot: refinery x unit, live SUMIFS over Boxes so
+        capacity edits there flow through."""
+        ws = self.wb.create_sheet("Nameplate")
+        _banner(ws, 1, "Nameplate capacity (kbd) — stated unit capacities, live from "
+                       "the Boxes sheet. This is what's on paper; see Effective for "
+                       "what units have actually demonstrated.", 5 + len(self.UNIT_COLS))
+        headers = ["refinery_id", "name", "padd", "crude kbd"] + self.UNIT_COLS
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, 2, c, h)
+        b_rid = f"Boxes!$B$3:$B${self.box_last}"
+        b_uid = f"Boxes!$D$3:$D${self.box_last}"
+        b_cap = f"Boxes!$F$3:$F${self.box_last}"
+        r = 3
+        for ref in self._grid_refineries():
+            _style(ws.cell(row=r, column=1, value=ref.refinery_id))
+            _style(ws.cell(row=r, column=2, value=ref.name))
+            _style(ws.cell(row=r, column=3, value=ref.padd))
+            _style(ws.cell(row=r, column=4, value=ref.crude_capacity_kbd), fmt="0")
+            for j, uid in enumerate(self.UNIT_COLS):
+                _style(ws.cell(
+                    row=r, column=5 + j,
+                    value=f'=SUMIFS({b_cap},{b_rid},$A{r},{b_uid},"{uid}")',
+                ), fill=FILL_CALC, fmt="0")
+            r += 1
+        last = r - 1
+        r += 1
+        _banner(ws, r, "PADD totals (kbd)", 5 + len(self.UNIT_COLS))
+        for p in self.padds:
+            r += 1
+            _style(ws.cell(row=r, column=1, value=f"PADD {p}"), bold=True)
+            _style(ws.cell(row=r, column=4,
+                           value=f"=SUMIFS($D$3:$D${last},$C$3:$C${last},{p})"),
+                   fill=FILL_TOTAL, fmt="0", bold=True)
+            for j in range(len(self.UNIT_COLS)):
+                cl = get_column_letter(5 + j)
+                _style(ws.cell(row=r, column=5 + j,
+                               value=f"=SUMIFS({cl}3:{cl}{last},$C$3:$C${last},{p})"),
+                       fill=FILL_TOTAL, fmt="0", bold=True)
+        self.nameplate_last = last
+        widths = [22, 30, 6, 9] + [7] * len(self.UNIT_COLS)
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = "E3"
+
+    # -------------------------------------------------------- Effective tab
+
+    def _sheet_effective(self) -> None:
+        """Demonstrated capacity: max annual throughput 2017-2024 excl. 2020
+        (RDT actuals). Same grid as Nameplate so the two compare row by row."""
+        ws = self.wb.create_sheet("Effective")
+        _banner(ws, 1, "Effective capacity (kbd) — max demonstrated annual throughput "
+                       "2017-2024 excl. 2020 (RefineryDataTool actuals). Nameplate is "
+                       "what's stated; this is what units have actually proven.",
+                7 + len(self.UNIT_COLS))
+        headers = (["refinery_id", "name", "padd", "crude kbd"] + self.UNIT_COLS
+                   + ["CDU eff yr", "CDU eff/plate"])
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, 2, c, h)
+        r = 3
+        for ref in self._grid_refineries():
+            _style(ws.cell(row=r, column=1, value=ref.refinery_id))
+            _style(ws.cell(row=r, column=2, value=ref.name))
+            _style(ws.cell(row=r, column=3, value=ref.padd))
+            _style(ws.cell(row=r, column=4, value=ref.crude_capacity_kbd), fmt="0")
+            for j, uid in enumerate(self.UNIT_COLS):
+                _style(ws.cell(row=r, column=5 + j,
+                               value=self.eff_caps.get((ref.refinery_id, uid))),
+                       fill=FILL_CALC, fmt="0")
+            _style(ws.cell(row=r, column=5 + len(self.UNIT_COLS),
+                           value=self.eff_years.get((ref.refinery_id, "CDU"))))
+            _style(ws.cell(
+                row=r, column=6 + len(self.UNIT_COLS),
+                value=f'=IFERROR($E{r}/Nameplate!$E{r},"")',
+            ), fill=FILL_CALC, fmt="0%")
+            r += 1
+        last = r - 1
+        r += 1
+        _banner(ws, r, "PADD rollup — CDU nameplate vs effective vs running (kbd, "
+                       "unit-detail refineries only)", 8)
+        _hdr(ws, r + 1, 1, "PADD")
+        _hdr(ws, r + 1, 2, "nameplate")
+        _hdr(ws, r + 1, 3, "effective")
+        _hdr(ws, r + 1, 4, "running now")
+        b_pad = f"Boxes!$C$3:$C${self.box_last}"
+        b_uid = f"Boxes!$D$3:$D${self.box_last}"
+        b_cap = f"Boxes!$F$3:$F${self.box_last}"
+        b_utl = f"Boxes!${get_column_letter(self.c_util)}$3:" \
+                f"${get_column_letter(self.c_util)}${self.box_last}"
+        for i, p in enumerate(self.padds):
+            rr = r + 2 + i
+            _style(ws.cell(row=rr, column=1, value=p), bold=True)
+            _style(ws.cell(
+                row=rr, column=2,
+                value=f"=SUMIFS(Nameplate!$E$3:$E${self.nameplate_last},"
+                      f"Nameplate!$C$3:$C${self.nameplate_last},{p})",
+            ), fill=FILL_TOTAL, fmt="0", bold=True)
+            _style(ws.cell(row=rr, column=3,
+                           value=f"=SUMIFS($E$3:$E${last},$C$3:$C${last},{p})"),
+                   fill=FILL_TOTAL, fmt="0", bold=True)
+            _style(ws.cell(
+                row=rr, column=4,
+                value=(f'=SUMPRODUCT(({b_uid}="CDU")'
+                       f"*({b_pad}={p})*{b_cap}*{b_utl})"),
+            ), fill=FILL_TOTAL, fmt="0", bold=True)
+        widths = [22, 30, 6, 9] + [7] * len(self.UNIT_COLS) + [9, 10]
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = "E3"
+
+    # ------------------------------------------------------- CrudeSlate tab
+
+    def _sheet_crudeslate(self) -> None:
+        import csv as _csv
+
+        ws = self.wb.create_sheet("CrudeSlate")
+        _banner(ws, 1, "Crude slate — actual crude diet per refinery (REM, latest "
+                       "year) and 2024 purchased supplementary feedstocks. Informs "
+                       "the naphtha-yield discussion (light vs heavy slate).", 8)
+        headers = ["refinery_id", "padd", "crude_stream", "source_country",
+                   "year", "slate %"]
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, 2, c, h)
+        padd_of = {x.refinery_id: x.padd for x in self.data.refineries}
+        slate_path = DATA_DIR / "reference" / "crude_slate.csv"
+        r = 3
+        if slate_path.exists():
+            with slate_path.open() as fh:
+                rows = [row for row in _csv.DictReader(fh) if row["refinery_id"]]
+            latest: dict[str, str] = {}
+            for row in rows:
+                rid = row["refinery_id"]
+                latest[rid] = max(latest.get(rid, ""), row["year"])
+            rows = [row for row in rows if row["year"] == latest[row["refinery_id"]]]
+            rows.sort(key=lambda x: (padd_of.get(x["refinery_id"], 9),
+                                     x["refinery_id"],
+                                     -float(x["slate_pct"] or 0)))
+            for row in rows:
+                _style(ws.cell(row=r, column=1, value=row["refinery_id"]))
+                _style(ws.cell(row=r, column=2, value=padd_of.get(row["refinery_id"])))
+                _style(ws.cell(row=r, column=3, value=row["crude_stream"]))
+                _style(ws.cell(row=r, column=4, value=row["source_country"]))
+                _style(ws.cell(row=r, column=5, value=int(row["year"])))
+                _style(ws.cell(row=r, column=6,
+                               value=float(row["slate_pct"]) / 100.0), fmt="0.0%")
+                r += 1
+
+        r += 1
+        _banner(ws, r, "Purchased supplementary feedstocks, 2024 — naphtha/reformate "
+                       "purchases mark merchant naphtha BUYERS", 8)
+        r += 1
+        for c, h in enumerate(["refinery_id", "padd", "feedstock", "to unit",
+                               "kbd", "API", "type", "naphtha buyer?"], start=1):
+            _hdr(ws, r, c, h)
+        fs_path = DATA_DIR / "reference" / "feedstock_slate.csv"
+        if fs_path.exists():
+            with fs_path.open() as fh:
+                feeds = [row for row in _csv.DictReader(fh)
+                         if row["refinery_id"] and row["year"] == "2024"
+                         and float(row["kbd"]) > 0]
+            feeds.sort(key=lambda x: (padd_of.get(x["refinery_id"], 9), -float(x["kbd"])))
+            for row in feeds:
+                r += 1
+                buyer = row["feedstock"].lower() in ("naphtha", "reformate")
+                _style(ws.cell(row=r, column=1, value=row["refinery_id"]))
+                _style(ws.cell(row=r, column=2, value=padd_of.get(row["refinery_id"])))
+                _style(ws.cell(row=r, column=3, value=row["feedstock"]))
+                _style(ws.cell(row=r, column=4, value=row["to_unit"]))
+                _style(ws.cell(row=r, column=5, value=float(row["kbd"])), fmt="0.0")
+                _style(ws.cell(row=r, column=6,
+                               value=float(row["api"]) if row["api"] else None), fmt="0.0")
+                _style(ws.cell(row=r, column=7, value=row["api_type"]))
+                cell = ws.cell(row=r, column=8, value="BUYER" if buyer else "")
+                _style(cell, fill=FILL_TOTAL if buyer else None, bold=buyer)
+        widths = [24, 6, 30, 13, 8, 7, 8, 13]
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = "A3"
+
+    # -------------------------------------------------------- BlendEcon tab
+
+    def _sheet_blendecon(self) -> None:
+        ws = self.wb.create_sheet("BlendEcon")
+        _banner(ws, 1, "Blending economics — FRAMEWORK: fill the blue price / freight "
+                       "/ scenario inputs on the Assumptions tab and every number "
+                       "here goes live.", 8)
+        P, F, B = self.price_refs, self.freight_refs, self.blend_refs
+
+        _banner(ws, 3, "Blend value spreads ($/bbl)", 4)
+        spreads = [
+            ("Gasoline - HVN (naphtha pull into mogas when positive)",
+             f'={P["Gasoline (RBOB)"]}-{P["Naphtha USGC (HVN)"]}'),
+            ("Gasoline - LVN",
+             f'={P["Gasoline (RBOB)"]}-{P["Naphtha LVN USGC"]}'),
+            ("Reformate - HVN (reforming uplift)",
+             f'={P["Reformate"]}-{P["Naphtha USGC (HVN)"]}'),
+            ("Naphtha USGC - WTI (naphtha crack)",
+             f'={P["Naphtha USGC (HVN)"]}-{P["WTI"]}'),
+        ]
+        r = 4
+        for label, formula in spreads:
+            ws.cell(row=r, column=1, value=label).font = FONT_SMALL
+            _style(ws.cell(row=r, column=4, value=formula), fill=FILL_CALC, fmt="0.00")
+            r += 1
+
+        r += 1
+        _banner(ws, r, "Arbitrage netbacks ($/bbl) — positive = arb OPEN", 4)
+        arbs = [
+            ("USGC -> Asia",
+             f'={P["Naphtha Asia (C+F Japan)"]}-{P["Naphtha USGC (HVN)"]}'
+             f'-{F["USGC -> Asia"]}'),
+            ("USGC -> NWE",
+             f'={P["Naphtha NWE (CIF)"]}-{P["Naphtha USGC (HVN)"]}'
+             f'-{F["USGC -> NWE"]}'),
+            ("NWE -> USGC (imports)",
+             f'={P["Naphtha USGC (HVN)"]}-{P["Naphtha NWE (CIF)"]}'
+             f'-{F["NWE -> USGC"]}'),
+        ]
+        for label, formula in arbs:
+            r += 1
+            ws.cell(row=r, column=1, value=label).font = FONT_SMALL
+            _style(ws.cell(row=r, column=4, value=formula), fill=FILL_CALC, fmt="+0.00;-0.00")
+            arb_cell = get_column_letter(4) + str(r)
+            _style(ws.cell(row=r, column=5,
+                           value=f'=IF({arb_cell}>0,"OPEN","shut")'), fill=FILL_CALC)
+
+        r += 2
+        _banner(ws, r, "Slate scenarios by PADD (kbd) — max-light vs max-heavy crude", 8)
+        r += 1
+        for c, h in enumerate(["PADD", "crude runs", "net naphtha (base)",
+                               "max-light delta", "max-heavy delta",
+                               "$k/day at stake (light, vs mogas)"], start=1):
+            _hdr(ws, r, c, h)
+        b_pad = f"Boxes!$C$3:$C${self.box_last}"
+        b_uid = f"Boxes!$D$3:$D${self.box_last}"
+        b_typ = f"Boxes!$A$3:$A${self.box_last}"
+        b_cap = f"Boxes!$F$3:$F${self.box_last}"
+        b_utl = f"Boxes!${get_column_letter(self.c_util)}$3:" \
+                f"${get_column_letter(self.c_util)}${self.box_last}"
+        b_net = f"Boxes!${get_column_letter(self.c_base)}$3:" \
+                f"${get_column_letter(self.c_base)}${self.box_last}"
+        uplift = B["Max-light: naphtha yield uplift (pts on crude)"]
+        cut = B["Max-heavy: naphtha yield reduction (pts on crude)"]
+        spread = "$D$4"   # gasoline - HVN spread cell above
+        for i, p in enumerate(self.padds):
+            r += 1
+            _style(ws.cell(row=r, column=1, value=p), bold=True)
+            _style(ws.cell(
+                row=r, column=2,
+                value=(f'=SUMPRODUCT((({b_uid}="CDU")+({b_uid}="CRUDE-EST"))'
+                       f"*({b_pad}={p})*{b_cap}*{b_utl})"),
+            ), fill=FILL_CALC, fmt="0")
+            _style(ws.cell(
+                row=r, column=3,
+                value=f'=SUMPRODUCT(({b_typ}="TOTAL")*({b_pad}={p})*{b_net})',
+            ), fill=FILL_CALC, fmt="0.0")
+            _style(ws.cell(row=r, column=4, value=f"=$B{r}*{uplift}/100"),
+                   fill=FILL_CALC, fmt="+0.0;-0.0")
+            _style(ws.cell(row=r, column=5, value=f"=-$B{r}*{cut}/100"),
+                   fill=FILL_CALC, fmt="+0.0;-0.0")
+            _style(ws.cell(row=r, column=6, value=f"=$D{r}*1000*{spread}/1000"),
+                   fill=FILL_CALC, fmt="0.0")
+        r += 2
+        ws.cell(row=r, column=1, value=(
+            "Where blends become economical: switch to max-light when the naphtha "
+            "value chain (spreads + open arbs) beats the light-crude premium plus "
+            "logistics; the desk sets those inputs on Assumptions."
+        )).font = FONT_SMALL
+        ws.column_dimensions["A"].width = 52
+        for c in "BCDEF":
+            ws.column_dimensions[c].width = 16
+
+    # ---------------------------------------------------------- KitWalk tab
+
+    def _sheet_kitwalk(self) -> None:
+        """The naphtha path per refinery: CDU -> SR naphtha -> NHT ->
+        reformer -> net naphtha, against the 2024 actual."""
+        ws = self.wb.create_sheet("KitWalk")
+        _banner(ws, 1, "Kit walk — CDU -> overheads (SR naphtha) -> naphtha "
+                       "hydrofiner -> reformer -> net naphtha vs 2024 actual. The "
+                       "yield-tuning workbench: adjust Assumptions/Boxes yields until "
+                       "delta ~ 0 per refinery.", 13)
+        headers = ["refinery_id", "padd", "CDU cap", "CDU util", "CDU runs",
+                   "SR naphtha %", "SR naphtha kbd", "NHT cap", "reformer feed",
+                   "isom pull", "net naphtha", "2024 actual %", "implied %",
+                   "delta (pts)", "flag"]
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, 2, c, h)
+        b_rid = f"Boxes!$B$3:$B${self.box_last}"
+        b_uid = f"Boxes!$D$3:$D${self.box_last}"
+        b_typ = f"Boxes!$A$3:$A${self.box_last}"
+        b_cap = f"Boxes!$F$3:$F${self.box_last}"
+        utl_l = get_column_letter(self.c_util)
+        ysm_l = get_column_letter(self.c_ysum)
+        b_utl = f"Boxes!${utl_l}$3:${utl_l}${self.box_last}"
+        b_ysm = f"Boxes!${ysm_l}$3:${ysm_l}${self.box_last}"
+        b_net = f"Boxes!${get_column_letter(self.c_base)}$3:" \
+                f"${get_column_letter(self.c_base)}${self.box_last}"
+        d_id = f"Data!$A$3:$A${self.data_last_row}"
+        d_np = f"Data!$N$3:$N${self.data_last_row}"
+
+        def by_unit(rng, rid_cell, uid):
+            return f'SUMPRODUCT(({b_rid}={rid_cell})*({b_uid}="{uid}")*{rng})'
+
+        r = 3
+        for ref in self._grid_refineries():
+            if not ref.units or ref.units[0].unit_id == "CRUDE-EST":
+                continue
+            rid = f"$A{r}"
+            _style(ws.cell(row=r, column=1, value=ref.refinery_id))
+            _style(ws.cell(row=r, column=2, value=ref.padd))
+            _style(ws.cell(row=r, column=3, value=f'={by_unit(b_cap, rid, "CDU")}'),
+                   fill=FILL_CALC, fmt="0")
+            _style(ws.cell(row=r, column=4, value=f'={by_unit(b_utl, rid, "CDU")}'),
+                   fill=FILL_CALC, fmt="0%")
+            _style(ws.cell(row=r, column=5, value=f"=$C{r}*$D{r}"),
+                   fill=FILL_CALC, fmt="0")
+            _style(ws.cell(row=r, column=6, value=f'={by_unit(b_ysm, rid, "CDU")}'),
+                   fill=FILL_CALC, fmt="0.0%")
+            _style(ws.cell(row=r, column=7, value=f"=$E{r}*$F{r}"),
+                   fill=FILL_CALC, fmt="0.0")
+            _style(ws.cell(row=r, column=8, value=f'={by_unit(b_cap, rid, "NHT")}'),
+                   fill=FILL_CALC, fmt="0")
+            _style(ws.cell(
+                row=r, column=9,
+                value=(f'={by_unit(b_cap, rid, "REF")}*{by_unit(b_utl, rid, "REF")}'
+                       f'+{by_unit(b_cap, rid, "CCR")}*{by_unit(b_utl, rid, "CCR")}'),
+            ), fill=FILL_CALC, fmt="0.0")
+            _style(ws.cell(
+                row=r, column=10,
+                value=f'={by_unit(b_cap, rid, "ISOM")}*{by_unit(b_utl, rid, "ISOM")}',
+            ), fill=FILL_CALC, fmt="0.0")
+            _style(ws.cell(
+                row=r, column=11,
+                value=f'=SUMPRODUCT(({b_typ}="TOTAL")*({b_rid}={rid})*{b_net})',
+            ), fill=FILL_CALC, fmt="0.0")
+            _style(ws.cell(row=r, column=12,
+                           value=f"=SUMIFS({d_np},{d_id},{rid})"),
+                   fill=FILL_CALC, fmt="0.00%")
+            _style(ws.cell(
+                row=r, column=13,
+                value=f'=IFERROR($K{r}/(SUMIFS(Data!$G$3:$G${self.data_last_row},'
+                      f'{d_id},{rid})*$D{r}),"")',
+            ), fill=FILL_CALC, fmt="0.00%")
+            _style(ws.cell(row=r, column=14,
+                           value=f'=IF($M{r}="","",$M{r}-$L{r})'),
+                   fill=FILL_CALC, fmt="+0.00%;-0.00%")
+            _style(ws.cell(
+                row=r, column=15,
+                value=f'=IF(AND($H{r}>0,$G{r}>$H{r}*1.05),"SR > NHT cap","")',
+            ), fill=FILL_CALC)
+            r += 1
+        last = r - 1
+        ws.conditional_formatting.add(
+            f"N3:N{last}",
+            CellIsRule(operator="greaterThan", formula=["0.02"], fill=FILL_FAIL))
+        ws.conditional_formatting.add(
+            f"N3:N{last}",
+            CellIsRule(operator="lessThan", formula=["-0.02"], fill=FILL_FAIL))
+        widths = [24, 6, 8, 8, 8, 10, 11, 8, 12, 9, 11, 11, 10, 11, 13]
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = "C3"
 
 
 def build_desk_workbook(

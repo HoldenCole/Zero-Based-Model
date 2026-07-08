@@ -137,15 +137,18 @@ pytest                                            # run the test suite
 Once generated, the desk drives it entirely inside Excel; Python only
 regenerates it when the underlying data/ files change.
 
-**The default is the simple three-sheet model** (current desk preference):
+**The default export has one tab per methodology step:**
 
-- **Boxes** — one box per refinery: units, capacity, utilization, signed
-  yields, orange manual-override cells, bold net-naphtha total. Yield-mode
-  refineries read their crude capacity and 2024 net yield live from Data.
-- **Assumptions** — per-PADD utilization/yield inputs plus the yield-mode
-  cut split.
-- **Data** — the imported registry + 2024 yields. Type a crude capacity and
-  that refinery's box lights up.
+| Tab | What it holds |
+|---|---|
+| Data | imported registry + 2024 yields; crude capacity inputs |
+| Boxes | every refinery unit by unit: nameplate, eff cap, actual utilization, yields, net naphtha |
+| Assumptions | per-PADD utilization/yield inputs, yield-mode cut split, **prices / logistics / blend-scenario inputs** |
+| Nameplate | stated unit capacities, refinery x unit grid (live from Boxes) + PADD totals |
+| Effective | demonstrated capacities (max annual throughput 2017-2024 excl. 2020) + PADD nameplate/effective/running rollup |
+| CrudeSlate | actual crude diet per refinery + purchased feedstocks (merchant naphtha buyers flagged) |
+| BlendEcon | blend value spreads, arb netbacks, max-light/max-heavy slate scenarios — activates when the Assumptions price/freight inputs are filled |
+| KitWalk | the naphtha path per refinery (CDU → SR naphtha → NHT → reformer → net) vs 2024 actual, with delta flags — the yield-tuning workbench |
 
 `export --full` builds the extended workbook described below (forward
 weekly strips, PADD balances, outage/scenario machinery, dashboard charts,
