@@ -27,7 +27,7 @@ def _totals(path) -> dict[str, float]:
     wb = openpyxl.load_workbook(path, data_only=True)
     ws = wb["Boxes"]
     return {
-        ws.cell(row=r, column=2).value: ws.cell(row=r, column=15).value
+        ws.cell(row=r, column=2).value: ws.cell(row=r, column=16).value
         for r in range(3, 3000)
         if ws.cell(row=r, column=1).value == "TOTAL"
     }
@@ -82,7 +82,7 @@ def test_every_refinery_has_a_box(built):
         and ws.cell(row=r, column=4).value == "CRUDE-EST"
     )
     assert "Data!" in str(ws.cell(row=unit_row, column=6).value)
-    assert "Data!" in str(ws.cell(row=unit_row, column=13).value)
+    assert "Data!" in str(ws.cell(row=unit_row, column=14).value)
 
 
 @pytest.mark.skipif(shutil.which("soffice") is None, reason="LibreOffice not installed")
@@ -144,6 +144,13 @@ def test_everything_propagates(built, tmp_path):
         if eff.cell(row=r, column=1).value == "MOTIVA_PAR":
             eff.cell(row=r, column=hdr["CDU"], value=999)
             break
+    # flip XOM_BAYTOWN's refinery-level mode toggle to 'assumption'
+    boxes_ws = wb["Boxes"]
+    for r in range(3, 3000):
+        if (boxes_ws.cell(row=r, column=1).value == "TOTAL"
+                and boxes_ws.cell(row=r, column=2).value == "XOM_BAYTOWN"):
+            boxes_ws.cell(row=r, column=8, value="assumption")
+            break
     modded = tmp_path / "modded.xlsx"
     wb.save(modded)
 
@@ -156,8 +163,22 @@ def test_everything_propagates(built, tmp_path):
         )
     base = _totals(tmp_path / "recalc" / Path(out).name)
     mod = _totals(tmp_path / "recalc" / "modded.xlsx")
-    for rid in ("XOM_BAYTOWN", "CHEVRON_PASCAGOULA", "BASF_PORT_ARTHUR"):
+    for rid in ("CHEVRON_PASCAGOULA", "BASF_PORT_ARTHUR"):
         assert mod[rid] == pytest.approx(base[rid] * 0.9 * 1.2, abs=0.05)
+
+    # XOM was flipped to 'assumption': expect the pure-assumption engine
+    # number (no overrides) scaled by the dials
+    import yaml
+
+    from naphtha_model.assumptions import AssumptionBook
+    from naphtha_model.config import DATA_DIR
+    from naphtha_model.loaders import _read_global_cfg
+
+    padd_cfg = yaml.safe_load(
+        (DATA_DIR / "assumptions" / "padd_overrides.yaml").open()) or {}
+    bare = AssumptionBook(_read_global_cfg(DATA_DIR), padd_cfg, [])
+    xom = refinery_day(data.refinery("XOM_BAYTOWN"), AXIS[0], bare, []).net_kbd
+    assert mod["XOM_BAYTOWN"] == pytest.approx(xom * 0.9 * 1.2, abs=0.05)
 
     boxes = openpyxl.load_workbook(
         tmp_path / "recalc" / "modded.xlsx", data_only=True)["Boxes"]

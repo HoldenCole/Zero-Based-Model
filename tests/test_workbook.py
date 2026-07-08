@@ -51,8 +51,8 @@ def test_boxes_are_formula_driven(built):
     unit_rows = [r for r in range(4, 1300) if ws.cell(row=r, column=1).value == "UNIT"]
     assert len(unit_rows) == sum(len(r.units) for r in data.refineries)
     r = unit_rows[0]
-    assert str(ws.cell(row=r, column=9).value).startswith("=IF(")     # util
-    assert "SUMPRODUCT" in str(ws.cell(row=r, column=24).value)       # offline wk1
+    assert str(ws.cell(row=r, column=10).value).startswith("=IF(")     # util
+    assert "SUMPRODUCT" in str(ws.cell(row=r, column=25).value)       # offline wk1
     total_rows = [r for r in range(4, 1300) if ws.cell(row=r, column=1).value == "TOTAL"]
     assert len(total_rows) == len(data.refineries)
 

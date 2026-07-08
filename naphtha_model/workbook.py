@@ -145,11 +145,11 @@ class DeskWorkbook:
 
         # Boxes column map (1-indexed), dynamic in the number of cuts:
         # A type | B refinery | C padd | D unit | E unit_type | F cap |
-        # G eff cap | H util_ovr | I util | (ovr, yield) per cut | ysum |
-        # base | net wk1..wkW | off% wk1..wkW
+        # G eff cap | H mode toggle | I util_ovr | J util |
+        # (ovr, yield) per cut | ysum | base | net wk1..wkW | off% wk1..wkW
         self.c_type, self.c_rid, self.c_padd, self.c_uid, self.c_utype = 1, 2, 3, 4, 5
-        self.c_cap, self.c_effcap, self.c_utilov, self.c_util = 6, 7, 8, 9
-        self.c_cut0 = 10                               # first cut override col
+        self.c_cap, self.c_effcap, self.c_mode, self.c_utilov, self.c_util = 6, 7, 8, 9, 10
+        self.c_cut0 = 11                               # first cut override col
         self.c_ysum = self.c_cut0 + 2 * len(self.cuts)
         self.c_base = self.c_ysum + 1
         self.c_net0 = self.c_base + 1                  # first weekly net col
@@ -530,7 +530,8 @@ class DeskWorkbook:
         labels = {
             self.c_type: "row", self.c_rid: "refinery_id", self.c_padd: "padd",
             self.c_uid: "unit", self.c_utype: "type", self.c_cap: "cap kbd",
-            self.c_effcap: "eff cap", self.c_utilov: "util ovr", self.c_util: "util",
+            self.c_effcap: "eff cap", self.c_mode: "mode",
+            self.c_utilov: "util ovr", self.c_util: "util",
             self.c_ysum: "Σ yield", self.c_base: "base net kbd",
         }
         for i, cut in enumerate(self.cuts):
@@ -557,6 +558,9 @@ class DeskWorkbook:
             row += 1
             first_unit = row
             ovl = get_column_letter(self.c_utilov)
+            mdl = get_column_letter(self.c_mode)
+            total_row = first_unit + len(ref.units)
+            mode = f'IF(${mdl}{total_row}<>"",${mdl}{total_row},${mdl}{{row}})'
             for unit in ref.units:
                 ws.cell(row=row, column=self.c_type, value="UNIT").font = FONT_SMALL
                 _style(ws.cell(row=row, column=self.c_rid, value=ref.refinery_id))
@@ -568,6 +572,8 @@ class DeskWorkbook:
                 _style(ws.cell(row=row, column=self.c_effcap,
                                value=self.eff_caps.get((ref.refinery_id, unit.unit_id))),
                        fill=FILL_CALC, fmt="#,##0")
+                _style(ws.cell(row=row, column=self.c_mode, value="override"),
+                       fill=FILL_INPUT)
 
                 # manual override cells, prefilled from data/overrides when active
                 ov_util = self.book._find_override(ref, unit, day1, "utilization")
@@ -576,7 +582,7 @@ class DeskWorkbook:
                        fill=FILL_OVERRIDE, fmt="0.0%")
                 _style(ws.cell(
                     row=row, column=self.c_util,
-                    value=(f'=IF(${ovl}{row}<>"",${ovl}{row},'
+                    value=(f'=IF(AND({mode.format(row=row)}="override",${ovl}{row}<>""),${ovl}{row},'
                            f"SUMIFS({util_val},{util_padd},$C{row}))"),
                 ), fill=FILL_CALC, fmt="0.0%")
 
@@ -588,7 +594,7 @@ class DeskWorkbook:
                            fill=FILL_OVERRIDE, fmt="0.0%")
                     _style(ws.cell(
                         row=row, column=self._cut_yld_col(i),
-                        value=(f'=IF(${oc}{row}<>"",${oc}{row},'
+                        value=(f'=IF(AND({mode.format(row=row)}="override",${oc}{row}<>""),${oc}{row},'
                                f"SUMIFS({y_val},{y_padd},$C{row},{y_ut},$E{row},"
                                f'{y_cut},"{cut}"))'),
                     ), fill=FILL_CALC, fmt="0.0%")
@@ -625,6 +631,7 @@ class DeskWorkbook:
                    fill=FILL_TOTAL, bold=True)
             _style(ws.cell(row=row, column=self.c_uid, value="NET NAPHTHA"),
                    fill=FILL_TOTAL, bold=True)
+            _style(ws.cell(row=row, column=self.c_mode), fill=FILL_INPUT)
             base_l = get_column_letter(self.c_base)
             _style(ws.cell(row=row, column=self.c_base,
                            value=f"=SUM({base_l}{first_unit}:{base_l}{row - 1})"),
@@ -649,6 +656,11 @@ class DeskWorkbook:
         for col, w in widths.items():
             ws.column_dimensions[get_column_letter(col)].width = w
         ws.freeze_panes = ws.cell(row=BOX_LO, column=self.c_utilov).coordinate
+        dv = DataValidation(type="list", formula1='"override,assumption"',
+                            allow_blank=True)
+        ws.add_data_validation(dv)
+        mdl = get_column_letter(self.c_mode)
+        dv.add(f"{mdl}{BOX_LO}:{mdl}{BOX_HI}")
 
     # -------------------------------------------------------------- Balance
 
@@ -929,6 +941,7 @@ class DeskWorkbook:
         ws.column_dimensions["H"].hidden = True
 
         ref_ids = f"Refineries!$A${REF_LO + 1}:$A${REF_HI}"
+        _ul = get_column_letter(self.c_util)
         yield_checks = "+".join(
             f'COUNTIF(Boxes!${get_column_letter(self._cut_yld_col(i))}${BOX_LO}:'
             f'${get_column_letter(self._cut_yld_col(i))}${BOX_HI},">1.2")'
@@ -948,8 +961,8 @@ class DeskWorkbook:
              f"=SUMPRODUCT((Boxes!$A${BOX_LO}:$A${BOX_HI}=\"UNIT\")"
              f"*(COUNTIF({ref_ids},Boxes!$B${BOX_LO}:$B${BOX_HI})=0))"),
             ("Utilization outside 0-110%",
-             f'=COUNTIF(Boxes!$H${BOX_LO}:$H${BOX_HI},">1.1")'
-             f'+COUNTIF(Boxes!$H${BOX_LO}:$H${BOX_HI},"<0")'),
+             f'=COUNTIF(Boxes!${_ul}${BOX_LO}:${_ul}${BOX_HI},">1.1")'
+             f'+COUNTIF(Boxes!${_ul}${BOX_LO}:${_ul}${BOX_HI},"<0")'),
             ("Yields outside +/-120% of throughput", f"={yield_checks}"),
             ("Negative unit capacities", f'=COUNTIF(Boxes!$F${BOX_LO}:$F${BOX_HI},"<0")'),
             ("Outages ending before they start",
@@ -1214,7 +1227,9 @@ class SimpleWorkbook(DeskWorkbook):
         # legend
         _banner(ws, 40, "  HOW TO DRIVE IT", 13)
         legend = [(FILL_INPUT, "blue — input: type here"),
-                  (FILL_OVERRIDE, "orange — manual override: beats assumptions; clear to revert"),
+                  (FILL_OVERRIDE, "orange — manual override: applies when MODE = override; "
+                   "flip the MODE dropdown (per unit, or per refinery on the "
+                   "NET NAPHTHA row) to switch back to assumptions"),
                   (FILL_CALC, "grey — live formula: don't type")]
         for i, (fill, text) in enumerate(legend):
             r = 42 + i
@@ -1300,14 +1315,17 @@ class SimpleWorkbook(DeskWorkbook):
         _banner(
             ws, 1,
             "Refinery boxes — net naphtha = capacity x utilization x signed yields. "
-            "Blue = input, orange = manual override (clear to fall back to the "
-            "Assumptions sheet), grey = formula. Yield-mode rows read the Data sheet.",
+            "Blue = input, orange = manual override, grey = formula. The MODE "
+            "dropdown flips each unit between override and assumption (set it on "
+            "the NET NAPHTHA row to flip the whole refinery). Yield-mode rows "
+            "read the Data sheet.",
             last_col,
         )
         labels = {
             self.c_type: "row", self.c_rid: "refinery_id", self.c_padd: "padd",
             self.c_uid: "unit", self.c_utype: "type", self.c_cap: "cap kbd",
-            self.c_effcap: "eff cap", self.c_utilov: "util ovr", self.c_util: "util",
+            self.c_effcap: "eff cap", self.c_mode: "mode",
+            self.c_utilov: "util ovr", self.c_util: "util",
             self.c_ysum: "Σ yield", self.c_base: "net naphtha kbd",
         }
         for i, cut in enumerate(self.cuts):
@@ -1342,6 +1360,9 @@ class SimpleWorkbook(DeskWorkbook):
             row += 1
             first_unit = row
             ovl = get_column_letter(self.c_utilov)
+            mdl = get_column_letter(self.c_mode)
+            total_row = first_unit + len(ref.units)
+            mode = f'IF(${mdl}{total_row}<>"",${mdl}{total_row},${mdl}{{row}})'
             for unit in ref.units:
                 est = unit.unit_id == "CRUDE-EST"
                 ws.cell(row=row, column=self.c_type, value="UNIT").font = FONT_SMALL
@@ -1366,6 +1387,8 @@ class SimpleWorkbook(DeskWorkbook):
                     row=row, column=self.c_effcap,
                     value=f'=IFERROR(IF({eff_inner}=0,"",{eff_inner}),"")',
                 ), fill=FILL_CALC, fmt="#,##0")
+                _style(ws.cell(row=row, column=self.c_mode, value="override"),
+                       fill=FILL_INPUT)
 
                 ov_util = self.book._find_override(ref, unit, day1, "utilization")
                 _style(ws.cell(row=row, column=self.c_utilov,
@@ -1373,7 +1396,7 @@ class SimpleWorkbook(DeskWorkbook):
                        fill=FILL_OVERRIDE, fmt="0.0%")
                 _style(ws.cell(
                     row=row, column=self.c_util,
-                    value=(f'=IF(${ovl}{row}<>"",${ovl}{row},'
+                    value=(f'=IF(AND({mode.format(row=row)}="override",${ovl}{row}<>""),${ovl}{row},'
                            f"SUMIFS({util_val},{util_padd},$C{row}))*{util_dial}"),
                 ), fill=FILL_CALC, fmt="0.0%")
 
@@ -1384,7 +1407,7 @@ class SimpleWorkbook(DeskWorkbook):
                         _style(ws.cell(row=row, column=self._cut_ovr_col(i)),
                                fill=FILL_OVERRIDE, fmt="0.0%")
                         formula = (
-                            f'=IF(${oc}{row}<>"",${oc}{row},'
+                            f'=IF(AND({mode.format(row=row)}="override",${oc}{row}<>""),${oc}{row},'
                             f"SUMIFS({data_naph},{data_id},$B{row})"
                             f"*{self.share_refs[cut]})"
                         )
@@ -1394,7 +1417,7 @@ class SimpleWorkbook(DeskWorkbook):
                                        value=ov.value if ov else None),
                                fill=FILL_OVERRIDE, fmt="0.0%")
                         formula = (
-                            f'=IF(${oc}{row}<>"",${oc}{row},'
+                            f'=IF(AND({mode.format(row=row)}="override",${oc}{row}<>""),${oc}{row},'
                             f"SUMIFS({y_val},{y_padd},$C{row},{y_ut},$E{row},"
                             f'{y_cut},"{cut}"))'
                         )
@@ -1423,6 +1446,7 @@ class SimpleWorkbook(DeskWorkbook):
                    fill=FILL_TOTAL, bold=True)
             _style(ws.cell(row=row, column=self.c_uid, value="NET NAPHTHA"),
                    fill=FILL_TOTAL, bold=True)
+            _style(ws.cell(row=row, column=self.c_mode), fill=FILL_INPUT)
             base_l = get_column_letter(self.c_base)
             _style(ws.cell(row=row, column=self.c_base,
                            value=f"=SUM({base_l}{first_unit}:{base_l}{row - 1})"),
@@ -1430,7 +1454,8 @@ class SimpleWorkbook(DeskWorkbook):
             self.refinery_total_rows[ref.refinery_id] = row
             row += 2
 
-        widths = {1: 7, 2: 22, 3: 5, 4: 12, 5: 12, 6: 8, 7: 8, 8: 8, 9: 7}
+        widths = {1: 7, 2: 22, 3: 5, 4: 12, 5: 12, 6: 8, 7: 8,
+                  self.c_mode: 11, self.c_utilov: 8, self.c_util: 7}
         for i in range(len(self.cuts)):
             widths[self._cut_ovr_col(i)] = 8
             widths[self._cut_yld_col(i)] = 9
@@ -1440,6 +1465,12 @@ class SimpleWorkbook(DeskWorkbook):
             ws.column_dimensions[get_column_letter(col)].width = w
         ws.freeze_panes = "A3"
         self.box_last = row - 1
+        # per-unit / per-refinery override-vs-assumption dropdown
+        dv = DataValidation(type="list", formula1='"override,assumption"',
+                            allow_blank=True)
+        ws.add_data_validation(dv)
+        mdl = get_column_letter(self.c_mode)
+        dv.add(f"{mdl}3:{mdl}{self.box_last}")
 
     # ----------------------------------------------- Assumptions: econ blocks
 
