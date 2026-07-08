@@ -1,0 +1,897 @@
+refinery_id,rem_name,product,grade,sub_region,yield_pct_2021
+,Alliance,LPG,Standard,PADD III,3.57
+MARATHON_ANACORTES,Anacortes Marathon,LPG,Standard,PADD V,2.42
+VALERO_ARDMORE,Ardmore,LPG,Standard,PADD II,1.77
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,LPG,Standard,PADD III,8.18
+XOM_BAYTOWN,Baytown,LPG,Standard,PADD III,7.43
+PHILLIPS_LINDEN,Bayway,LPG,Standard,PADD I,6.65
+EXXONMOBIL_BEAUMONT,Beaumont,LPG,Standard,PADD III,5.20
+VALERO_BENICIA,Benicia,LPG,Standard,PADD V,4.13
+ALON_BIG_SPRINGS,Big Spring,LPG,Standard,PADD III,2.55
+PHILLIPS_BILLINGS,Billings P66,LPG,Standard,PADD IV,4.11
+PAR_BILLINGS,Billings Par,LPG,Standard,PADD IV,3.41
+WRB_BORGER,Borger,LPG,Standard,PADD III,4.58
+MARATHON_CANTON,Canton,LPG,Standard,PADD II,0.90
+MARATHON_CATLETTSBURG,Catlettsburg,LPG,Standard,PADD II,1.28
+PBF_CHALMETTE,Chalmette,LPG,Standard,PADD III,5.19
+BP_FERNDALE,Cherry Point,LPG,Standard,PADD V,2.55
+CVR_COFFEYVILLE,Coffeyville,LPG,Standard,PADD II,3.43
+SUNCOR_DENVER,Commerce City,LPG,Standard,PADD IV,6.38
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,LPG,Standard,PADD III,2.14
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,LPG,Standard,PADD III,2.81
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,LPG,Standard,PADD III,3.39
+PEMEX_DEER_PARK,Deer Park,LPG,Standard,PADD III,4.63
+MARATHON_DETROIT,Detroit,LPG,Standard,PADD II,1.02
+,East Coast Refining System PBF (Delaware and Paulsboro),LPG,Standard,PADD I,5.08
+HF_EL_DORADO_KS,El Dorado Frontier,LPG,Standard,PADD II,1.69
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,LPG,Standard,PADD III,1.42
+MARATHON_EL_PASO,El Paso,LPG,Standard,PADD III,1.77
+CHEVRON_EL_SEGUNDO,El Segundo,LPG,Standard,PADD V,3.36
+PHILLIPS_FERNDALE,Ferndale P66,LPG,Standard,PADD V,3.23
+MPC_GALV_BAY,Galveston Bay,LPG,Standard,PADD III,5.23
+MARATHON_GARYVILLE,Garyville,LPG,Standard,PADD III,1.72
+LYONDELLBASELL_HOUSTON,Houston Lyondell,LPG,Standard,PADD III,4.12
+VALERO_HOUSTON,Houston Valero,LPG,Standard,PADD III,1.15
+EXXONMOBIL_JOLIET,Joliet,LPG,Standard,PADD II,5.75
+PAR_EWA_BEACH,Kapolei Par,LPG,Standard,PADD V,1.74
+MARATHON_NIKISKI,Kenai,LPG,Standard,PADD V,2.41
+DELEK_KROTZ_SPRINGS,Krotz Springs,LPG,Standard,PADD III,4.17
+CITGO_LAKE_CHARLES,Lake Charles Citgo,LPG,Standard,PADD III,3.50
+PHILLIPS_WESTLAKE,Lake Charles P66,LPG,Standard,PADD III,2.11
+CHS_LAUREL,Laurel,LPG,Standard,PADD IV,1.81
+CITGO_LEMONT,Lemont,LPG,Standard,PADD II,3.66
+CENOVUS_LIMA,Lima,LPG,Standard,PADD II,7.32
+,Los Angeles Marathon,LPG,Standard,PADD V,3.36
+PHILLIPS_LOS_ANGELES,Los Angeles P66,LPG,Standard,PADD V,6.25
+MARATHON_MANDAN,Mandan,LPG,Standard,PADD II,2.21
+PBF_MARTINEZ,Martinez PBF,LPG,Standard,PADD V,3.82
+VALERO_SUNRAY,McKee,LPG,Standard,PADD III,3.03
+NCRA_MCPHERSON,McPherson,LPG,Standard,PADD II,1.96
+VALERO_MEMPHIS,Memphis,LPG,Standard,PADD II,1.17
+VALERO_MERAUX,Meraux,LPG,Standard,PADD III,0.36
+HF_ARTESIA,Navajo (Artesia),LPG,Standard,PADD III,2.44
+SHELL_NORCO,Norco,LPG,Standard,PADD III,4.19
+CHEVRON_PASADENA,Pasadena,LPG,Standard,PADD III,2.47
+CHEVRON_PASCAGOULA,Pascagoula,LPG,Standard,PADD III,2.80
+FLINT_ROSEMOUNT,Pine Bend,LPG,Standard,PADD II,3.33
+PHILLIPS_PONCA_CITY,Ponca City,LPG,Standard,PADD II,2.66
+PLACID_PORT_ALLEN,Port Allen,LPG,Standard,PADD III,3.27
+MOTIVA_PAR,Port Arthur Motiva,LPG,Standard,PADD III,1.87
+TOTAL_PORT_ARTHUR,Port Arthur Total,LPG,Standard,PADD III,6.16
+VALERO_PORT_ARTHUR,Port Arthur Valero,LPG,Standard,PADD III,2.53
+HF_ANACORTES,Puget Sound,LPG,Standard,PADD V,1.92
+CHEVRON_RICHMOND,Richmond,LPG,Standard,PADD V,3.53
+MARATHON_ROBINSON,Robinson,LPG,Standard,PADD II,2.17
+BIG_NORTH_SLATERVILLE_CANAL,Salt Lake City BigWest,LPG,Standard,PADD IV,4.81
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,LPG,Standard,PADD IV,1.80
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,LPG,Standard,PADD IV,1.97
+,San Francisco (Rodeo and Santa Maria),LPG,Standard,PADD V,5.59
+VERTEX_MOBILE,Saraland,LPG,Standard,PADD III,1.47
+CALUMET_SHREVEPORT,Shreveport,LPG,Standard,PADD III,1.49
+SINCLAIR_SINCLAIR,Sinclair,LPG,Standard,PADD IV,2.12
+VALERO_SAINT_CHARLES,St. Charles,LPG,Standard,PADD III,4.33
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,LPG,Standard,PADD II,1.68
+PHILLIPS_SWEENY,Sweeny,LPG,Standard,PADD III,3.48
+VALERO_TEXAS_CITY,Texas City Valero,LPG,Standard,PADD III,1.40
+VALERO_THREE_RIVERS,Three Rivers,LPG,Standard,PADD III,1.77
+CENOVUS_TOLEDO,Toledo Cenovus,LPG,Standard,PADD II,2.17
+PBF_TOLEDO,Toledo PBF,LPG,Standard,PADD II,3.65
+PBF_TORRANCE,Torrance,LPG,Standard,PADD V,2.87
+MONROE_TRAINER,Trainer,LPG,Standard,PADD I,2.34
+HF_TULSA,Tulsa,LPG,Standard,PADD II,2.44
+HUNT_TUSCALOOSA,Tuscaloosa,LPG,Standard,PADD III,2.53
+DELEK_TYLER,Tyler,LPG,Standard,PADD III,3.24
+UNITED_WARREN,Warren,LPG,Standard,PADD I,2.78
+BP_WHITING,Whiting,LPG,Standard,PADD II,2.59
+VALERO_LOS_ANGELES,Wilmington Valero,LPG,Standard,PADD V,5.52
+CENOVUS_WOOD_RIVER,Wood River,LPG,Standard,PADD II,3.33
+HF_WOODS_CROSS,Woods Cross Holly Corp,LPG,Standard,PADD IV,1.35
+CVR_WYNNEWOOD,Wynnewood,LPG,Standard,PADD II,2.87
+,Alliance,Naphtha,Standard,PADD III,8.97
+EXXONMOBIL_BEAUMONT,Beaumont,Naphtha,Standard,PADD III,0.23
+ALON_BIG_SPRINGS,Big Spring,Naphtha,Standard,PADD III,16.45
+PHILLIPS_BILLINGS,Billings P66,Naphtha,Standard,PADD IV,1.45
+BP_FERNDALE,Cherry Point,Naphtha,Standard,PADD V,0.06
+CVR_COFFEYVILLE,Coffeyville,Naphtha,Standard,PADD II,0.89
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,Naphtha,Standard,PADD III,5.26
+,East Coast Refining System PBF (Delaware and Paulsboro),Naphtha,Standard,PADD I,5.03
+MPC_GALV_BAY,Galveston Bay,Naphtha,Standard,PADD III,7.99
+MARATHON_GARYVILLE,Garyville,Naphtha,Standard,PADD III,1.46
+LYONDELLBASELL_HOUSTON,Houston Lyondell,Naphtha,Standard,PADD III,2.91
+VALERO_HOUSTON,Houston Valero,Naphtha,Standard,PADD III,28.47
+PAR_EWA_BEACH,Kapolei Par,Naphtha,Standard,PADD V,0.71
+PHILLIPS_WESTLAKE,Lake Charles P66,Naphtha,Standard,PADD III,3.29
+CHS_LAUREL,Laurel,Naphtha,Standard,PADD IV,7.77
+CITGO_LEMONT,Lemont,Naphtha,Standard,PADD II,7.90
+VALERO_SUNRAY,McKee,Naphtha,Standard,PADD III,5.98
+NCRA_MCPHERSON,McPherson,Naphtha,Standard,PADD II,4.10
+VALERO_MEMPHIS,Memphis,Naphtha,Standard,PADD II,12.35
+HF_ARTESIA,Navajo (Artesia),Naphtha,Standard,PADD III,9.38
+SHELL_NORCO,Norco,Naphtha,Standard,PADD III,3.63
+CHEVRON_PASCAGOULA,Pascagoula,Naphtha,Standard,PADD III,3.62
+TOTAL_PORT_ARTHUR,Port Arthur Total,Naphtha,Standard,PADD III,3.43
+VALERO_PORT_ARTHUR,Port Arthur Valero,Naphtha,Standard,PADD III,8.58
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,Naphtha,Standard,PADD IV,3.59
+SINCLAIR_SINCLAIR,Sinclair,Naphtha,Standard,PADD IV,4.29
+VALERO_TEXAS_CITY,Texas City Valero,Naphtha,Standard,PADD III,7.66
+VALERO_THREE_RIVERS,Three Rivers,Naphtha,Standard,PADD III,1.19
+HF_WOODS_CROSS,Woods Cross Holly Corp,Naphtha,Standard,PADD IV,4.08
+,Alliance,Gasoline,Regular Unleaded,PADD III,30.57
+MARATHON_ANACORTES,Anacortes Marathon,Gasoline,Regular Unleaded,PADD V,53.31
+VALERO_ARDMORE,Ardmore,Gasoline,Regular Unleaded,PADD II,42.80
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,Gasoline,Regular Unleaded,PADD III,47.28
+XOM_BAYTOWN,Baytown,Gasoline,Regular Unleaded,PADD III,41.16
+PHILLIPS_LINDEN,Bayway,Gasoline,Regular Unleaded,PADD I,48.84
+EXXONMOBIL_BEAUMONT,Beaumont,Gasoline,Regular Unleaded,PADD III,41.25
+VALERO_BENICIA,Benicia,Gasoline,Regular Unleaded,PADD V,44.48
+ALON_BIG_SPRINGS,Big Spring,Gasoline,Regular Unleaded,PADD III,30.69
+PHILLIPS_BILLINGS,Billings P66,Gasoline,Regular Unleaded,PADD IV,41.69
+PAR_BILLINGS,Billings Par,Gasoline,Regular Unleaded,PADD IV,36.28
+WRB_BORGER,Borger,Gasoline,Regular Unleaded,PADD III,44.60
+MARATHON_CANTON,Canton,Gasoline,Regular Unleaded,PADD II,54.29
+MARATHON_CATLETTSBURG,Catlettsburg,Gasoline,Regular Unleaded,PADD II,49.59
+PBF_CHALMETTE,Chalmette,Gasoline,Regular Unleaded,PADD III,43.29
+BP_FERNDALE,Cherry Point,Gasoline,Regular Unleaded,PADD V,31.45
+CVR_COFFEYVILLE,Coffeyville,Gasoline,Regular Unleaded,PADD II,48.28
+SUNCOR_DENVER,Commerce City,Gasoline,Regular Unleaded,PADD IV,44.45
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,Gasoline,Regular Unleaded,PADD III,47.08
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,Gasoline,Regular Unleaded,PADD III,41.54
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,Gasoline,Regular Unleaded,PADD III,41.26
+PEMEX_DEER_PARK,Deer Park,Gasoline,Regular Unleaded,PADD III,40.55
+MARATHON_DETROIT,Detroit,Gasoline,Regular Unleaded,PADD II,49.14
+,East Coast Refining System PBF (Delaware and Paulsboro),Gasoline,Regular Unleaded,PADD I,42.41
+HF_EL_DORADO_KS,El Dorado Frontier,Gasoline,Regular Unleaded,PADD II,46.33
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,Gasoline,Regular Unleaded,PADD III,44.49
+MARATHON_EL_PASO,El Paso,Gasoline,Regular Unleaded,PADD III,54.56
+CHEVRON_EL_SEGUNDO,El Segundo,Gasoline,Regular Unleaded,PADD V,48.66
+PHILLIPS_FERNDALE,Ferndale P66,Gasoline,Regular Unleaded,PADD V,51.16
+MPC_GALV_BAY,Galveston Bay,Gasoline,Regular Unleaded,PADD III,40.90
+MARATHON_GARYVILLE,Garyville,Gasoline,Regular Unleaded,PADD III,44.40
+LYONDELLBASELL_HOUSTON,Houston Lyondell,Gasoline,Regular Unleaded,PADD III,46.02
+VALERO_HOUSTON,Houston Valero,Gasoline,Regular Unleaded,PADD III,29.00
+EXXONMOBIL_JOLIET,Joliet,Gasoline,Regular Unleaded,PADD II,49.44
+PAR_EWA_BEACH,Kapolei Par,Gasoline,Regular Unleaded,PADD V,26.67
+MARATHON_NIKISKI,Kenai,Gasoline,Regular Unleaded,PADD V,30.32
+DELEK_KROTZ_SPRINGS,Krotz Springs,Gasoline,Regular Unleaded,PADD III,43.29
+CITGO_LAKE_CHARLES,Lake Charles Citgo,Gasoline,Regular Unleaded,PADD III,47.53
+PHILLIPS_WESTLAKE,Lake Charles P66,Gasoline,Regular Unleaded,PADD III,44.20
+CHS_LAUREL,Laurel,Gasoline,Regular Unleaded,PADD IV,28.49
+CITGO_LEMONT,Lemont,Gasoline,Regular Unleaded,PADD II,39.02
+CENOVUS_LIMA,Lima,Gasoline,Regular Unleaded,PADD II,44.13
+,Los Angeles Marathon,Gasoline,Regular Unleaded,PADD V,56.31
+PHILLIPS_LOS_ANGELES,Los Angeles P66,Gasoline,Regular Unleaded,PADD V,60.95
+MARATHON_MANDAN,Mandan,Gasoline,Regular Unleaded,PADD II,54.19
+PBF_MARTINEZ,Martinez PBF,Gasoline,Regular Unleaded,PADD V,57.09
+VALERO_SUNRAY,McKee,Gasoline,Regular Unleaded,PADD III,43.39
+NCRA_MCPHERSON,McPherson,Gasoline,Regular Unleaded,PADD II,51.79
+VALERO_MEMPHIS,Memphis,Gasoline,Regular Unleaded,PADD II,36.04
+VALERO_MERAUX,Meraux,Gasoline,Regular Unleaded,PADD III,27.76
+HF_ARTESIA,Navajo (Artesia),Gasoline,Regular Unleaded,PADD III,48.93
+SHELL_NORCO,Norco,Gasoline,Regular Unleaded,PADD III,51.69
+CHEVRON_PASADENA,Pasadena,Gasoline,Regular Unleaded,PADD III,34.24
+CHEVRON_PASCAGOULA,Pascagoula,Gasoline,Regular Unleaded,PADD III,36.69
+FLINT_ROSEMOUNT,Pine Bend,Gasoline,Regular Unleaded,PADD II,43.40
+PHILLIPS_PONCA_CITY,Ponca City,Gasoline,Regular Unleaded,PADD II,46.41
+PLACID_PORT_ALLEN,Port Allen,Gasoline,Regular Unleaded,PADD III,46.10
+MOTIVA_PAR,Port Arthur Motiva,Gasoline,Regular Unleaded,PADD III,39.44
+TOTAL_PORT_ARTHUR,Port Arthur Total,Gasoline,Regular Unleaded,PADD III,35.67
+VALERO_PORT_ARTHUR,Port Arthur Valero,Gasoline,Regular Unleaded,PADD III,38.53
+HF_ANACORTES,Puget Sound,Gasoline,Regular Unleaded,PADD V,46.33
+CHEVRON_RICHMOND,Richmond,Gasoline,Regular Unleaded,PADD V,40.85
+MARATHON_ROBINSON,Robinson,Gasoline,Regular Unleaded,PADD II,41.45
+BIG_NORTH_SLATERVILLE_CANAL,Salt Lake City BigWest,Gasoline,Regular Unleaded,PADD IV,53.25
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,Gasoline,Regular Unleaded,PADD IV,50.94
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,Gasoline,Regular Unleaded,PADD IV,46.56
+,San Francisco (Rodeo and Santa Maria),Gasoline,Regular Unleaded,PADD V,23.29
+VERTEX_MOBILE,Saraland,Gasoline,Regular Unleaded,PADD III,29.20
+CALUMET_SHREVEPORT,Shreveport,Gasoline,Regular Unleaded,PADD III,34.49
+SINCLAIR_SINCLAIR,Sinclair,Gasoline,Regular Unleaded,PADD IV,34.30
+VALERO_SAINT_CHARLES,St. Charles,Gasoline,Regular Unleaded,PADD III,40.14
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,Gasoline,Regular Unleaded,PADD II,44.81
+PHILLIPS_SWEENY,Sweeny,Gasoline,Regular Unleaded,PADD III,36.58
+VALERO_TEXAS_CITY,Texas City Valero,Gasoline,Regular Unleaded,PADD III,45.41
+VALERO_THREE_RIVERS,Three Rivers,Gasoline,Regular Unleaded,PADD III,41.09
+CENOVUS_TOLEDO,Toledo Cenovus,Gasoline,Regular Unleaded,PADD II,55.67
+PBF_TOLEDO,Toledo PBF,Gasoline,Regular Unleaded,PADD II,52.48
+PBF_TORRANCE,Torrance,Gasoline,Regular Unleaded,PADD V,62.55
+MONROE_TRAINER,Trainer,Gasoline,Regular Unleaded,PADD I,40.15
+HF_TULSA,Tulsa,Gasoline,Regular Unleaded,PADD II,47.51
+HUNT_TUSCALOOSA,Tuscaloosa,Gasoline,Regular Unleaded,PADD III,23.27
+DELEK_TYLER,Tyler,Gasoline,Regular Unleaded,PADD III,48.03
+UNITED_WARREN,Warren,Gasoline,Regular Unleaded,PADD I,44.06
+BP_WHITING,Whiting,Gasoline,Regular Unleaded,PADD II,46.09
+VALERO_LOS_ANGELES,Wilmington Valero,Gasoline,Regular Unleaded,PADD V,51.00
+CENOVUS_WOOD_RIVER,Wood River,Gasoline,Regular Unleaded,PADD II,41.25
+HF_WOODS_CROSS,Woods Cross Holly Corp,Gasoline,Regular Unleaded,PADD IV,45.80
+CVR_WYNNEWOOD,Wynnewood,Gasoline,Regular Unleaded,PADD II,49.06
+,Alliance,Gasoline,Premium Unleaded,PADD III,3.62
+MARATHON_ANACORTES,Anacortes Marathon,Gasoline,Premium Unleaded,PADD V,5.16
+VALERO_ARDMORE,Ardmore,Gasoline,Premium Unleaded,PADD II,3.89
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,Gasoline,Premium Unleaded,PADD III,3.47
+XOM_BAYTOWN,Baytown,Gasoline,Premium Unleaded,PADD III,4.72
+PHILLIPS_LINDEN,Bayway,Gasoline,Premium Unleaded,PADD I,5.90
+EXXONMOBIL_BEAUMONT,Beaumont,Gasoline,Premium Unleaded,PADD III,4.23
+VALERO_BENICIA,Benicia,Gasoline,Premium Unleaded,PADD V,2.74
+ALON_BIG_SPRINGS,Big Spring,Gasoline,Premium Unleaded,PADD III,4.31
+PHILLIPS_BILLINGS,Billings P66,Gasoline,Premium Unleaded,PADD IV,4.30
+PAR_BILLINGS,Billings Par,Gasoline,Premium Unleaded,PADD IV,6.97
+WRB_BORGER,Borger,Gasoline,Premium Unleaded,PADD III,4.95
+MARATHON_CANTON,Canton,Gasoline,Premium Unleaded,PADD II,4.26
+MARATHON_CATLETTSBURG,Catlettsburg,Gasoline,Premium Unleaded,PADD II,4.97
+PBF_CHALMETTE,Chalmette,Gasoline,Premium Unleaded,PADD III,3.70
+BP_FERNDALE,Cherry Point,Gasoline,Premium Unleaded,PADD V,4.29
+SUNCOR_DENVER,Commerce City,Gasoline,Premium Unleaded,PADD IV,5.30
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,Gasoline,Premium Unleaded,PADD III,5.56
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,Gasoline,Premium Unleaded,PADD III,3.98
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,Gasoline,Premium Unleaded,PADD III,2.52
+PEMEX_DEER_PARK,Deer Park,Gasoline,Premium Unleaded,PADD III,4.60
+MARATHON_DETROIT,Detroit,Gasoline,Premium Unleaded,PADD II,3.76
+HF_EL_DORADO_KS,El Dorado Frontier,Gasoline,Premium Unleaded,PADD II,5.81
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,Gasoline,Premium Unleaded,PADD III,4.58
+MARATHON_EL_PASO,El Paso,Gasoline,Premium Unleaded,PADD III,0.36
+CHEVRON_EL_SEGUNDO,El Segundo,Gasoline,Premium Unleaded,PADD V,4.29
+PHILLIPS_FERNDALE,Ferndale P66,Gasoline,Premium Unleaded,PADD V,4.91
+MPC_GALV_BAY,Galveston Bay,Gasoline,Premium Unleaded,PADD III,7.41
+MARATHON_GARYVILLE,Garyville,Gasoline,Premium Unleaded,PADD III,3.15
+LYONDELLBASELL_HOUSTON,Houston Lyondell,Gasoline,Premium Unleaded,PADD III,2.07
+VALERO_HOUSTON,Houston Valero,Gasoline,Premium Unleaded,PADD III,6.47
+EXXONMOBIL_JOLIET,Joliet,Gasoline,Premium Unleaded,PADD II,4.08
+MARATHON_NIKISKI,Kenai,Gasoline,Premium Unleaded,PADD V,2.47
+DELEK_KROTZ_SPRINGS,Krotz Springs,Gasoline,Premium Unleaded,PADD III,7.37
+CITGO_LAKE_CHARLES,Lake Charles Citgo,Gasoline,Premium Unleaded,PADD III,4.24
+PHILLIPS_WESTLAKE,Lake Charles P66,Gasoline,Premium Unleaded,PADD III,2.55
+CHS_LAUREL,Laurel,Gasoline,Premium Unleaded,PADD IV,3.50
+CITGO_LEMONT,Lemont,Gasoline,Premium Unleaded,PADD II,2.24
+CENOVUS_LIMA,Lima,Gasoline,Premium Unleaded,PADD II,2.86
+,Los Angeles Marathon,Gasoline,Premium Unleaded,PADD V,2.41
+PHILLIPS_LOS_ANGELES,Los Angeles P66,Gasoline,Premium Unleaded,PADD V,3.17
+MARATHON_MANDAN,Mandan,Gasoline,Premium Unleaded,PADD II,2.84
+PBF_MARTINEZ,Martinez PBF,Gasoline,Premium Unleaded,PADD V,3.53
+VALERO_SUNRAY,McKee,Gasoline,Premium Unleaded,PADD III,5.15
+VALERO_MEMPHIS,Memphis,Gasoline,Premium Unleaded,PADD II,1.80
+VALERO_MERAUX,Meraux,Gasoline,Premium Unleaded,PADD III,3.41
+SHELL_NORCO,Norco,Gasoline,Premium Unleaded,PADD III,6.47
+CHEVRON_PASADENA,Pasadena,Gasoline,Premium Unleaded,PADD III,5.77
+CHEVRON_PASCAGOULA,Pascagoula,Gasoline,Premium Unleaded,PADD III,4.28
+FLINT_ROSEMOUNT,Pine Bend,Gasoline,Premium Unleaded,PADD II,3.98
+PHILLIPS_PONCA_CITY,Ponca City,Gasoline,Premium Unleaded,PADD II,5.43
+PLACID_PORT_ALLEN,Port Allen,Gasoline,Premium Unleaded,PADD III,1.52
+MOTIVA_PAR,Port Arthur Motiva,Gasoline,Premium Unleaded,PADD III,4.34
+TOTAL_PORT_ARTHUR,Port Arthur Total,Gasoline,Premium Unleaded,PADD III,5.08
+HF_ANACORTES,Puget Sound,Gasoline,Premium Unleaded,PADD V,3.98
+CHEVRON_RICHMOND,Richmond,Gasoline,Premium Unleaded,PADD V,7.11
+MARATHON_ROBINSON,Robinson,Gasoline,Premium Unleaded,PADD II,1.93
+BIG_NORTH_SLATERVILLE_CANAL,Salt Lake City BigWest,Gasoline,Premium Unleaded,PADD IV,3.52
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,Gasoline,Premium Unleaded,PADD IV,4.00
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,Gasoline,Premium Unleaded,PADD IV,3.84
+,San Francisco (Rodeo and Santa Maria),Gasoline,Premium Unleaded,PADD V,3.08
+VERTEX_MOBILE,Saraland,Gasoline,Premium Unleaded,PADD III,1.35
+CALUMET_SHREVEPORT,Shreveport,Gasoline,Premium Unleaded,PADD III,7.87
+SINCLAIR_SINCLAIR,Sinclair,Gasoline,Premium Unleaded,PADD IV,4.66
+VALERO_SAINT_CHARLES,St. Charles,Gasoline,Premium Unleaded,PADD III,3.01
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,Gasoline,Premium Unleaded,PADD II,7.17
+PHILLIPS_SWEENY,Sweeny,Gasoline,Premium Unleaded,PADD III,3.21
+VALERO_TEXAS_CITY,Texas City Valero,Gasoline,Premium Unleaded,PADD III,0.94
+VALERO_THREE_RIVERS,Three Rivers,Gasoline,Premium Unleaded,PADD III,3.75
+CENOVUS_TOLEDO,Toledo Cenovus,Gasoline,Premium Unleaded,PADD II,4.02
+PBF_TOLEDO,Toledo PBF,Gasoline,Premium Unleaded,PADD II,3.63
+PBF_TORRANCE,Torrance,Gasoline,Premium Unleaded,PADD V,5.05
+MONROE_TRAINER,Trainer,Gasoline,Premium Unleaded,PADD I,10.00
+HF_TULSA,Tulsa,Gasoline,Premium Unleaded,PADD II,6.19
+DELEK_TYLER,Tyler,Gasoline,Premium Unleaded,PADD III,4.41
+UNITED_WARREN,Warren,Gasoline,Premium Unleaded,PADD I,3.81
+BP_WHITING,Whiting,Gasoline,Premium Unleaded,PADD II,4.94
+VALERO_LOS_ANGELES,Wilmington Valero,Gasoline,Premium Unleaded,PADD V,5.07
+CENOVUS_WOOD_RIVER,Wood River,Gasoline,Premium Unleaded,PADD II,4.86
+CVR_WYNNEWOOD,Wynnewood,Gasoline,Premium Unleaded,PADD II,5.01
+,Alliance,Jet/Other Kerosene,Standard,PADD III,1.12
+MARATHON_ANACORTES,Anacortes Marathon,Jet/Other Kerosene,Standard,PADD V,9.19
+VALERO_ARDMORE,Ardmore,Jet/Other Kerosene,Standard,PADD II,9.41
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,Jet/Other Kerosene,Standard,PADD III,7.30
+XOM_BAYTOWN,Baytown,Jet/Other Kerosene,Standard,PADD III,5.00
+PHILLIPS_LINDEN,Bayway,Jet/Other Kerosene,Standard,PADD I,7.58
+EXXONMOBIL_BEAUMONT,Beaumont,Jet/Other Kerosene,Standard,PADD III,9.36
+VALERO_BENICIA,Benicia,Jet/Other Kerosene,Standard,PADD V,10.82
+ALON_BIG_SPRINGS,Big Spring,Jet/Other Kerosene,Standard,PADD III,7.17
+PHILLIPS_BILLINGS,Billings P66,Jet/Other Kerosene,Standard,PADD IV,13.22
+PAR_BILLINGS,Billings Par,Jet/Other Kerosene,Standard,PADD IV,4.67
+WRB_BORGER,Borger,Jet/Other Kerosene,Standard,PADD III,5.20
+MARATHON_CANTON,Canton,Jet/Other Kerosene,Standard,PADD II,6.93
+MARATHON_CATLETTSBURG,Catlettsburg,Jet/Other Kerosene,Standard,PADD II,9.22
+PBF_CHALMETTE,Chalmette,Jet/Other Kerosene,Standard,PADD III,6.76
+BP_FERNDALE,Cherry Point,Jet/Other Kerosene,Standard,PADD V,10.65
+CVR_COFFEYVILLE,Coffeyville,Jet/Other Kerosene,Standard,PADD II,6.98
+SUNCOR_DENVER,Commerce City,Jet/Other Kerosene,Standard,PADD IV,5.36
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,Jet/Other Kerosene,Standard,PADD III,4.35
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,Jet/Other Kerosene,Standard,PADD III,15.33
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,Jet/Other Kerosene,Standard,PADD III,10.92
+PEMEX_DEER_PARK,Deer Park,Jet/Other Kerosene,Standard,PADD III,9.58
+MARATHON_DETROIT,Detroit,Jet/Other Kerosene,Standard,PADD II,1.51
+,East Coast Refining System PBF (Delaware and Paulsboro),Jet/Other Kerosene,Standard,PADD I,4.74
+HF_EL_DORADO_KS,El Dorado Frontier,Jet/Other Kerosene,Standard,PADD II,6.18
+MARATHON_EL_PASO,El Paso,Jet/Other Kerosene,Standard,PADD III,7.70
+CHEVRON_EL_SEGUNDO,El Segundo,Jet/Other Kerosene,Standard,PADD V,14.14
+MPC_GALV_BAY,Galveston Bay,Jet/Other Kerosene,Standard,PADD III,2.78
+MARATHON_GARYVILLE,Garyville,Jet/Other Kerosene,Standard,PADD III,8.18
+LYONDELLBASELL_HOUSTON,Houston Lyondell,Jet/Other Kerosene,Standard,PADD III,5.38
+VALERO_HOUSTON,Houston Valero,Jet/Other Kerosene,Standard,PADD III,8.63
+EXXONMOBIL_JOLIET,Joliet,Jet/Other Kerosene,Standard,PADD II,5.77
+PAR_EWA_BEACH,Kapolei Par,Jet/Other Kerosene,Standard,PADD V,24.94
+MARATHON_NIKISKI,Kenai,Jet/Other Kerosene,Standard,PADD V,13.18
+DELEK_KROTZ_SPRINGS,Krotz Springs,Jet/Other Kerosene,Standard,PADD III,12.28
+CITGO_LAKE_CHARLES,Lake Charles Citgo,Jet/Other Kerosene,Standard,PADD III,10.60
+PHILLIPS_WESTLAKE,Lake Charles P66,Jet/Other Kerosene,Standard,PADD III,4.26
+CHS_LAUREL,Laurel,Jet/Other Kerosene,Standard,PADD IV,8.76
+CITGO_LEMONT,Lemont,Jet/Other Kerosene,Standard,PADD II,8.38
+CENOVUS_LIMA,Lima,Jet/Other Kerosene,Standard,PADD II,10.10
+,Los Angeles Marathon,Jet/Other Kerosene,Standard,PADD V,7.54
+PHILLIPS_LOS_ANGELES,Los Angeles P66,Jet/Other Kerosene,Standard,PADD V,11.88
+MARATHON_MANDAN,Mandan,Jet/Other Kerosene,Standard,PADD II,5.69
+PBF_MARTINEZ,Martinez PBF,Jet/Other Kerosene,Standard,PADD V,9.27
+VALERO_SUNRAY,McKee,Jet/Other Kerosene,Standard,PADD III,8.76
+NCRA_MCPHERSON,McPherson,Jet/Other Kerosene,Standard,PADD II,7.26
+VALERO_MERAUX,Meraux,Jet/Other Kerosene,Standard,PADD III,7.24
+SHELL_NORCO,Norco,Jet/Other Kerosene,Standard,PADD III,8.05
+CHEVRON_PASADENA,Pasadena,Jet/Other Kerosene,Standard,PADD III,12.28
+FLINT_ROSEMOUNT,Pine Bend,Jet/Other Kerosene,Standard,PADD II,9.10
+PHILLIPS_PONCA_CITY,Ponca City,Jet/Other Kerosene,Standard,PADD II,4.52
+PLACID_PORT_ALLEN,Port Allen,Jet/Other Kerosene,Standard,PADD III,10.80
+MOTIVA_PAR,Port Arthur Motiva,Jet/Other Kerosene,Standard,PADD III,6.90
+TOTAL_PORT_ARTHUR,Port Arthur Total,Jet/Other Kerosene,Standard,PADD III,3.38
+VALERO_PORT_ARTHUR,Port Arthur Valero,Jet/Other Kerosene,Standard,PADD III,6.53
+HF_ANACORTES,Puget Sound,Jet/Other Kerosene,Standard,PADD V,13.68
+CHEVRON_RICHMOND,Richmond,Jet/Other Kerosene,Standard,PADD V,10.43
+MARATHON_ROBINSON,Robinson,Jet/Other Kerosene,Standard,PADD II,5.78
+BIG_NORTH_SLATERVILLE_CANAL,Salt Lake City BigWest,Jet/Other Kerosene,Standard,PADD IV,8.81
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,Jet/Other Kerosene,Standard,PADD IV,13.32
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,Jet/Other Kerosene,Standard,PADD IV,14.73
+,San Francisco (Rodeo and Santa Maria),Jet/Other Kerosene,Standard,PADD V,9.76
+VERTEX_MOBILE,Saraland,Jet/Other Kerosene,Standard,PADD III,10.06
+CALUMET_SHREVEPORT,Shreveport,Jet/Other Kerosene,Standard,PADD III,5.76
+SINCLAIR_SINCLAIR,Sinclair,Jet/Other Kerosene,Standard,PADD IV,6.75
+VALERO_SAINT_CHARLES,St. Charles,Jet/Other Kerosene,Standard,PADD III,4.47
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,Jet/Other Kerosene,Standard,PADD II,8.09
+PHILLIPS_SWEENY,Sweeny,Jet/Other Kerosene,Standard,PADD III,4.82
+VALERO_TEXAS_CITY,Texas City Valero,Jet/Other Kerosene,Standard,PADD III,4.92
+VALERO_THREE_RIVERS,Three Rivers,Jet/Other Kerosene,Standard,PADD III,5.00
+CENOVUS_TOLEDO,Toledo Cenovus,Jet/Other Kerosene,Standard,PADD II,12.23
+PBF_TOLEDO,Toledo PBF,Jet/Other Kerosene,Standard,PADD II,9.72
+PBF_TORRANCE,Torrance,Jet/Other Kerosene,Standard,PADD V,7.21
+MONROE_TRAINER,Trainer,Jet/Other Kerosene,Standard,PADD I,7.92
+HF_TULSA,Tulsa,Jet/Other Kerosene,Standard,PADD II,5.35
+HUNT_TUSCALOOSA,Tuscaloosa,Jet/Other Kerosene,Standard,PADD III,9.27
+DELEK_TYLER,Tyler,Jet/Other Kerosene,Standard,PADD III,8.11
+UNITED_WARREN,Warren,Jet/Other Kerosene,Standard,PADD I,7.62
+BP_WHITING,Whiting,Jet/Other Kerosene,Standard,PADD II,2.86
+VALERO_LOS_ANGELES,Wilmington Valero,Jet/Other Kerosene,Standard,PADD V,9.52
+CENOVUS_WOOD_RIVER,Wood River,Jet/Other Kerosene,Standard,PADD II,16.54
+CVR_WYNNEWOOD,Wynnewood,Jet/Other Kerosene,Standard,PADD II,6.10
+,Alliance,Diesel,Ultra Low Sulphur,PADD III,26.61
+MARATHON_ANACORTES,Anacortes Marathon,Diesel,Ultra Low Sulphur,PADD V,23.85
+VALERO_ARDMORE,Ardmore,Diesel,Ultra Low Sulphur,PADD II,33.75
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,Diesel,Ultra Low Sulphur,PADD III,25.86
+XOM_BAYTOWN,Baytown,Diesel,Ultra Low Sulphur,PADD III,27.62
+PHILLIPS_LINDEN,Bayway,Diesel,Ultra Low Sulphur,PADD I,28.23
+EXXONMOBIL_BEAUMONT,Beaumont,Diesel,Ultra Low Sulphur,PADD III,24.98
+VALERO_BENICIA,Benicia,Diesel,Ultra Low Sulphur,PADD V,17.52
+ALON_BIG_SPRINGS,Big Spring,Diesel,Ultra Low Sulphur,PADD III,30.05
+PHILLIPS_BILLINGS,Billings P66,Diesel,Ultra Low Sulphur,PADD IV,26.88
+PAR_BILLINGS,Billings Par,Diesel,Ultra Low Sulphur,PADD IV,32.87
+WRB_BORGER,Borger,Diesel,Ultra Low Sulphur,PADD III,27.38
+MARATHON_CANTON,Canton,Diesel,Ultra Low Sulphur,PADD II,24.34
+MARATHON_CATLETTSBURG,Catlettsburg,Diesel,Ultra Low Sulphur,PADD II,25.45
+PBF_CHALMETTE,Chalmette,Diesel,Ultra Low Sulphur,PADD III,23.34
+BP_FERNDALE,Cherry Point,Diesel,Ultra Low Sulphur,PADD V,50.50
+CVR_COFFEYVILLE,Coffeyville,Diesel,Ultra Low Sulphur,PADD II,37.64
+SUNCOR_DENVER,Commerce City,Diesel,Ultra Low Sulphur,PADD IV,28.88
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,Diesel,Ultra Low Sulphur,PADD III,35.63
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,Diesel,Ultra Low Sulphur,PADD III,27.85
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,Diesel,Ultra Low Sulphur,PADD III,25.59
+PEMEX_DEER_PARK,Deer Park,Diesel,Ultra Low Sulphur,PADD III,28.01
+MARATHON_DETROIT,Detroit,Diesel,Ultra Low Sulphur,PADD II,31.87
+,East Coast Refining System PBF (Delaware and Paulsboro),Diesel,Ultra Low Sulphur,PADD I,26.92
+HF_EL_DORADO_KS,El Dorado Frontier,Diesel,Ultra Low Sulphur,PADD II,38.76
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,Diesel,Ultra Low Sulphur,PADD III,38.23
+MARATHON_EL_PASO,El Paso,Diesel,Ultra Low Sulphur,PADD III,31.39
+CHEVRON_EL_SEGUNDO,El Segundo,Diesel,Ultra Low Sulphur,PADD V,25.72
+PHILLIPS_FERNDALE,Ferndale P66,Diesel,Ultra Low Sulphur,PADD V,33.92
+MPC_GALV_BAY,Galveston Bay,Diesel,Ultra Low Sulphur,PADD III,30.72
+MARATHON_GARYVILLE,Garyville,Diesel,Ultra Low Sulphur,PADD III,35.63
+LYONDELLBASELL_HOUSTON,Houston Lyondell,Diesel,Ultra Low Sulphur,PADD III,26.98
+VALERO_HOUSTON,Houston Valero,Diesel,Ultra Low Sulphur,PADD III,18.10
+EXXONMOBIL_JOLIET,Joliet,Diesel,Ultra Low Sulphur,PADD II,30.83
+PAR_EWA_BEACH,Kapolei Par,Diesel,Ultra Low Sulphur,PADD V,21.92
+MARATHON_NIKISKI,Kenai,Diesel,Ultra Low Sulphur,PADD V,27.52
+CITGO_LAKE_CHARLES,Lake Charles Citgo,Diesel,Ultra Low Sulphur,PADD III,26.30
+PHILLIPS_WESTLAKE,Lake Charles P66,Diesel,Ultra Low Sulphur,PADD III,28.46
+CHS_LAUREL,Laurel,Diesel,Ultra Low Sulphur,PADD IV,29.16
+CITGO_LEMONT,Lemont,Diesel,Ultra Low Sulphur,PADD II,33.15
+CENOVUS_LIMA,Lima,Diesel,Ultra Low Sulphur,PADD II,24.59
+,Los Angeles Marathon,Diesel,Ultra Low Sulphur,PADD V,26.26
+PHILLIPS_LOS_ANGELES,Los Angeles P66,Diesel,Ultra Low Sulphur,PADD V,9.26
+MARATHON_MANDAN,Mandan,Diesel,Ultra Low Sulphur,PADD II,31.04
+PBF_MARTINEZ,Martinez PBF,Diesel,Ultra Low Sulphur,PADD V,24.45
+VALERO_SUNRAY,McKee,Diesel,Ultra Low Sulphur,PADD III,26.98
+NCRA_MCPHERSON,McPherson,Diesel,Ultra Low Sulphur,PADD II,31.65
+VALERO_MEMPHIS,Memphis,Diesel,Ultra Low Sulphur,PADD II,32.86
+VALERO_MERAUX,Meraux,Diesel,Ultra Low Sulphur,PADD III,51.05
+HF_ARTESIA,Navajo (Artesia),Diesel,Ultra Low Sulphur,PADD III,28.08
+SHELL_NORCO,Norco,Diesel,Ultra Low Sulphur,PADD III,23.65
+CHEVRON_PASADENA,Pasadena,Diesel,Ultra Low Sulphur,PADD III,20.93
+CHEVRON_PASCAGOULA,Pascagoula,Diesel,Ultra Low Sulphur,PADD III,42.09
+FLINT_ROSEMOUNT,Pine Bend,Diesel,Ultra Low Sulphur,PADD II,27.34
+PHILLIPS_PONCA_CITY,Ponca City,Diesel,Ultra Low Sulphur,PADD II,34.14
+PLACID_PORT_ALLEN,Port Allen,Diesel,Ultra Low Sulphur,PADD III,25.12
+MOTIVA_PAR,Port Arthur Motiva,Diesel,Ultra Low Sulphur,PADD III,40.57
+TOTAL_PORT_ARTHUR,Port Arthur Total,Diesel,Ultra Low Sulphur,PADD III,33.82
+VALERO_PORT_ARTHUR,Port Arthur Valero,Diesel,Ultra Low Sulphur,PADD III,42.95
+HF_ANACORTES,Puget Sound,Diesel,Ultra Low Sulphur,PADD V,30.38
+CHEVRON_RICHMOND,Richmond,Diesel,Ultra Low Sulphur,PADD V,27.89
+MARATHON_ROBINSON,Robinson,Diesel,Ultra Low Sulphur,PADD II,35.56
+BIG_NORTH_SLATERVILLE_CANAL,Salt Lake City BigWest,Diesel,Ultra Low Sulphur,PADD IV,23.81
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,Diesel,Ultra Low Sulphur,PADD IV,24.68
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,Diesel,Ultra Low Sulphur,PADD IV,17.59
+,San Francisco (Rodeo and Santa Maria),Diesel,Ultra Low Sulphur,PADD V,52.94
+VERTEX_MOBILE,Saraland,Diesel,Ultra Low Sulphur,PADD III,33.05
+CALUMET_SHREVEPORT,Shreveport,Diesel,Ultra Low Sulphur,PADD III,36.99
+SINCLAIR_SINCLAIR,Sinclair,Diesel,Ultra Low Sulphur,PADD IV,32.49
+VALERO_SAINT_CHARLES,St. Charles,Diesel,Ultra Low Sulphur,PADD III,45.89
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,Diesel,Ultra Low Sulphur,PADD II,24.48
+PHILLIPS_SWEENY,Sweeny,Diesel,Ultra Low Sulphur,PADD III,34.05
+VALERO_TEXAS_CITY,Texas City Valero,Diesel,Ultra Low Sulphur,PADD III,31.78
+VALERO_THREE_RIVERS,Three Rivers,Diesel,Ultra Low Sulphur,PADD III,29.57
+CENOVUS_TOLEDO,Toledo Cenovus,Diesel,Ultra Low Sulphur,PADD II,19.80
+PBF_TOLEDO,Toledo PBF,Diesel,Ultra Low Sulphur,PADD II,21.70
+PBF_TORRANCE,Torrance,Diesel,Ultra Low Sulphur,PADD V,14.83
+MONROE_TRAINER,Trainer,Diesel,Ultra Low Sulphur,PADD I,34.83
+HF_TULSA,Tulsa,Diesel,Ultra Low Sulphur,PADD II,28.29
+HUNT_TUSCALOOSA,Tuscaloosa,Diesel,Ultra Low Sulphur,PADD III,42.20
+DELEK_TYLER,Tyler,Diesel,Ultra Low Sulphur,PADD III,31.96
+UNITED_WARREN,Warren,Diesel,Ultra Low Sulphur,PADD I,23.65
+BP_WHITING,Whiting,Diesel,Ultra Low Sulphur,PADD II,32.20
+VALERO_LOS_ANGELES,Wilmington Valero,Diesel,Ultra Low Sulphur,PADD V,21.28
+CENOVUS_WOOD_RIVER,Wood River,Diesel,Ultra Low Sulphur,PADD II,24.24
+HF_WOODS_CROSS,Woods Cross Holly Corp,Diesel,Ultra Low Sulphur,PADD IV,23.65
+CVR_WYNNEWOOD,Wynnewood,Diesel,Ultra Low Sulphur,PADD II,34.16
+PBF_CHALMETTE,Chalmette,Diesel,Medium Sulphur,PADD III,2.43
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,Diesel,Medium Sulphur,PADD IV,6.67
+EXXONMOBIL_BEAUMONT,Beaumont,Gasoil,Low Sulphur,PADD III,3.95
+CHEVRON_EL_SEGUNDO,El Segundo,Gasoil,Low Sulphur,PADD V,0.96
+MPC_GALV_BAY,Galveston Bay,Gasoil,Low Sulphur,PADD III,1.63
+MARATHON_GARYVILLE,Garyville,Gasoil,Low Sulphur,PADD III,2.09
+PHILLIPS_WESTLAKE,Lake Charles P66,Gasoil,Low Sulphur,PADD III,3.52
+VALERO_MEMPHIS,Memphis,Gasoil,Low Sulphur,PADD II,1.54
+CHEVRON_PASCAGOULA,Pascagoula,Gasoil,Low Sulphur,PADD III,2.70
+BIG_NORTH_SLATERVILLE_CANAL,Salt Lake City BigWest,Gasoil,Low Sulphur,PADD IV,1.87
+HF_WOODS_CROSS,Woods Cross Holly Corp,Gasoil,Low Sulphur,PADD IV,22.60
+DELEK_KROTZ_SPRINGS,Krotz Springs,Gasoil,Medium Sulphur,PADD III,7.50
+,Alliance,Gasoil,High Sulphur,PADD III,2.70
+PBF_CHALMETTE,Chalmette,Gasoil,High Sulphur,PADD III,0.64
+DELEK_KROTZ_SPRINGS,Krotz Springs,Gasoil,High Sulphur,PADD III,22.56
+HF_ARTESIA,Navajo (Artesia),Gasoil,High Sulphur,PADD III,6.56
+,Alliance,Fuel Oil,Low Sulphur,PADD III,10.04
+PHILLIPS_LINDEN,Bayway,Fuel Oil,Low Sulphur,PADD I,0.75
+PHILLIPS_BILLINGS,Billings P66,Fuel Oil,Low Sulphur,PADD IV,1.69
+WRB_BORGER,Borger,Fuel Oil,Low Sulphur,PADD III,9.48
+PBF_CHALMETTE,Chalmette,Fuel Oil,Low Sulphur,PADD III,4.85
+SUNCOR_DENVER,Commerce City,Fuel Oil,Low Sulphur,PADD IV,1.67
+PEMEX_DEER_PARK,Deer Park,Fuel Oil,Low Sulphur,PADD III,2.09
+,East Coast Refining System PBF (Delaware and Paulsboro),Fuel Oil,Low Sulphur,PADD I,5.57
+MPC_GALV_BAY,Galveston Bay,Fuel Oil,Low Sulphur,PADD III,0.01
+LYONDELLBASELL_HOUSTON,Houston Lyondell,Fuel Oil,Low Sulphur,PADD III,3.20
+PAR_EWA_BEACH,Kapolei Par,Fuel Oil,Low Sulphur,PADD V,18.18
+MARATHON_NIKISKI,Kenai,Fuel Oil,Low Sulphur,PADD V,1.36
+,Los Angeles Marathon,Fuel Oil,Low Sulphur,PADD V,2.85
+PHILLIPS_LOS_ANGELES,Los Angeles P66,Fuel Oil,Low Sulphur,PADD V,6.58
+MARATHON_MANDAN,Mandan,Fuel Oil,Low Sulphur,PADD II,2.01
+HF_ARTESIA,Navajo (Artesia),Fuel Oil,Low Sulphur,PADD III,1.72
+CHEVRON_PASADENA,Pasadena,Fuel Oil,Low Sulphur,PADD III,15.99
+BIG_NORTH_SLATERVILLE_CANAL,Salt Lake City BigWest,Fuel Oil,Low Sulphur,PADD IV,2.61
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,Fuel Oil,Low Sulphur,PADD IV,2.87
+SINCLAIR_SINCLAIR,Sinclair,Fuel Oil,Low Sulphur,PADD IV,1.48
+CENOVUS_TOLEDO,Toledo Cenovus,Fuel Oil,Low Sulphur,PADD II,3.11
+PBF_TOLEDO,Toledo PBF,Fuel Oil,Low Sulphur,PADD II,2.49
+MONROE_TRAINER,Trainer,Fuel Oil,Low Sulphur,PADD I,5.34
+VALERO_LOS_ANGELES,Wilmington Valero,Fuel Oil,Low Sulphur,PADD V,3.38
+HF_WOODS_CROSS,Woods Cross Holly Corp,Fuel Oil,Low Sulphur,PADD IV,3.84
+CVR_WYNNEWOOD,Wynnewood,Fuel Oil,Low Sulphur,PADD II,1.33
+,Alliance,Fuel Oil,High Sulphur,PADD III,3.81
+MARATHON_ANACORTES,Anacortes Marathon,Fuel Oil,High Sulphur,PADD V,6.94
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,Fuel Oil,High Sulphur,PADD III,1.98
+XOM_BAYTOWN,Baytown,Fuel Oil,High Sulphur,PADD III,1.99
+PHILLIPS_LINDEN,Bayway,Fuel Oil,High Sulphur,PADD I,3.39
+EXXONMOBIL_BEAUMONT,Beaumont,Fuel Oil,High Sulphur,PADD III,2.92
+VALERO_BENICIA,Benicia,Fuel Oil,High Sulphur,PADD V,3.25
+ALON_BIG_SPRINGS,Big Spring,Fuel Oil,High Sulphur,PADD III,1.67
+PBF_CHALMETTE,Chalmette,Fuel Oil,High Sulphur,PADD III,7.74
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,Fuel Oil,High Sulphur,PADD III,4.69
+,East Coast Refining System PBF (Delaware and Paulsboro),Fuel Oil,High Sulphur,PADD I,6.17
+MARATHON_EL_PASO,El Paso,Fuel Oil,High Sulphur,PADD III,1.14
+PHILLIPS_FERNDALE,Ferndale P66,Fuel Oil,High Sulphur,PADD V,9.24
+MPC_GALV_BAY,Galveston Bay,Fuel Oil,High Sulphur,PADD III,0.28
+MARATHON_GARYVILLE,Garyville,Fuel Oil,High Sulphur,PADD III,0.41
+VALERO_HOUSTON,Houston Valero,Fuel Oil,High Sulphur,PADD III,5.60
+MARATHON_NIKISKI,Kenai,Fuel Oil,High Sulphur,PADD V,20.75
+DELEK_KROTZ_SPRINGS,Krotz Springs,Fuel Oil,High Sulphur,PADD III,2.76
+CITGO_LAKE_CHARLES,Lake Charles Citgo,Fuel Oil,High Sulphur,PADD III,0.63
+VALERO_SUNRAY,McKee,Fuel Oil,High Sulphur,PADD III,2.82
+NCRA_MCPHERSON,McPherson,Fuel Oil,High Sulphur,PADD II,2.76
+VALERO_MEMPHIS,Memphis,Fuel Oil,High Sulphur,PADD II,4.44
+VALERO_MERAUX,Meraux,Fuel Oil,High Sulphur,PADD III,5.48
+HF_ARTESIA,Navajo (Artesia),Fuel Oil,High Sulphur,PADD III,0.49
+SHELL_NORCO,Norco,Fuel Oil,High Sulphur,PADD III,3.95
+PHILLIPS_PONCA_CITY,Ponca City,Fuel Oil,High Sulphur,PADD II,2.91
+PLACID_PORT_ALLEN,Port Allen,Fuel Oil,High Sulphur,PADD III,7.64
+HF_ANACORTES,Puget Sound,Fuel Oil,High Sulphur,PADD V,2.55
+MARATHON_ROBINSON,Robinson,Fuel Oil,High Sulphur,PADD II,8.93
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,Fuel Oil,High Sulphur,PADD IV,1.10
+VERTEX_MOBILE,Saraland,Fuel Oil,High Sulphur,PADD III,7.88
+PHILLIPS_SWEENY,Sweeny,Fuel Oil,High Sulphur,PADD III,5.20
+VALERO_THREE_RIVERS,Three Rivers,Fuel Oil,High Sulphur,PADD III,1.82
+PBF_TOLEDO,Toledo PBF,Fuel Oil,High Sulphur,PADD II,3.09
+HF_TULSA,Tulsa,Fuel Oil,High Sulphur,PADD II,0.20
+DELEK_TYLER,Tyler,Fuel Oil,High Sulphur,PADD III,1.41
+UNITED_WARREN,Warren,Fuel Oil,High Sulphur,PADD I,5.37
+CENOVUS_WOOD_RIVER,Wood River,Fuel Oil,High Sulphur,PADD II,2.76
+VALERO_ARDMORE,Ardmore,Fuel Oil,Very Low Sulphur,PADD II,0.51
+MARATHON_CANTON,Canton,Fuel Oil,Very Low Sulphur,PADD II,0.66
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,Fuel Oil,Very Low Sulphur,PADD III,1.37
+MARATHON_DETROIT,Detroit,Fuel Oil,Very Low Sulphur,PADD II,0.56
+HF_EL_DORADO_KS,El Dorado Frontier,Fuel Oil,Very Low Sulphur,PADD II,0.41
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,Fuel Oil,Very Low Sulphur,PADD III,1.17
+PHILLIPS_WESTLAKE,Lake Charles P66,Fuel Oil,Very Low Sulphur,PADD III,7.45
+HF_ARTESIA,Navajo (Artesia),Fuel Oil,Very Low Sulphur,PADD III,0.18
+FLINT_ROSEMOUNT,Pine Bend,Fuel Oil,Very Low Sulphur,PADD II,2.76
+CHEVRON_RICHMOND,Richmond,Fuel Oil,Very Low Sulphur,PADD V,1.30
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,Fuel Oil,Very Low Sulphur,PADD IV,3.32
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,Fuel Oil,Very Low Sulphur,PADD II,1.14
+XOM_BAYTOWN,Baytown,VGO,Low Sulphur,PADD III,0.18
+MARATHON_CATLETTSBURG,Catlettsburg,VGO,Low Sulphur,PADD II,2.18
+BP_FERNDALE,Cherry Point,VGO,Low Sulphur,PADD V,1.06
+VALERO_MERAUX,Meraux,VGO,Low Sulphur,PADD III,1.12
+VERTEX_MOBILE,Saraland,VGO,Low Sulphur,PADD III,15.71
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,VGO,High Sulphur,PADD III,0.77
+XOM_BAYTOWN,Baytown,VGO,High Sulphur,PADD III,0.96
+VALERO_BENICIA,Benicia,VGO,High Sulphur,PADD V,9.34
+PEMEX_DEER_PARK,Deer Park,VGO,High Sulphur,PADD III,1.48
+MARATHON_GARYVILLE,Garyville,VGO,High Sulphur,PADD III,0.22
+MARATHON_NIKISKI,Kenai,VGO,High Sulphur,PADD V,3.29
+PHILLIPS_WESTLAKE,Lake Charles P66,VGO,High Sulphur,PADD III,2.05
+VALERO_MEMPHIS,Memphis,VGO,High Sulphur,PADD II,0.37
+CHEVRON_PASADENA,Pasadena,VGO,High Sulphur,PADD III,6.85
+,San Francisco (Rodeo and Santa Maria),VGO,High Sulphur,PADD V,1.53
+SINCLAIR_SINCLAIR,Sinclair,VGO,High Sulphur,PADD IV,4.85
+PHILLIPS_SWEENY,Sweeny,VGO,High Sulphur,PADD III,3.01
+VALERO_TEXAS_CITY,Texas City Valero,VGO,High Sulphur,PADD III,1.56
+HUNT_TUSCALOOSA,Tuscaloosa,VGO,High Sulphur,PADD III,10.74
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,Lubricants,Standard,PADD III,1.05
+XOM_BAYTOWN,Baytown,Lubricants,Standard,PADD III,2.91
+,East Coast Refining System PBF (Delaware and Paulsboro),Lubricants,Standard,PADD I,1.80
+LYONDELLBASELL_HOUSTON,Houston Lyondell,Lubricants,Standard,PADD III,0.47
+CHEVRON_PASCAGOULA,Pascagoula,Lubricants,Standard,PADD III,2.08
+MOTIVA_PAR,Port Arthur Motiva,Lubricants,Standard,PADD III,3.39
+CHEVRON_RICHMOND,Richmond,Lubricants,Standard,PADD V,4.85
+CALUMET_SHREVEPORT,Shreveport,Lubricants,Standard,PADD III,10.63
+VALERO_THREE_RIVERS,Three Rivers,Lubricants,Standard,PADD III,0.72
+HF_TULSA,Tulsa,Lubricants,Standard,PADD II,2.90
+VALERO_ARDMORE,Ardmore,Bitumen,Standard,PADD II,8.21
+PHILLIPS_LINDEN,Bayway,Bitumen,Standard,PADD I,0.12
+VALERO_BENICIA,Benicia,Bitumen,Standard,PADD V,5.48
+ALON_BIG_SPRINGS,Big Spring,Bitumen,Standard,PADD III,2.63
+PAR_BILLINGS,Billings Par,Bitumen,Standard,PADD IV,17.43
+MARATHON_CANTON,Canton,Bitumen,Standard,PADD II,8.81
+MARATHON_CATLETTSBURG,Catlettsburg,Bitumen,Standard,PADD II,5.84
+SUNCOR_DENVER,Commerce City,Bitumen,Standard,PADD IV,10.91
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,Bitumen,Standard,PADD III,0.58
+MARATHON_DETROIT,Detroit,Bitumen,Standard,PADD II,12.05
+,East Coast Refining System PBF (Delaware and Paulsboro),Bitumen,Standard,PADD I,1.58
+HF_EL_DORADO_KS,El Dorado Frontier,Bitumen,Standard,PADD II,1.45
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,Bitumen,Standard,PADD III,9.68
+MARATHON_EL_PASO,El Paso,Bitumen,Standard,PADD III,3.08
+MPC_GALV_BAY,Galveston Bay,Bitumen,Standard,PADD III,1.06
+MARATHON_GARYVILLE,Garyville,Bitumen,Standard,PADD III,1.46
+VALERO_HOUSTON,Houston Valero,Bitumen,Standard,PADD III,4.13
+EXXONMOBIL_JOLIET,Joliet,Bitumen,Standard,PADD II,1.63
+PAR_EWA_BEACH,Kapolei Par,Bitumen,Standard,PADD V,1.46
+MARATHON_NIKISKI,Kenai,Bitumen,Standard,PADD V,1.65
+CHS_LAUREL,Laurel,Bitumen,Standard,PADD IV,14.01
+PBF_MARTINEZ,Martinez PBF,Bitumen,Standard,PADD V,2.54
+VALERO_SUNRAY,McKee,Bitumen,Standard,PADD III,3.35
+VALERO_MERAUX,Meraux,Bitumen,Standard,PADD III,7.09
+HF_ARTESIA,Navajo (Artesia),Bitumen,Standard,PADD III,4.96
+CHEVRON_PASCAGOULA,Pascagoula,Bitumen,Standard,PADD III,1.67
+FLINT_ROSEMOUNT,Pine Bend,Bitumen,Standard,PADD II,6.13
+PLACID_PORT_ALLEN,Port Allen,Bitumen,Standard,PADD III,5.76
+TOTAL_PORT_ARTHUR,Port Arthur Total,Bitumen,Standard,PADD III,3.11
+CHEVRON_RICHMOND,Richmond,Bitumen,Standard,PADD V,6.30
+CALUMET_SHREVEPORT,Shreveport,Bitumen,Standard,PADD III,2.66
+SINCLAIR_SINCLAIR,Sinclair,Bitumen,Standard,PADD IV,4.31
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,Bitumen,Standard,PADD II,12.31
+VALERO_TEXAS_CITY,Texas City Valero,Bitumen,Standard,PADD III,2.01
+VALERO_THREE_RIVERS,Three Rivers,Bitumen,Standard,PADD III,4.66
+CENOVUS_TOLEDO,Toledo Cenovus,Bitumen,Standard,PADD II,3.89
+PBF_TORRANCE,Torrance,Bitumen,Standard,PADD V,7.21
+HF_TULSA,Tulsa,Bitumen,Standard,PADD II,4.59
+HUNT_TUSCALOOSA,Tuscaloosa,Bitumen,Standard,PADD III,7.87
+UNITED_WARREN,Warren,Bitumen,Standard,PADD I,12.21
+BP_WHITING,Whiting,Bitumen,Standard,PADD II,4.18
+CENOVUS_WOOD_RIVER,Wood River,Bitumen,Standard,PADD II,2.93
+HF_WOODS_CROSS,Woods Cross Holly Corp,Bitumen,Standard,PADD IV,1.83
+CVR_WYNNEWOOD,Wynnewood,Bitumen,Standard,PADD II,3.39
+,Alliance,BTX,Standard,PADD III,5.25
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,BTX,Standard,PADD III,2.00
+XOM_BAYTOWN,Baytown,BTX,Standard,PADD III,5.96
+EXXONMOBIL_BEAUMONT,Beaumont,BTX,Standard,PADD III,3.39
+ALON_BIG_SPRINGS,Big Spring,BTX,Standard,PADD III,1.39
+MARATHON_CATLETTSBURG,Catlettsburg,BTX,Standard,PADD II,1.22
+PBF_CHALMETTE,Chalmette,BTX,Standard,PADD III,3.03
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,BTX,Standard,PADD III,2.35
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,BTX,Standard,PADD III,4.95
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,BTX,Standard,PADD III,2.93
+PEMEX_DEER_PARK,Deer Park,BTX,Standard,PADD III,2.84
+,East Coast Refining System PBF (Delaware and Paulsboro),BTX,Standard,PADD I,0.77
+HF_EL_DORADO_KS,El Dorado Frontier,BTX,Standard,PADD II,1.00
+MPC_GALV_BAY,Galveston Bay,BTX,Standard,PADD III,7.75
+LYONDELLBASELL_HOUSTON,Houston Lyondell,BTX,Standard,PADD III,0.73
+CITGO_LAKE_CHARLES,Lake Charles Citgo,BTX,Standard,PADD III,3.08
+CITGO_LEMONT,Lemont,BTX,Standard,PADD II,1.10
+CENOVUS_LIMA,Lima,BTX,Standard,PADD II,4.18
+VALERO_MEMPHIS,Memphis,BTX,Standard,PADD II,6.68
+CHEVRON_PASCAGOULA,Pascagoula,BTX,Standard,PADD III,1.66
+TOTAL_PORT_ARTHUR,Port Arthur Total,BTX,Standard,PADD III,4.76
+MARATHON_ROBINSON,Robinson,BTX,Standard,PADD II,0.88
+VALERO_SAINT_CHARLES,St. Charles,BTX,Standard,PADD III,3.38
+PHILLIPS_SWEENY,Sweeny,BTX,Standard,PADD III,5.09
+VALERO_THREE_RIVERS,Three Rivers,BTX,Standard,PADD III,6.41
+PBF_TOLEDO,Toledo PBF,BTX,Standard,PADD II,2.43
+BP_WHITING,Whiting,BTX,Standard,PADD II,2.34
+CENOVUS_WOOD_RIVER,Wood River,BTX,Standard,PADD II,0.84
+CVR_WYNNEWOOD,Wynnewood,BTX,Standard,PADD II,0.21
+,Alliance,Petroleum Coke,Standard,PADD III,1.39
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,Petroleum Coke,Standard,PADD III,3.70
+XOM_BAYTOWN,Baytown,Petroleum Coke,Standard,PADD III,2.91
+EXXONMOBIL_BEAUMONT,Beaumont,Petroleum Coke,Standard,PADD III,4.19
+VALERO_BENICIA,Benicia,Petroleum Coke,Standard,PADD V,2.42
+PHILLIPS_BILLINGS,Billings P66,Petroleum Coke,Standard,PADD IV,8.57
+PAR_BILLINGS,Billings Par,Petroleum Coke,Standard,PADD IV,1.54
+WRB_BORGER,Borger,Petroleum Coke,Standard,PADD III,4.48
+PBF_CHALMETTE,Chalmette,Petroleum Coke,Standard,PADD III,2.51
+BP_FERNDALE,Cherry Point,Petroleum Coke,Standard,PADD V,3.40
+CVR_COFFEYVILLE,Coffeyville,Petroleum Coke,Standard,PADD II,2.74
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,Petroleum Coke,Standard,PADD III,2.82
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,Petroleum Coke,Standard,PADD III,0.28
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,Petroleum Coke,Standard,PADD III,1.23
+PEMEX_DEER_PARK,Deer Park,Petroleum Coke,Standard,PADD III,5.26
+MARATHON_DETROIT,Detroit,Petroleum Coke,Standard,PADD II,0.75
+,East Coast Refining System PBF (Delaware and Paulsboro),Petroleum Coke,Standard,PADD I,3.08
+HF_EL_DORADO_KS,El Dorado Frontier,Petroleum Coke,Standard,PADD II,4.24
+CHEVRON_EL_SEGUNDO,El Segundo,Petroleum Coke,Standard,PADD V,6.75
+MPC_GALV_BAY,Galveston Bay,Petroleum Coke,Standard,PADD III,0.74
+MARATHON_GARYVILLE,Garyville,Petroleum Coke,Standard,PADD III,2.37
+LYONDELLBASELL_HOUSTON,Houston Lyondell,Petroleum Coke,Standard,PADD III,9.41
+EXXONMOBIL_JOLIET,Joliet,Petroleum Coke,Standard,PADD II,6.07
+CITGO_LAKE_CHARLES,Lake Charles Citgo,Petroleum Coke,Standard,PADD III,1.80
+PHILLIPS_WESTLAKE,Lake Charles P66,Petroleum Coke,Standard,PADD III,1.44
+CHS_LAUREL,Laurel,Petroleum Coke,Standard,PADD IV,6.99
+CITGO_LEMONT,Lemont,Petroleum Coke,Standard,PADD II,5.84
+CENOVUS_LIMA,Lima,Petroleum Coke,Standard,PADD II,4.20
+,Los Angeles Marathon,Petroleum Coke,Standard,PADD V,5.62
+PHILLIPS_LOS_ANGELES,Los Angeles P66,Petroleum Coke,Standard,PADD V,6.17
+PBF_MARTINEZ,Martinez PBF,Petroleum Coke,Standard,PADD V,2.70
+NCRA_MCPHERSON,McPherson,Petroleum Coke,Standard,PADD II,4.72
+SHELL_NORCO,Norco,Petroleum Coke,Standard,PADD III,1.95
+CHEVRON_PASCAGOULA,Pascagoula,Petroleum Coke,Standard,PADD III,5.15
+FLINT_ROSEMOUNT,Pine Bend,Petroleum Coke,Standard,PADD II,6.55
+PHILLIPS_PONCA_CITY,Ponca City,Petroleum Coke,Standard,PADD II,3.21
+MOTIVA_PAR,Port Arthur Motiva,Petroleum Coke,Standard,PADD III,4.74
+TOTAL_PORT_ARTHUR,Port Arthur Total,Petroleum Coke,Standard,PADD III,3.36
+VALERO_PORT_ARTHUR,Port Arthur Valero,Petroleum Coke,Standard,PADD III,4.37
+HF_ANACORTES,Puget Sound,Petroleum Coke,Standard,PADD V,2.42
+MARATHON_ROBINSON,Robinson,Petroleum Coke,Standard,PADD II,3.47
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,Petroleum Coke,Standard,PADD IV,2.25
+,San Francisco (Rodeo and Santa Maria),Petroleum Coke,Standard,PADD V,7.94
+SINCLAIR_SINCLAIR,Sinclair,Petroleum Coke,Standard,PADD IV,1.16
+VALERO_SAINT_CHARLES,St. Charles,Petroleum Coke,Standard,PADD III,4.26
+PHILLIPS_SWEENY,Sweeny,Petroleum Coke,Standard,PADD III,4.73
+VALERO_TEXAS_CITY,Texas City Valero,Petroleum Coke,Standard,PADD III,5.02
+CENOVUS_TOLEDO,Toledo Cenovus,Petroleum Coke,Standard,PADD II,2.82
+PBF_TORRANCE,Torrance,Petroleum Coke,Standard,PADD V,4.90
+HF_TULSA,Tulsa,Petroleum Coke,Standard,PADD II,0.81
+HUNT_TUSCALOOSA,Tuscaloosa,Petroleum Coke,Standard,PADD III,7.22
+DELEK_TYLER,Tyler,Petroleum Coke,Standard,PADD III,1.56
+BP_WHITING,Whiting,Petroleum Coke,Standard,PADD II,5.33
+VALERO_LOS_ANGELES,Wilmington Valero,Petroleum Coke,Standard,PADD V,5.31
+CENOVUS_WOOD_RIVER,Wood River,Petroleum Coke,Standard,PADD II,4.61
+,Alliance,Sulphur,Standard,PADD III,0.14
+MARATHON_ANACORTES,Anacortes Marathon,Sulphur,Standard,PADD V,0.21
+VALERO_ARDMORE,Ardmore,Sulphur,Standard,PADD II,0.24
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,Sulphur,Standard,PADD III,0.49
+XOM_BAYTOWN,Baytown,Sulphur,Standard,PADD III,0.52
+PHILLIPS_LINDEN,Bayway,Sulphur,Standard,PADD I,0.15
+EXXONMOBIL_BEAUMONT,Beaumont,Sulphur,Standard,PADD III,0.69
+VALERO_BENICIA,Benicia,Sulphur,Standard,PADD V,0.39
+ALON_BIG_SPRINGS,Big Spring,Sulphur,Standard,PADD III,0.29
+PHILLIPS_BILLINGS,Billings P66,Sulphur,Standard,PADD IV,1.39
+PAR_BILLINGS,Billings Par,Sulphur,Standard,PADD IV,0.74
+WRB_BORGER,Borger,Sulphur,Standard,PADD III,0.71
+MARATHON_CANTON,Canton,Sulphur,Standard,PADD II,0.11
+MARATHON_CATLETTSBURG,Catlettsburg,Sulphur,Standard,PADD II,0.14
+PBF_CHALMETTE,Chalmette,Sulphur,Standard,PADD III,0.53
+BP_FERNDALE,Cherry Point,Sulphur,Standard,PADD V,0.46
+CVR_COFFEYVILLE,Coffeyville,Sulphur,Standard,PADD II,0.40
+SUNCOR_DENVER,Commerce City,Sulphur,Standard,PADD IV,0.65
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,Sulphur,Standard,PADD III,0.37
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,Sulphur,Standard,PADD III,0.08
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,Sulphur,Standard,PADD III,0.58
+PEMEX_DEER_PARK,Deer Park,Sulphur,Standard,PADD III,0.69
+MARATHON_DETROIT,Detroit,Sulphur,Standard,PADD II,0.67
+,East Coast Refining System PBF (Delaware and Paulsboro),Sulphur,Standard,PADD I,0.81
+HF_EL_DORADO_KS,El Dorado Frontier,Sulphur,Standard,PADD II,0.97
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,Sulphur,Standard,PADD III,0.12
+MARATHON_EL_PASO,El Paso,Sulphur,Standard,PADD III,0.26
+CHEVRON_EL_SEGUNDO,El Segundo,Sulphur,Standard,PADD V,0.88
+PHILLIPS_FERNDALE,Ferndale P66,Sulphur,Standard,PADD V,0.23
+MPC_GALV_BAY,Galveston Bay,Sulphur,Standard,PADD III,0.77
+MARATHON_GARYVILLE,Garyville,Sulphur,Standard,PADD III,0.53
+LYONDELLBASELL_HOUSTON,Houston Lyondell,Sulphur,Standard,PADD III,1.11
+VALERO_HOUSTON,Houston Valero,Sulphur,Standard,PADD III,0.14
+EXXONMOBIL_JOLIET,Joliet,Sulphur,Standard,PADD II,0.98
+PAR_EWA_BEACH,Kapolei Par,Sulphur,Standard,PADD V,0.07
+MARATHON_NIKISKI,Kenai,Sulphur,Standard,PADD V,0.19
+DELEK_KROTZ_SPRINGS,Krotz Springs,Sulphur,Standard,PADD III,0.10
+CITGO_LAKE_CHARLES,Lake Charles Citgo,Sulphur,Standard,PADD III,0.24
+PHILLIPS_WESTLAKE,Lake Charles P66,Sulphur,Standard,PADD III,0.24
+CHS_LAUREL,Laurel,Sulphur,Standard,PADD IV,1.12
+CITGO_LEMONT,Lemont,Sulphur,Standard,PADD II,1.02
+CENOVUS_LIMA,Lima,Sulphur,Standard,PADD II,1.07
+,Los Angeles Marathon,Sulphur,Standard,PADD V,0.73
+PHILLIPS_LOS_ANGELES,Los Angeles P66,Sulphur,Standard,PADD V,0.96
+MARATHON_MANDAN,Mandan,Sulphur,Standard,PADD II,0.11
+PBF_MARTINEZ,Martinez PBF,Sulphur,Standard,PADD V,0.27
+VALERO_SUNRAY,McKee,Sulphur,Standard,PADD III,0.22
+NCRA_MCPHERSON,McPherson,Sulphur,Standard,PADD II,0.66
+VALERO_MEMPHIS,Memphis,Sulphur,Standard,PADD II,0.18
+VALERO_MERAUX,Meraux,Sulphur,Standard,PADD III,0.29
+HF_ARTESIA,Navajo (Artesia),Sulphur,Standard,PADD III,0.42
+SHELL_NORCO,Norco,Sulphur,Standard,PADD III,0.27
+CHEVRON_PASADENA,Pasadena,Sulphur,Standard,PADD III,0.05
+CHEVRON_PASCAGOULA,Pascagoula,Sulphur,Standard,PADD III,0.91
+FLINT_ROSEMOUNT,Pine Bend,Sulphur,Standard,PADD II,1.32
+PHILLIPS_PONCA_CITY,Ponca City,Sulphur,Standard,PADD II,0.51
+PLACID_PORT_ALLEN,Port Allen,Sulphur,Standard,PADD III,0.22
+MOTIVA_PAR,Port Arthur Motiva,Sulphur,Standard,PADD III,0.91
+TOTAL_PORT_ARTHUR,Port Arthur Total,Sulphur,Standard,PADD III,0.66
+VALERO_PORT_ARTHUR,Port Arthur Valero,Sulphur,Standard,PADD III,0.72
+HF_ANACORTES,Puget Sound,Sulphur,Standard,PADD V,0.37
+CHEVRON_RICHMOND,Richmond,Sulphur,Standard,PADD V,0.95
+MARATHON_ROBINSON,Robinson,Sulphur,Standard,PADD II,0.90
+BIG_NORTH_SLATERVILLE_CANAL,Salt Lake City BigWest,Sulphur,Standard,PADD IV,0.12
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,Sulphur,Standard,PADD IV,0.27
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,Sulphur,Standard,PADD IV,0.10
+,San Francisco (Rodeo and Santa Maria),Sulphur,Standard,PADD V,0.93
+VERTEX_MOBILE,Saraland,Sulphur,Standard,PADD III,0.18
+CALUMET_SHREVEPORT,Shreveport,Sulphur,Standard,PADD III,0.18
+SINCLAIR_SINCLAIR,Sinclair,Sulphur,Standard,PADD IV,0.34
+VALERO_SAINT_CHARLES,St. Charles,Sulphur,Standard,PADD III,1.06
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,Sulphur,Standard,PADD II,0.29
+PHILLIPS_SWEENY,Sweeny,Sulphur,Standard,PADD III,0.77
+VALERO_TEXAS_CITY,Texas City Valero,Sulphur,Standard,PADD III,0.95
+VALERO_THREE_RIVERS,Three Rivers,Sulphur,Standard,PADD III,0.26
+CENOVUS_TOLEDO,Toledo Cenovus,Sulphur,Standard,PADD II,0.44
+PBF_TOLEDO,Toledo PBF,Sulphur,Standard,PADD II,0.18
+PBF_TORRANCE,Torrance,Sulphur,Standard,PADD V,0.47
+MONROE_TRAINER,Trainer,Sulphur,Standard,PADD I,0.16
+HF_TULSA,Tulsa,Sulphur,Standard,PADD II,0.17
+HUNT_TUSCALOOSA,Tuscaloosa,Sulphur,Standard,PADD III,1.21
+DELEK_TYLER,Tyler,Sulphur,Standard,PADD III,0.15
+UNITED_WARREN,Warren,Sulphur,Standard,PADD I,0.65
+BP_WHITING,Whiting,Sulphur,Standard,PADD II,0.89
+VALERO_LOS_ANGELES,Wilmington Valero,Sulphur,Standard,PADD V,0.51
+CENOVUS_WOOD_RIVER,Wood River,Sulphur,Standard,PADD II,0.87
+HF_WOODS_CROSS,Woods Cross Holly Corp,Sulphur,Standard,PADD IV,0.17
+CVR_WYNNEWOOD,Wynnewood,Sulphur,Standard,PADD II,0.13
+EXXONMOBIL_BEAUMONT,Beaumont,Propylene,Standard,PADD III,2.37
+ALON_BIG_SPRINGS,Big Spring,Propylene,Standard,PADD III,2.40
+PEMEX_DEER_PARK,Deer Park,Propylene,Standard,PADD III,1.90
+MARATHON_DETROIT,Detroit,Propylene,Standard,PADD II,1.08
+MARATHON_GARYVILLE,Garyville,Propylene,Standard,PADD III,1.78
+CENOVUS_LIMA,Lima,Propylene,Standard,PADD II,1.85
+SHELL_NORCO,Norco,Propylene,Standard,PADD III,0.36
+MOTIVA_PAR,Port Arthur Motiva,Propylene,Standard,PADD III,1.46
+TOTAL_PORT_ARTHUR,Port Arthur Total,Propylene,Standard,PADD III,2.55
+VALERO_TEXAS_CITY,Texas City Valero,Propylene,Standard,PADD III,1.95
+VALERO_THREE_RIVERS,Three Rivers,Propylene,Standard,PADD III,1.51
+BP_WHITING,Whiting,Propylene,Standard,PADD II,3.32
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,Other Products,Standard,PADD III,0.25
+HF_TULSA,Tulsa,Other Products,Standard,PADD II,0.68
+,Alliance,Refinery Fuel,Standard,PADD III,5.89
+MARATHON_ANACORTES,Anacortes Marathon,Refinery Fuel,Standard,PADD V,4.28
+VALERO_ARDMORE,Ardmore,Refinery Fuel,Standard,PADD II,2.24
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,Refinery Fuel,Standard,PADD III,5.13
+XOM_BAYTOWN,Baytown,Refinery Fuel,Standard,PADD III,4.28
+PHILLIPS_LINDEN,Bayway,Refinery Fuel,Standard,PADD I,5.62
+EXXONMOBIL_BEAUMONT,Beaumont,Refinery Fuel,Standard,PADD III,5.10
+VALERO_BENICIA,Benicia,Refinery Fuel,Standard,PADD V,6.08
+ALON_BIG_SPRINGS,Big Spring,Refinery Fuel,Standard,PADD III,4.34
+PHILLIPS_BILLINGS,Billings P66,Refinery Fuel,Standard,PADD IV,6.46
+PAR_BILLINGS,Billings Par,Refinery Fuel,Standard,PADD IV,3.94
+WRB_BORGER,Borger,Refinery Fuel,Standard,PADD III,5.85
+MARATHON_CANTON,Canton,Refinery Fuel,Standard,PADD II,1.86
+MARATHON_CATLETTSBURG,Catlettsburg,Refinery Fuel,Standard,PADD II,3.61
+PBF_CHALMETTE,Chalmette,Refinery Fuel,Standard,PADD III,4.70
+BP_FERNDALE,Cherry Point,Refinery Fuel,Standard,PADD V,0.69
+CVR_COFFEYVILLE,Coffeyville,Refinery Fuel,Standard,PADD II,4.52
+SUNCOR_DENVER,Commerce City,Refinery Fuel,Standard,PADD IV,4.77
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,Refinery Fuel,Standard,PADD III,4.56
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,Refinery Fuel,Standard,PADD III,4.20
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,Refinery Fuel,Standard,PADD III,6.00
+PEMEX_DEER_PARK,Deer Park,Refinery Fuel,Standard,PADD III,4.83
+MARATHON_DETROIT,Detroit,Refinery Fuel,Standard,PADD II,3.01
+,East Coast Refining System PBF (Delaware and Paulsboro),Refinery Fuel,Standard,PADD I,4.52
+HF_EL_DORADO_KS,El Dorado Frontier,Refinery Fuel,Standard,PADD II,2.90
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,Refinery Fuel,Standard,PADD III,2.96
+MARATHON_EL_PASO,El Paso,Refinery Fuel,Standard,PADD III,3.75
+CHEVRON_EL_SEGUNDO,El Segundo,Refinery Fuel,Standard,PADD V,5.96
+PHILLIPS_FERNDALE,Ferndale P66,Refinery Fuel,Standard,PADD V,3.77
+MPC_GALV_BAY,Galveston Bay,Refinery Fuel,Standard,PADD III,2.48
+MARATHON_GARYVILLE,Garyville,Refinery Fuel,Standard,PADD III,3.47
+LYONDELLBASELL_HOUSTON,Houston Lyondell,Refinery Fuel,Standard,PADD III,7.33
+VALERO_HOUSTON,Houston Valero,Refinery Fuel,Standard,PADD III,3.24
+EXXONMOBIL_JOLIET,Joliet,Refinery Fuel,Standard,PADD II,6.27
+PAR_EWA_BEACH,Kapolei Par,Refinery Fuel,Standard,PADD V,7.72
+MARATHON_NIKISKI,Kenai,Refinery Fuel,Standard,PADD V,0.19
+DELEK_KROTZ_SPRINGS,Krotz Springs,Refinery Fuel,Standard,PADD III,4.88
+CITGO_LAKE_CHARLES,Lake Charles Citgo,Refinery Fuel,Standard,PADD III,6.15
+PHILLIPS_WESTLAKE,Lake Charles P66,Refinery Fuel,Standard,PADD III,3.44
+CHS_LAUREL,Laurel,Refinery Fuel,Standard,PADD IV,5.00
+CITGO_LEMONT,Lemont,Refinery Fuel,Standard,PADD II,5.18
+CENOVUS_LIMA,Lima,Refinery Fuel,Standard,PADD II,8.24
+,Los Angeles Marathon,Refinery Fuel,Standard,PADD V,4.75
+PHILLIPS_LOS_ANGELES,Los Angeles P66,Refinery Fuel,Standard,PADD V,6.79
+MARATHON_MANDAN,Mandan,Refinery Fuel,Standard,PADD II,5.67
+PBF_MARTINEZ,Martinez PBF,Refinery Fuel,Standard,PADD V,5.06
+VALERO_SUNRAY,McKee,Refinery Fuel,Standard,PADD III,4.33
+NCRA_MCPHERSON,McPherson,Refinery Fuel,Standard,PADD II,3.40
+VALERO_MEMPHIS,Memphis,Refinery Fuel,Standard,PADD II,5.76
+VALERO_MERAUX,Meraux,Refinery Fuel,Standard,PADD III,0.13
+HF_ARTESIA,Navajo (Artesia),Refinery Fuel,Standard,PADD III,2.67
+SHELL_NORCO,Norco,Refinery Fuel,Standard,PADD III,4.54
+CHEVRON_PASADENA,Pasadena,Refinery Fuel,Standard,PADD III,2.24
+CHEVRON_PASCAGOULA,Pascagoula,Refinery Fuel,Standard,PADD III,4.89
+FLINT_ROSEMOUNT,Pine Bend,Refinery Fuel,Standard,PADD II,4.62
+PHILLIPS_PONCA_CITY,Ponca City,Refinery Fuel,Standard,PADD II,5.13
+PLACID_PORT_ALLEN,Port Allen,Refinery Fuel,Standard,PADD III,4.62
+MOTIVA_PAR,Port Arthur Motiva,Refinery Fuel,Standard,PADD III,3.28
+TOTAL_PORT_ARTHUR,Port Arthur Total,Refinery Fuel,Standard,PADD III,4.63
+VALERO_PORT_ARTHUR,Port Arthur Valero,Refinery Fuel,Standard,PADD III,2.37
+HF_ANACORTES,Puget Sound,Refinery Fuel,Standard,PADD V,4.44
+CHEVRON_RICHMOND,Richmond,Refinery Fuel,Standard,PADD V,3.11
+MARATHON_ROBINSON,Robinson,Refinery Fuel,Standard,PADD II,5.90
+BIG_NORTH_SLATERVILLE_CANAL,Salt Lake City BigWest,Refinery Fuel,Standard,PADD IV,6.67
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,Refinery Fuel,Standard,PADD IV,3.18
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,Refinery Fuel,Standard,PADD IV,6.22
+,San Francisco (Rodeo and Santa Maria),Refinery Fuel,Standard,PADD V,2.49
+VERTEX_MOBILE,Saraland,Refinery Fuel,Standard,PADD III,1.28
+CALUMET_SHREVEPORT,Shreveport,Refinery Fuel,Standard,PADD III,1.20
+SINCLAIR_SINCLAIR,Sinclair,Refinery Fuel,Standard,PADD IV,3.41
+VALERO_SAINT_CHARLES,St. Charles,Refinery Fuel,Standard,PADD III,5.57
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,Refinery Fuel,Standard,PADD II,3.49
+PHILLIPS_SWEENY,Sweeny,Refinery Fuel,Standard,PADD III,4.89
+VALERO_TEXAS_CITY,Texas City Valero,Refinery Fuel,Standard,PADD III,5.37
+VALERO_THREE_RIVERS,Three Rivers,Refinery Fuel,Standard,PADD III,4.86
+CENOVUS_TOLEDO,Toledo Cenovus,Refinery Fuel,Standard,PADD II,3.52
+PBF_TOLEDO,Toledo PBF,Refinery Fuel,Standard,PADD II,6.76
+PBF_TORRANCE,Torrance,Refinery Fuel,Standard,PADD V,6.19
+MONROE_TRAINER,Trainer,Refinery Fuel,Standard,PADD I,1.63
+HF_TULSA,Tulsa,Refinery Fuel,Standard,PADD II,3.58
+HUNT_TUSCALOOSA,Tuscaloosa,Refinery Fuel,Standard,PADD III,1.70
+DELEK_TYLER,Tyler,Refinery Fuel,Standard,PADD III,4.73
+UNITED_WARREN,Warren,Refinery Fuel,Standard,PADD I,5.59
+BP_WHITING,Whiting,Refinery Fuel,Standard,PADD II,5.07
+VALERO_LOS_ANGELES,Wilmington Valero,Refinery Fuel,Standard,PADD V,7.23
+CENOVUS_WOOD_RIVER,Wood River,Refinery Fuel,Standard,PADD II,5.20
+HF_WOODS_CROSS,Woods Cross Holly Corp,Refinery Fuel,Standard,PADD IV,3.75
+CVR_WYNNEWOOD,Wynnewood,Refinery Fuel,Standard,PADD II,2.39
+BP_FERNDALE,Cherry Point,HVO,Standard,PADD V,1.18
+,San Francisco (Rodeo and Santa Maria),HVO,Standard,PADD V,2.86
+SINCLAIR_SINCLAIR,Sinclair,HVO,Standard,PADD IV,7.21

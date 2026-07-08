@@ -65,7 +65,7 @@ OUT_LO, OUT_HI = 2, 201        # Outages data rows
 FLOW_LO, FLOW_HI = 2, 300      # Flows data rows
 DEM_LO, DEM_HI = 2, 100        # Demand data rows
 REF_LO, REF_HI = 2, 300        # Refineries registry rows
-BOX_LO, BOX_HI = 4, 1200       # Boxes data rows
+BOX_LO, BOX_HI = 4, 2600       # Boxes data rows
 
 
 def _banner(ws, row: int, text: str, span: int) -> None:

@@ -210,12 +210,18 @@ window.
 
 - **Real:** refinery registry & 2024 net product yields (desk's Estimated
   Refinery Outputs file); site-level monthly nameplate capacities (desk's EA
-  file, stamped 2026-07); unit-level capacities for Motiva Port Arthur /
-  ExxonMobil Baytown / Galveston Bay (EIA Refinery Capacity Report 2026,
-  Jan 1 2026, in `data/raw/eia_refcap26.xlsx`).
+  file, stamped 2026-07); **unit-by-unit capacities for 111 refineries**
+  (desk's REM export, 2026 column — `ingest-units`); **actual 2024 per-unit
+  utilizations for 515 units** (desk's RefineryDataTool export, applied as
+  unit-level overrides); crude slate by refinery, 2021 full product yields,
+  and the EA US/Europe/Asia monthly naphtha balance in `data/reference/`;
+  EIA Refinery Capacity Report 2026 kept in `data/raw/` as a cross-check.
 - **Assumptions (desk-tunable, clearly labeled):** per-unit-type naphtha
-  yields and utilization in `data/assumptions/` — these drive the three
-  unit-detail refineries and are the reason their Calibration deltas are
-  non-zero. Tune them against the 2024 actuals in the Calibration view.
-- **Empty until sourced:** unit detail for the other 120 refineries
-  (yield-mode meanwhile), outages, flows, demand, intel.
+  yields in `data/assumptions/` — the one remaining invented layer, and the
+  reason unit-detail refineries' Calibration deltas are non-zero. Tune them
+  against the 2024 actuals in the Calibration view.
+- **Yield-mode (no honest unit split):** 12 refineries where REM only
+  carries combined entities (PBF Delaware City + Paulsboro, Marathon LA
+  Carson + Wilmington) or no units — they run capacity x utilization x
+  2024 actual yield.
+- **Empty until sourced:** outages, flows, demand, intel.

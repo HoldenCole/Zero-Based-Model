@@ -267,10 +267,26 @@ def _apply_yields_2024(
     return synth
 
 
+def load_unit_utilization(data_dir: Path = DATA_DIR) -> list[Override]:
+    """Actual per-unit utilization (RefineryDataTool) as utilization
+    overrides — the most specific layer, beating PADD/global defaults."""
+    return [
+        Override(
+            refinery_id=row["refinery_id"],
+            unit_id=row["unit_id"],
+            field_name="utilization",
+            value=float(row["utilization"]),
+            source=f"RDT {row['year']} actual",
+        )
+        for row in _read_csv(data_dir / "reference" / "unit_utilization.csv")
+    ]
+
+
 def load_all(data_dir: Path = DATA_DIR) -> ModelData:
     refineries = load_refineries(data_dir)
     global_cfg = _read_global_cfg(data_dir)
     synth = _apply_yields_2024(refineries, load_yields_2024(data_dir), global_cfg)
+    synth += load_unit_utilization(data_dir)
     return ModelData(
         refineries=refineries,
         book=load_assumptions(data_dir, extra_overrides=synth),

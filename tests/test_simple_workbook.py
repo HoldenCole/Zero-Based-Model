@@ -28,7 +28,7 @@ def _totals(path) -> dict[str, float]:
     ws = wb["Boxes"]
     return {
         ws.cell(row=r, column=2).value: ws.cell(row=r, column=14).value
-        for r in range(3, 900)
+        for r in range(3, 3000)
         if ws.cell(row=r, column=1).value == "TOTAL"
     }
 
@@ -43,11 +43,11 @@ def test_every_refinery_has_a_box(built):
     data, out = built
     wb = openpyxl.load_workbook(out)
     ws = wb["Boxes"]
-    total_rows = [r for r in range(3, 900) if ws.cell(row=r, column=1).value == "TOTAL"]
+    total_rows = [r for r in range(3, 3000) if ws.cell(row=r, column=1).value == "TOTAL"]
     assert len(total_rows) == len(data.refineries)
     # yield-mode capacity and yields read the Data sheet live
     unit_row = next(
-        r for r in range(3, 900)
+        r for r in range(3, 3000)
         if ws.cell(row=r, column=1).value == "UNIT"
         and ws.cell(row=r, column=4).value == "CRUDE-EST"
     )
@@ -62,7 +62,7 @@ def test_boxes_match_engine_and_capacity_lights_up(built, tmp_path):
     wb = openpyxl.load_workbook(out)
     ws = wb["Data"]
     row = next(r for r in range(3, 300)
-               if ws.cell(row=r, column=1).value == "EXXONMOBIL_BATON_ROUGE")
+               if ws.cell(row=r, column=1).value == "PBF_DELAWARE_CITY")
     ws.cell(row=row, column=7, value=500)
     capped = tmp_path / "capped.xlsx"
     wb.save(capped)
@@ -82,11 +82,11 @@ def test_boxes_match_engine_and_capacity_lights_up(built, tmp_path):
         py = refinery_day(data.refinery(rid), day, data.book, [], include_outages=False).net_kbd
         assert base[rid] == pytest.approx(py, abs=0.05)
 
-    r = data.refinery("EXXONMOBIL_BATON_ROUGE")
+    r = data.refinery("PBF_DELAWARE_CITY")
     util = data.book.utilization(r, r.units[0], day).value
-    assert base["EXXONMOBIL_BATON_ROUGE"] == pytest.approx(
+    assert base["PBF_DELAWARE_CITY"] == pytest.approx(
         r.crude_capacity_kbd * util * r.naphtha_yield_pct / 100, abs=0.01
     )
-    assert cap["EXXONMOBIL_BATON_ROUGE"] == pytest.approx(
+    assert cap["PBF_DELAWARE_CITY"] == pytest.approx(
         500 * util * r.naphtha_yield_pct / 100, abs=0.01
     )

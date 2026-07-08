@@ -58,6 +58,19 @@ def main(argv: list[str] | None = None) -> int:
     p_cap.add_argument("path")
     p_cap.add_argument("--as-of", default="2026-07", help="month to stamp (YYYY-MM)")
 
+    p_units = sub.add_parser(
+        "ingest-units", help="ingest REM unit capacities (+ optional RDT utilizations)"
+    )
+    p_units.add_argument("rem_csv")
+    p_units.add_argument("--utilization", help="RefineryDataTool throughput CSV")
+    p_units.add_argument("--year", default="2026", help="REM capacity year column")
+    p_units.add_argument("--util-year", default="2024", help="utilization year")
+
+    sub.add_parser(
+        "ingest-reference",
+        help="extract crude slate / 2021 yields / US naphtha balance from data/raw",
+    )
+
     p_cal = sub.add_parser(
         "calibrate", help="model-implied net naphtha yield vs 2024 actuals"
     )
@@ -82,6 +95,26 @@ def main(argv: list[str] | None = None) -> int:
 
         result = ingest_yields(Path(args.path))
         for k, v in result.items():
+            print(f"{k}: {v}")
+        return 0
+
+    if args.command == "ingest-units":
+        from .ingest import ingest_units
+
+        result = ingest_units(
+            Path(args.rem_csv),
+            rdt_csv=Path(args.utilization) if args.utilization else None,
+            year=args.year,
+            util_year=args.util_year,
+        )
+        for k, v in result.items():
+            print(f"{k}: {v}")
+        return 0
+
+    if args.command == "ingest-reference":
+        from .ingest import ingest_reference
+
+        for k, v in ingest_reference().items():
             print(f"{k}: {v}")
         return 0
 

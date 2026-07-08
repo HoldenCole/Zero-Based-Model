@@ -39,9 +39,11 @@ def test_yields_csv_and_registry_consistent():
 
 
 def test_yield_mode_math():
-    """Yield-mode refinery: net = crude x util x 2024 yield, split across cuts."""
+    """Yield-mode refinery: net = crude x util x 2024 yield, split across cuts.
+    PBF Delaware City stays yield-mode because REM only carries the combined
+    PBF East Coast entity, which can't be split honestly."""
     data = load_all()
-    r = data.refinery("EXXONMOBIL_BATON_ROUGE")
+    r = data.refinery("PBF_DELAWARE_CITY")
     assert [u.unit_id for u in r.units] == ["CRUDE-EST"]
     assert r.crude_capacity_kbd > 0  # EA nameplate ingested
     day = date(2026, 7, 6)
@@ -53,6 +55,27 @@ def test_yield_mode_math():
     prod = snap.production_kbd
     assert prod["LVN"] == pytest.approx(expected * 0.35)
     assert prod["HVN"] == pytest.approx(expected * 0.65)
+
+
+def test_unit_ingestion_state():
+    """After REM/RDT ingestion: most refineries run unit-detail with real
+    capacities and actual 2024 unit utilizations."""
+    data = load_all()
+    day = date(2026, 7, 6)
+    unit_detail = [r for r in data.refineries
+                   if r.units and r.units[0].unit_id != "CRUDE-EST"]
+    assert len(unit_detail) >= 100
+    motiva = data.refinery("MOTIVA_PAR")
+    types = {u.unit_type for u in motiva.units}
+    assert {"CDU", "VDU", "FCC", "COKER", "REFORMER", "ISOM"} <= types
+    cdu = motiva.unit("CDU")
+    res = data.book.utilization(motiva, cdu, day)
+    assert "RDT" in res.source          # actual 2024 utilization applied
+    assert 0.5 < res.value <= 1.1
+    # splitters came through where REM has them
+    splitters = [u for r in data.refineries for u in r.units
+                 if u.unit_type == "SPLITTER"]
+    assert splitters
 
 
 def test_capacity_ingestion_state():

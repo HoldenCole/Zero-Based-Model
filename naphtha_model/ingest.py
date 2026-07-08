@@ -19,12 +19,27 @@ yield, split across cuts by assumptions/global.yaml yield_mode.cut_shares.
 from __future__ import annotations
 
 import csv
+import io
 import re
 from pathlib import Path
 
 import openpyxl
 
 from .config import DATA_DIR
+
+
+def _read_utf16_tsv(path: Path) -> list[list[str]]:
+    """REM / RefineryDataTool exports are UTF-16 tab-separated."""
+    text = Path(path).open(encoding="utf-16").read()
+    return [
+        [c.strip() for c in row]
+        for row in csv.reader(io.StringIO(text), delimiter="\t")
+    ]
+
+
+def _num(s: str) -> float:
+    s = (s or "").replace(",", "").replace("%", "").strip()
+    return float(s) if s else 0.0
 
 ROMAN_PADD = {"PADD I": 1, "PADD II": 2, "PADD III": 3, "PADD IV": 4, "PADD V": 5}
 
@@ -361,3 +376,258 @@ def ingest_capacity(
         "monthly_csv": str(monthly_path),
         "as_of": as_of,
     }
+
+
+# ------------------------------------------------------------- REM unit data
+#
+# REM export: one row per (unit type, refinery), capacity b/d by year
+# 2010-2026. Refinery names are "City Operator" style; the alias map handles
+# what automatic matching can't. None = deliberately skipped:
+#   - combined entities REM merges but the registry splits (PBF East Coast =
+#     Delaware City + Paulsboro; Marathon LA = Carson + Wilmington) - unit
+#     stacks can't be split honestly, so those stay yield-mode;
+#   - plants not in the registry (splitters, lube/asphalt, micro sites).
+
+REM_ALIASES: dict[str, str | None] = {
+    "Bayway": "PHILLIPS_LINDEN",
+    "Big Spring": "ALON_BIG_SPRINGS",
+    "Cherry Point": "BP_FERNDALE",
+    "Commerce City": "SUNCOR_DENVER",
+    "Corpus Christi Magellan": None,          # splitter, not in registry
+    "East Coast Refining System PBF (Delaware and Paulsboro)": None,
+    "El Dorado Frontier": "HF_EL_DORADO_KS",
+    "El Dorado Lion Oil": "DELEK_EL_DORADO_AR",
+    "Ely": "FORELAND_TONOPAH",
+    "Evansville": "HF_CASPER",
+    "Galena Park": "KINDER_HOUSTON",
+    "Galveston Bay": "MPC_GALV_BAY",
+    "Houston Petromax": None,                 # not in registry
+    "Houston Targa Condensate Splitter": None,
+    "Kapolei Par": "PAR_EWA_BEACH",
+    "Kenai": "MARATHON_NIKISKI",
+    "Kuparuk": "CONOCOPHILLIPS_ANCHORAGE",
+    "Lake Charles Lubricants": None,          # lube plant
+    "Lake Charles P66": "PHILLIPS_WESTLAKE",
+    "Los Angeles Marathon": None,             # REM combines Carson+Wilmington
+    "McKee": "VALERO_SUNRAY",
+    "Navajo (Artesia)": "HF_ARTESIA",
+    "Pine Bend": "FLINT_ROSEMOUNT",
+    "Port Arthur Total": "TOTAL_PORT_ARTHUR",
+    "Puget Sound": "HF_ANACORTES",
+    "Salt Lake City BigWest": "BIG_NORTH_SLATERVILLE_CANAL",
+    "Santa Maria": None,
+    "Saraland": "VERTEX_MOBILE",
+    "St. Charles": "VALERO_SAINT_CHARLES",
+    "St. Paul Park": "MARATHON_SAINT_PAUL_PARK",
+    "Wilmington Valero": "VALERO_LOS_ANGELES",
+    "Wilmington Valero Asphalt": None,
+    "Woods Cross Holly Corp": "HF_WOODS_CROSS",
+}
+
+# REM unit code -> (model unit_id, model unit_type). Codes not listed are not
+# naphtha-relevant (HDS trains, BTX, lubes, H2, sulphur, ...) and are skipped.
+REM_UNIT_MAP: dict[str, tuple[str, str]] = {
+    "CDU": ("CDU", "CDU"),
+    "VDU": ("VDU", "VDU"),
+    "CCU/FCC": ("FCC", "FCC"),
+    "RCC": ("RCC", "FCC"),
+    "COK": ("COKER", "COKER"),
+    "FCOK": ("FCOKER", "COKER"),
+    "DHCU": ("DHCU", "HYDROCRACKER"),
+    "RHCU": ("RHCU", "HYDROCRACKER"),
+    "REF": ("REF", "REFORMER"),
+    "CCR": ("CCR", "REFORMER"),
+    "ISM": ("ISOM", "ISOM"),
+    "ALK": ("ALKY", "ALKY"),
+    "Naphtha Splitter": ("NSPL", "SPLITTER"),
+}
+
+# RefineryDataTool process-unit name -> model unit_id (for utilization)
+RDT_UNIT_MAP: dict[str, str] = {
+    "CDU": "CDU", "VDU": "VDU", "FCC": "FCC", "RFCC": "RCC",
+    "COKER": "COKER", "FCOKER": "FCOKER",
+    "DHCU": "DHCU", "MHCU": "DHCU", "RHCU": "RHCU",
+    "REF": "REF", "CCR": "CCR", "C5C6Isom": "ISOM", "ALKY": "ALKY",
+}
+
+
+def match_rem(name: str, operator: str, registry: list[dict]) -> str | None:
+    """Resolve a REM refinery name ('City Operator' style) to a registry id."""
+    if name in REM_ALIASES:
+        return REM_ALIASES[name]
+    n = _norm(name)
+    cands = [r for r in registry if n.startswith(_norm(r["city"])) or _norm(r["city"]) == n]
+    if len(cands) > 1:
+        for r in cands:
+            rest = n[len(_norm(r["city"])):].strip()
+            if rest and rest in _norm(r["name"] + " " + r["owner"]):
+                return r["refinery_id"]
+        opn = _norm(operator)
+        hinted = [r for r in cands
+                  if opn and opn.split()[0] in _norm(r["name"] + " " + r["owner"])]
+        if len(hinted) == 1:
+            return hinted[0]["refinery_id"]
+        return None
+    return cands[0]["refinery_id"] if cands else None
+
+
+def ingest_units(
+    rem_csv: Path,
+    rdt_csv: Path | None = None,
+    data_dir: Path = DATA_DIR,
+    year: str = "2026",
+    util_year: str = "2024",
+) -> dict:
+    """Rebuild data/reference/units.csv from the REM unit-capacity export and
+    (optionally) data/reference/unit_utilization.csv from the
+    RefineryDataTool throughput export."""
+    registry = _read_registry(data_dir / "reference" / "refineries.csv")
+
+    rows = _read_utf16_tsv(rem_csv)
+    ycol = rows[1].index(year)
+    name_to_rid: dict[str, str | None] = {}
+    units: dict[str, list[dict]] = {}
+    skipped_active: set[str] = set()
+    for r in rows[2:]:
+        if len(r) <= ycol or not r[0] or not r[1]:
+            continue
+        code, name, operator = r[0], r[1], r[2]
+        cap_kbd = _num(r[ycol]) / 1000.0
+        if cap_kbd <= 0:
+            continue
+        if name not in name_to_rid:
+            name_to_rid[name] = match_rem(name, operator, registry)
+        rid = name_to_rid[name]
+        if rid is None:
+            if code == "CDU":
+                skipped_active.add(name)
+            continue
+        if code not in REM_UNIT_MAP:
+            continue
+        unit_id, unit_type = REM_UNIT_MAP[code]
+        units.setdefault(rid, []).append({
+            "refinery_id": rid, "unit_id": unit_id, "unit_type": unit_type,
+            "capacity_kbd": round(cap_kbd, 2),
+            "notes": f"REM {year} capacity (source code: {code})",
+        })
+
+    units_path = data_dir / "reference" / "units.csv"
+    with units_path.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=["refinery_id", "unit_id", "unit_type",
+                                           "capacity_kbd", "notes"])
+        w.writeheader()
+        for rid in sorted(units):
+            w.writerows(units[rid])
+
+    result = {
+        "rem_refineries_matched": len({r for r in name_to_rid.values() if r}),
+        "refineries_with_units": len(units),
+        "unit_rows": sum(len(v) for v in units.values()),
+        "skipped_active_rem_names": sorted(skipped_active),
+        "units_csv": str(units_path),
+    }
+
+    if rdt_csv:
+        rdt = _read_utf16_tsv(rdt_csv)
+        hdr = rdt[0]
+        idx = {h: hdr.index(h) for h in hdr}
+        util_rows: dict[tuple[str, str], list[dict]] = {}
+        for r in rdt[1:]:
+            if not r or r[idx["Period"]] != util_year:
+                continue
+            unit_id = RDT_UNIT_MAP.get(r[idx["Process Unit"]])
+            if unit_id is None:
+                continue
+            name = r[idx["Refinery Name"]]
+            if name not in name_to_rid:
+                name_to_rid[name] = match_rem(name, "", registry)
+            rid = name_to_rid[name]
+            if rid is None or not any(u["unit_id"] == unit_id for u in units.get(rid, [])):
+                continue
+            util_rows.setdefault((rid, unit_id), []).append({
+                "throughput_kbd": _num(r[idx["Unit Throughput bpd"]]) / 1000.0,
+                "capacity_kbd": _num(r[idx["Unit Capacity bpd"]]) / 1000.0,
+                "utilization": _num(r[idx["Unit Utilization Percent"]]) / 100.0,
+            })
+        util_path = data_dir / "reference" / "unit_utilization.csv"
+        with util_path.open("w", newline="", encoding="utf-8") as fh:
+            w = csv.writer(fh)
+            w.writerow(["refinery_id", "unit_id", "year", "throughput_kbd",
+                        "capacity_kbd", "utilization"])
+            for (rid, unit_id), recs in sorted(util_rows.items()):
+                n = len(recs)
+                w.writerow([
+                    rid, unit_id, util_year,
+                    round(sum(x["throughput_kbd"] for x in recs) / n, 2),
+                    round(sum(x["capacity_kbd"] for x in recs) / n, 2),
+                    round(min(max(sum(x["utilization"] for x in recs) / n, 0.0), 1.1), 4),
+                ])
+        result["utilization_rows"] = len(util_rows)
+        result["utilization_csv"] = str(util_path)
+    return result
+
+
+# -------------------------------------------------------- reference extracts
+
+
+def ingest_reference(data_dir: Path = DATA_DIR) -> dict:
+    """Extract reference datasets from the raw REM / EA files:
+    crude slate, 2021 product yields, US monthly naphtha balance."""
+    registry = _read_registry(data_dir / "reference" / "refineries.csv")
+    out = {}
+
+    # crude slate (long format, non-empty cells only)
+    slate = _read_utf16_tsv(data_dir / "raw" / "rem_crude_slate.csv")
+    years = slate[1][4:]
+    path = data_dir / "reference" / "crude_slate.csv"
+    n = 0
+    cache: dict[str, str | None] = {}
+    with path.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["refinery_id", "rem_name", "crude_stream", "source_country",
+                    "year", "slate_pct"])
+        for r in slate[2:]:
+            if not r or not r[0]:
+                continue
+            if r[0] not in cache:
+                cache[r[0]] = match_rem(r[0], r[1], registry)
+            for i, yr in enumerate(years):
+                if len(r) > 4 + i and r[4 + i].strip():
+                    w.writerow([cache[r[0]] or "", r[0], r[2], r[3], yr, r[4 + i]])
+                    n += 1
+    out["crude_slate_rows"] = n
+
+    # 2021 full product yields
+    y21 = _read_utf16_tsv(data_dir / "raw" / "rem_product_yields_2021.csv")
+    path = data_dir / "reference" / "refinery_yields_2021.csv"
+    n = 0
+    with path.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["refinery_id", "rem_name", "product", "grade", "sub_region",
+                    "yield_pct_2021"])
+        for r in y21[2:]:
+            if not r or not r[0] or not r[2]:
+                continue
+            if r[2] not in cache:
+                cache[r[2]] = match_rem(r[2], "", registry)
+            w.writerow([cache[r[2]] or "", r[2], r[0], r[1], r[3], r[4]])
+            n += 1
+    out["yields_2021_rows"] = n
+
+    # US monthly naphtha balance (EA workbook, Country_US tab)
+    wb = openpyxl.load_workbook(
+        data_dir / "raw" / "ea_naphtha_balance_2023_present.xlsx", data_only=True
+    )
+    ws = wb["Country_US"]
+    path = data_dir / "reference" / "us_naphtha_balance_monthly.csv"
+    n = 0
+    with path.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["month", "flow", "kbd", "source"])
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            if row[0] != "US":
+                continue
+            w.writerow([str(row[3])[:7], row[4], row[7], row[8]])
+            n += 1
+    out["us_balance_rows"] = n
+    return out
