@@ -37,7 +37,7 @@ from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule
 
-from .config import PADDS, UNIT_TYPES
+from .config import DATA_DIR, PADDS, UNIT_TYPES
 from .loaders import ModelData
 from .schema import ProcessUnit, Refinery
 
@@ -114,16 +114,28 @@ class DeskWorkbook:
 
         # Boxes column map (1-indexed), dynamic in the number of cuts:
         # A type | B refinery | C padd | D unit | E unit_type | F cap |
-        # G util_ovr | H util | (ovr, yield) per cut | ysum | base |
-        # net wk1..wkW | off% wk1..wkW
+        # G eff cap | H util_ovr | I util | (ovr, yield) per cut | ysum |
+        # base | net wk1..wkW | off% wk1..wkW
         self.c_type, self.c_rid, self.c_padd, self.c_uid, self.c_utype = 1, 2, 3, 4, 5
-        self.c_cap, self.c_utilov, self.c_util = 6, 7, 8
-        self.c_cut0 = 9                                # first cut override col
+        self.c_cap, self.c_effcap, self.c_utilov, self.c_util = 6, 7, 8, 9
+        self.c_cut0 = 10                               # first cut override col
         self.c_ysum = self.c_cut0 + 2 * len(self.cuts)
         self.c_base = self.c_ysum + 1
         self.c_net0 = self.c_base + 1                  # first weekly net col
         self.c_off0 = self.c_net0 + self.weeks         # first weekly off% col
         self.c_last = self.c_off0 + self.weeks - 1
+
+        # effective capacity (demonstrated max annual throughput) if ingested
+        self.eff_caps: dict[tuple[str, str], float] = {}
+        eff_path = DATA_DIR / "reference" / "effective_capacity.csv"
+        if eff_path.exists():
+            import csv as _csv
+
+            with eff_path.open() as fh:
+                for row in _csv.DictReader(fh):
+                    self.eff_caps[(row["refinery_id"], row["unit_id"])] = float(
+                        row["effective_kbd"]
+                    )
 
         # populated as sheets are built
         self.assump_refs: dict = {}
@@ -486,7 +498,7 @@ class DeskWorkbook:
         labels = {
             self.c_type: "row", self.c_rid: "refinery_id", self.c_padd: "padd",
             self.c_uid: "unit", self.c_utype: "type", self.c_cap: "cap kbd",
-            self.c_utilov: "util ovr", self.c_util: "util",
+            self.c_effcap: "eff cap", self.c_utilov: "util ovr", self.c_util: "util",
             self.c_ysum: "Σ yield", self.c_base: "base net kbd",
         }
         for i, cut in enumerate(self.cuts):
@@ -512,6 +524,7 @@ class DeskWorkbook:
             )
             row += 1
             first_unit = row
+            ovl = get_column_letter(self.c_utilov)
             for unit in ref.units:
                 ws.cell(row=row, column=self.c_type, value="UNIT").font = FONT_SMALL
                 _style(ws.cell(row=row, column=self.c_rid, value=ref.refinery_id))
@@ -520,6 +533,9 @@ class DeskWorkbook:
                 _style(ws.cell(row=row, column=self.c_utype, value=unit.unit_type))
                 _style(ws.cell(row=row, column=self.c_cap, value=unit.capacity_kbd),
                        fill=FILL_INPUT, fmt="0")
+                _style(ws.cell(row=row, column=self.c_effcap,
+                               value=self.eff_caps.get((ref.refinery_id, unit.unit_id))),
+                       fill=FILL_CALC, fmt="0")
 
                 # manual override cells, prefilled from data/overrides when active
                 ov_util = self.book._find_override(ref, unit, day1, "utilization")
@@ -528,7 +544,7 @@ class DeskWorkbook:
                        fill=FILL_OVERRIDE, fmt="0.0%")
                 _style(ws.cell(
                     row=row, column=self.c_util,
-                    value=(f'=IF($G{row}<>"",$G{row},'
+                    value=(f'=IF(${ovl}{row}<>"",${ovl}{row},'
                            f"SUMIFS({util_val},{util_padd},$C{row}))"),
                 ), fill=FILL_CALC, fmt="0.0%")
 
@@ -589,7 +605,7 @@ class DeskWorkbook:
             self.refinery_total_rows[ref.refinery_id] = row
             row += 2
 
-        widths = {1: 7, 2: 14, 3: 5, 4: 12, 5: 12, 6: 8, 7: 8, 8: 7}
+        widths = {1: 7, 2: 14, 3: 5, 4: 12, 5: 12, 6: 8, 7: 8, 8: 8, 9: 7}
         for i in range(len(self.cuts)):
             widths[self._cut_ovr_col(i)] = 8
             widths[self._cut_yld_col(i)] = 8
@@ -1104,7 +1120,7 @@ class SimpleWorkbook(DeskWorkbook):
         labels = {
             self.c_type: "row", self.c_rid: "refinery_id", self.c_padd: "padd",
             self.c_uid: "unit", self.c_utype: "type", self.c_cap: "cap kbd",
-            self.c_utilov: "util ovr", self.c_util: "util",
+            self.c_effcap: "eff cap", self.c_utilov: "util ovr", self.c_util: "util",
             self.c_ysum: "Σ yield", self.c_base: "net naphtha kbd",
         }
         for i, cut in enumerate(self.cuts):
@@ -1129,6 +1145,7 @@ class SimpleWorkbook(DeskWorkbook):
                     f"PADD {ref.padd}   —   {crude}", last_col)
             row += 1
             first_unit = row
+            ovl = get_column_letter(self.c_utilov)
             for unit in ref.units:
                 est = unit.unit_id == "CRUDE-EST"
                 ws.cell(row=row, column=self.c_type, value="UNIT").font = FONT_SMALL
@@ -1144,6 +1161,9 @@ class SimpleWorkbook(DeskWorkbook):
                 else:
                     _style(ws.cell(row=row, column=self.c_cap, value=unit.capacity_kbd),
                            fill=FILL_INPUT, fmt="0")
+                _style(ws.cell(row=row, column=self.c_effcap,
+                               value=self.eff_caps.get((ref.refinery_id, unit.unit_id))),
+                       fill=FILL_CALC, fmt="0")
 
                 ov_util = self.book._find_override(ref, unit, day1, "utilization")
                 _style(ws.cell(row=row, column=self.c_utilov,
@@ -1151,7 +1171,7 @@ class SimpleWorkbook(DeskWorkbook):
                        fill=FILL_OVERRIDE, fmt="0.0%")
                 _style(ws.cell(
                     row=row, column=self.c_util,
-                    value=(f'=IF($G{row}<>"",$G{row},'
+                    value=(f'=IF(${ovl}{row}<>"",${ovl}{row},'
                            f"SUMIFS({util_val},{util_padd},$C{row}))"),
                 ), fill=FILL_CALC, fmt="0.0%")
 
@@ -1207,7 +1227,7 @@ class SimpleWorkbook(DeskWorkbook):
             self.refinery_total_rows[ref.refinery_id] = row
             row += 2
 
-        widths = {1: 7, 2: 22, 3: 5, 4: 12, 5: 12, 6: 8, 7: 8, 8: 7}
+        widths = {1: 7, 2: 22, 3: 5, 4: 12, 5: 12, 6: 8, 7: 8, 8: 8, 9: 7}
         for i in range(len(self.cuts)):
             widths[self._cut_ovr_col(i)] = 8
             widths[self._cut_yld_col(i)] = 9

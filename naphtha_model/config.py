@@ -30,6 +30,8 @@ UNIT_TYPES = [
     "ISOM",         # isomerization — CONSUMES light naphtha
     "ALKY",         # alkylation (no straight naphtha make; kept for the box)
     "SPLITTER",     # condensate splitter — heavy naphtha maker
+    "NHT",          # naphtha hydrofiner/hydrotreater — pass-through in the
+                    # naphtha path (CDU -> OH dist -> NHT -> reformer/mogas)
 ]
 
 # Units whose yields are expected to be negative (naphtha consumers).

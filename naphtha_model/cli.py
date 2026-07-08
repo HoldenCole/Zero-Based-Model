@@ -76,6 +76,17 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_cal.add_argument("--padd", type=int)
 
+    p_capr = sub.add_parser(
+        "capacity", help="nameplate vs effective (demonstrated) capacity vs current rate"
+    )
+    p_capr.add_argument("--padd", type=int)
+    p_capr.add_argument("--unit", default="CDU", help="unit id to report (default CDU)")
+
+    p_slate = sub.add_parser(
+        "slate", help="crude / feedstock slate for one refinery (API, light vs heavy)"
+    )
+    p_slate.add_argument("refinery_id")
+
     p_exp = sub.add_parser("export", help="build the live desk Excel workbook")
     p_exp.add_argument("--out", default="naphtha_model.xlsx")
     p_exp.add_argument(
@@ -219,6 +230,88 @@ def main(argv: list[str] | None = None) -> int:
         for p in sorted({r.padd for r, *_ in rows}):
             ys = [r.naphtha_yield_pct for r, *_ in rows if r.padd == p]
             print(f"  PADD {p}: {sum(ys) / len(ys):.2f}%  ({len(ys)} refineries)")
+
+    elif args.command == "capacity":
+        import csv as _csv
+
+        from .config import DATA_DIR
+
+        eff = {}
+        with (DATA_DIR / "reference" / "effective_capacity.csv").open() as fh:
+            for row in _csv.DictReader(fh):
+                eff[(row["refinery_id"], row["unit_id"])] = row
+        day = axis[0]
+        print(f"{'refinery':<26} {'PADD':<5} {'plate':>7} {'effective':>10} "
+              f"{'eff yr':>7} {'eff/plate':>10} {'run 2024':>9}")
+        print("-" * 82)
+        padd_tot: dict[int, list[float]] = {}
+        for r in sorted(data.refineries, key=lambda x: (x.padd, -x.crude_capacity_kbd)):
+            if args.padd is not None and r.padd != args.padd:
+                continue
+            row = eff.get((r.refinery_id, args.unit))
+            unit = next((u for u in r.units if u.unit_id == args.unit), None)
+            if unit is None:
+                continue
+            util = data.book.utilization(r, unit, day).value
+            plate = unit.capacity_kbd
+            t = padd_tot.setdefault(r.padd, [0.0, 0.0, 0.0])
+            t[0] += plate
+            t[2] += plate * util
+            if row:
+                e = float(row["effective_kbd"])
+                t[1] += e
+                print(f"{r.refinery_id:<26} {r.padd:<5} {plate:>7,.0f} {e:>10,.1f} "
+                      f"{row['effective_year']:>7} {e / plate:>9.0%} {util:>8.0%}")
+            else:
+                t[1] += plate * util  # no history: assume current rate
+                print(f"{r.refinery_id:<26} {r.padd:<5} {plate:>7,.0f} {'n/a':>10} "
+                      f"{'':>7} {'':>10} {util:>8.0%}")
+        print("-" * 82)
+        print(f"{'PADD':<6}{'plate':>10}{'effective':>12}{'running':>10}  ({args.unit}, kbd)")
+        for p in sorted(padd_tot):
+            plate, e, run = padd_tot[p]
+            print(f"{p:<6}{plate:>10,.0f}{e:>12,.0f}{run:>10,.0f}")
+        tp = [sum(v[i] for v in padd_tot.values()) for i in range(3)]
+        print(f"{'US':<6}{tp[0]:>10,.0f}{tp[1]:>12,.0f}{tp[2]:>10,.0f}")
+        print("\neffective = max demonstrated annual throughput 2017-2024 excl. 2020 (RDT)")
+
+    elif args.command == "slate":
+        import csv as _csv
+
+        from .config import DATA_DIR
+
+        rid = args.refinery_id
+        r = data.refinery(rid)
+        print(f"{r.name} [{rid}] — PADD {r.padd} — crude {r.crude_capacity_kbd:,.0f} kbd\n")
+
+        with (DATA_DIR / "reference" / "crude_slate.csv").open() as fh:
+            slate = [row for row in _csv.DictReader(fh) if row["refinery_id"] == rid]
+        if slate:
+            latest = max(row["year"] for row in slate)
+            rows = sorted((row for row in slate if row["year"] == latest),
+                          key=lambda x: -float(x["slate_pct"] or 0))
+            print(f"crude slate, {latest} (REM):")
+            for row in rows[:12]:
+                print(f"  {float(row['slate_pct']):>5.1f}%  {row['crude_stream']}"
+                      f"  ({row['source_country']})")
+
+        with (DATA_DIR / "reference" / "feedstock_slate.csv").open() as fh:
+            feeds = [row for row in _csv.DictReader(fh)
+                     if row["refinery_id"] == rid and row["year"] == "2024"
+                     and float(row["kbd"]) > 0]
+        if feeds:
+            print("\npurchased supplementary feedstocks, 2024 (RefineryDataTool):")
+            print(f"  {'feedstock':<34} {'kbd':>7} {'to unit':<14} {'API':>6}")
+            for f in sorted(feeds, key=lambda x: -float(x["kbd"])):
+                api = f"{float(f['api']):.1f}" if f["api"] else ""
+                print(f"  {f['feedstock']:<34} {float(f['kbd']):>7.1f} "
+                      f"{f['to_unit']:<14} {api:>6}")
+            naph = [f for f in feeds
+                    if f["feedstock"].lower() in ("naphtha", "reformate")]
+            if naph:
+                kbd = sum(float(f["kbd"]) for f in naph)
+                print(f"\n  >> buys {kbd:.1f} kbd of naphtha/reformate — "
+                      f"a merchant naphtha BUYER")
 
     elif args.command == "export":
         if args.dump:

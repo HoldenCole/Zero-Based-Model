@@ -29,3 +29,4 @@ yields:
   REFORMER:     {LVN: 0.00, HVN: -1.00}  # eats heavy naphtha 1:1 as feed
   ISOM:         {LVN: -1.00, HVN: 0.00}  # eats light naphtha 1:1 as feed
   ALKY:         {LVN: 0.00, HVN: 0.00}   # no naphtha make; kept for the box
+  NHT:          {LVN: 0.00, HVN: 0.00}   # hydrofiner: pass-through, no net make

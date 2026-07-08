@@ -440,6 +440,7 @@ REM_UNIT_MAP: dict[str, tuple[str, str]] = {
     "ISM": ("ISOM", "ISOM"),
     "ALK": ("ALKY", "ALKY"),
     "Naphtha Splitter": ("NSPL", "SPLITTER"),
+    "HDS - NAP": ("NHT", "NHT"),
 }
 
 # RefineryDataTool process-unit name -> model unit_id (for utilization)
@@ -448,6 +449,7 @@ RDT_UNIT_MAP: dict[str, str] = {
     "COKER": "COKER", "FCOKER": "FCOKER",
     "DHCU": "DHCU", "MHCU": "DHCU", "RHCU": "RHCU",
     "REF": "REF", "CCR": "CCR", "C5C6Isom": "ISOM", "ALKY": "ALKY",
+    "NHT": "NHT", "Naphtha HT": "NHT",
 }
 
 
@@ -531,9 +533,9 @@ def ingest_units(
         rdt = _read_utf16_tsv(rdt_csv)
         hdr = rdt[0]
         idx = {h: hdr.index(h) for h in hdr}
-        util_rows: dict[tuple[str, str], list[dict]] = {}
+        history: dict[tuple[str, str], dict[str, list[dict]]] = {}
         for r in rdt[1:]:
-            if not r or r[idx["Period"]] != util_year:
+            if not r or not r[idx["Period"]]:
                 continue
             unit_id = RDT_UNIT_MAP.get(r[idx["Process Unit"]])
             if unit_id is None:
@@ -544,26 +546,61 @@ def ingest_units(
             rid = name_to_rid[name]
             if rid is None or not any(u["unit_id"] == unit_id for u in units.get(rid, [])):
                 continue
-            util_rows.setdefault((rid, unit_id), []).append({
+            history.setdefault((rid, unit_id), {}).setdefault(r[idx["Period"]], []).append({
                 "throughput_kbd": _num(r[idx["Unit Throughput bpd"]]) / 1000.0,
                 "capacity_kbd": _num(r[idx["Unit Capacity bpd"]]) / 1000.0,
                 "utilization": _num(r[idx["Unit Utilization Percent"]]) / 100.0,
             })
+
+        def _avg(recs, key):
+            return sum(x[key] for x in recs) / len(recs)
+
+        # current-year actual utilization -> unit-level overrides
         util_path = data_dir / "reference" / "unit_utilization.csv"
+        n_util = 0
         with util_path.open("w", newline="", encoding="utf-8") as fh:
             w = csv.writer(fh)
             w.writerow(["refinery_id", "unit_id", "year", "throughput_kbd",
                         "capacity_kbd", "utilization"])
-            for (rid, unit_id), recs in sorted(util_rows.items()):
-                n = len(recs)
+            for (rid, unit_id), by_year in sorted(history.items()):
+                recs = by_year.get(util_year)
+                if not recs:
+                    continue
                 w.writerow([
                     rid, unit_id, util_year,
-                    round(sum(x["throughput_kbd"] for x in recs) / n, 2),
-                    round(sum(x["capacity_kbd"] for x in recs) / n, 2),
-                    round(min(max(sum(x["utilization"] for x in recs) / n, 0.0), 1.1), 4),
+                    round(_avg(recs, "throughput_kbd"), 2),
+                    round(_avg(recs, "capacity_kbd"), 2),
+                    round(min(max(_avg(recs, "utilization"), 0.0), 1.1), 4),
                 ])
-        result["utilization_rows"] = len(util_rows)
+                n_util += 1
+
+        # effective capacity = demonstrated max annual throughput, excluding
+        # the 2020 COVID year (nameplate is what's stated; this is what the
+        # unit has actually proven it can run)
+        nameplate = {(u["refinery_id"], u["unit_id"]): u["capacity_kbd"]
+                     for us in units.values() for u in us}
+        eff_path = data_dir / "reference" / "effective_capacity.csv"
+        n_eff = 0
+        with eff_path.open("w", newline="", encoding="utf-8") as fh:
+            w = csv.writer(fh)
+            w.writerow(["refinery_id", "unit_id", "nameplate_kbd",
+                        "effective_kbd", "effective_year", "eff_vs_nameplate"])
+            for (rid, unit_id), by_year in sorted(history.items()):
+                candidates = [
+                    (round(_avg(recs, "throughput_kbd"), 2), yr)
+                    for yr, recs in by_year.items() if yr != "2020"
+                ]
+                if not candidates:
+                    continue
+                eff, yr = max(candidates)
+                plate = nameplate.get((rid, unit_id), 0.0)
+                w.writerow([rid, unit_id, plate, eff, yr,
+                            round(eff / plate, 4) if plate else ""])
+                n_eff += 1
+        result["utilization_rows"] = n_util
         result["utilization_csv"] = str(util_path)
+        result["effective_capacity_rows"] = n_eff
+        result["effective_capacity_csv"] = str(eff_path)
     return result
 
 
@@ -613,6 +650,34 @@ def ingest_reference(data_dir: Path = DATA_DIR) -> dict:
             w.writerow([cache[r[2]] or "", r[2], r[0], r[1], r[3], r[4]])
             n += 1
     out["yields_2021_rows"] = n
+
+    # feedstock slate with API / sulfur typing (RefineryDataTool1)
+    fs = _read_utf16_tsv(data_dir / "raw" / "refinery_feedstock_slate_2023_2024.csv")
+    hdr = fs[0]
+    idx = {h: hdr.index(h) for h in hdr}
+    path = data_dir / "reference" / "feedstock_slate.csv"
+    n = 0
+    with path.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["refinery_id", "rem_name", "year", "feedstock", "to_unit",
+                    "kbd", "vol_pct", "api", "api_type", "sulfur_wt_pct",
+                    "sulfur_type"])
+        for r in fs[1:]:
+            if not r or not r[idx["Period"]]:
+                continue
+            name = r[idx["Refinery Name"]]
+            if name not in cache:
+                cache[name] = match_rem(name, "", registry)
+            w.writerow([
+                cache[name] or "", name, r[idx["Period"]], r[idx["Feedstock"]],
+                r[idx["To Unit"]],
+                round(_num(r[idx["Barrel per Day"]]) / 1000.0, 2),
+                round(_num(r[idx["Volume Percent"]]), 3),
+                r[idx["API"]], r[idx["API Type"]],
+                r[idx["Sulfur, wt%"]], r[idx["Sulfur Type"]],
+            ])
+            n += 1
+    out["feedstock_rows"] = n
 
     # US monthly naphtha balance (EA workbook, Country_US tab)
     wb = openpyxl.load_workbook(

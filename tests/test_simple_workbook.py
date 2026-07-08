@@ -27,7 +27,7 @@ def _totals(path) -> dict[str, float]:
     wb = openpyxl.load_workbook(path, data_only=True)
     ws = wb["Boxes"]
     return {
-        ws.cell(row=r, column=2).value: ws.cell(row=r, column=14).value
+        ws.cell(row=r, column=2).value: ws.cell(row=r, column=15).value
         for r in range(3, 3000)
         if ws.cell(row=r, column=1).value == "TOTAL"
     }
@@ -52,7 +52,7 @@ def test_every_refinery_has_a_box(built):
         and ws.cell(row=r, column=4).value == "CRUDE-EST"
     )
     assert "Data!" in str(ws.cell(row=unit_row, column=6).value)
-    assert "Data!" in str(ws.cell(row=unit_row, column=12).value)
+    assert "Data!" in str(ws.cell(row=unit_row, column=13).value)
 
 
 @pytest.mark.skipif(shutil.which("soffice") is None, reason="LibreOffice not installed")

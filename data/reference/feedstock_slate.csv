@@ -1,0 +1,923 @@
+refinery_id,rem_name,year,feedstock,to_unit,kbd,vol_pct,api,api_type,sulfur_wt_pct,sulfur_type
+MARATHON_ANACORTES,Anacortes Marathon,2024,Butane,NC4Imports,1.01,0.857,112.47,Light,,High
+MARATHON_ANACORTES,Anacortes Marathon,2024,VGO - Low Sulphur,FCC,8.0,6.789,27.19,Heavy,0.50,Medium
+MARATHON_ANACORTES,Anacortes Marathon,2023,VGO - Low Sulphur,FCC,8.0,7.167,27.19,Heavy,0.50,Medium
+MARATHON_ANACORTES,Anacortes Marathon,2022,VGO - Low Sulphur,FCC,8.0,6.678,27.19,Heavy,0.50,Medium
+MARATHON_ANACORTES,Anacortes Marathon,2022,Butane,NC4Imports,1.0,0.838,112.47,Light,,High
+MARATHON_ANACORTES,Anacortes Marathon,2021,VGO - Low Sulphur,FCC,15.0,12.91,27.19,Heavy,0.50,Medium
+MARATHON_ANACORTES,Anacortes Marathon,2023,Butane,NC4Imports,0.07,0.061,112.47,Light,,High
+PAR_BILLINGS,Billings Par,2017,I-Butane,IC4Imports,1.18,1.94,120.01,Light,,High
+PAR_BILLINGS,Billings Par,2024,I-Butane,IC4imports,1.09,2.142,120.01,Light,,High
+PAR_BILLINGS,Billings Par,2018,I-Butane,IC4Imports,1.26,2.182,120.01,Light,,High
+PAR_BILLINGS,Billings Par,2019,I-Butane,IC4Imports,1.03,1.87,120.01,Light,,High
+PAR_BILLINGS,Billings Par,2020,I-Butane,IC4imports,0.98,1.891,120.01,Light,,High
+PAR_BILLINGS,Billings Par,2021,I-Butane,IC4imports,1.38,2.406,120.01,Light,,High
+PAR_BILLINGS,Billings Par,2022,I-Butane,IC4imports,0.92,1.82,120.01,Light,,High
+PAR_BILLINGS,Billings Par,2023,I-Butane,IC4imports,1.39,2.401,120.01,Light,,High
+MARATHON_CATLETTSBURG,Catlettsburg,2023,I-Butane,IC4Imports,6.18,1.962,120.01,Light,,High
+MARATHON_CATLETTSBURG,Catlettsburg,2024,I-Butane,IC4Imports,6.92,2.278,120.01,Light,,High
+MARATHON_CATLETTSBURG,Catlettsburg,2017,I-Butane,IC4Imports,7.98,2.947,120.01,Light,,High
+MARATHON_CATLETTSBURG,Catlettsburg,2017,VGO - Low Sulphur,CFHT,18.0,6.648,15.41,Heavy,0.50,Medium
+MARATHON_CATLETTSBURG,Catlettsburg,2018,I-Butane,IC4Imports,6.23,2.09,120.01,Light,,High
+MARATHON_CATLETTSBURG,Catlettsburg,2018,VGO - Low Sulphur,CFHT,24.5,8.214,15.41,Heavy,0.50,Medium
+MARATHON_CATLETTSBURG,Catlettsburg,2019,I-Butane,IC4Imports,6.62,2.177,120.01,Light,,High
+MARATHON_CATLETTSBURG,Catlettsburg,2019,VGO - Low Sulphur,CFHT,25.0,8.217,15.41,Heavy,0.50,Medium
+MARATHON_CATLETTSBURG,Catlettsburg,2020,I-Butane,IC4Imports,7.53,2.714,120.01,Light,,High
+MARATHON_CATLETTSBURG,Catlettsburg,2020,VGO - Low Sulphur,CFHT,15.5,5.588,27.19,Heavy,0.50,Medium
+MARATHON_CATLETTSBURG,Catlettsburg,2021,I-Butane,IC4Imports,7.14,2.367,120.01,Light,,High
+MARATHON_CATLETTSBURG,Catlettsburg,2021,VGO - Low Sulphur,CFHT,18.0,5.968,27.19,Heavy,0.50,Medium
+MARATHON_CATLETTSBURG,Catlettsburg,2022,VGO - Low Sulphur,CFHT,16.0,5.097,27.19,Heavy,0.50,Medium
+MARATHON_CATLETTSBURG,Catlettsburg,2023,VGO - Low Sulphur,CFHT,16.0,5.076,27.19,Heavy,0.50,Medium
+MARATHON_CATLETTSBURG,Catlettsburg,2022,I-Butane,IC4Imports,5.94,1.891,120.01,Light,,High
+CHEVRON_EL_SEGUNDO,El Segundo,2019,VGO - Low Sulphur,FCC,3.09,1.265,20.65,Heavy,2.00,High
+CHEVRON_EL_SEGUNDO,El Segundo,2018,VGO - Low Sulphur,FCC,3.09,1.118,20.65,Heavy,2.00,High
+CHEVRON_EL_SEGUNDO,El Segundo,2017,VGO - Low Sulphur,FCC,3.09,1.12,20.65,Heavy,2.00,High
+CHEVRON_EL_SEGUNDO,El Segundo,2020,VGO - Low Sulphur,FCC,3.09,1.724,27.19,Heavy,0.50,Medium
+CHS_LAUREL,Laurel,2024,VGO - Low Sulphur,FCC,4.0,5.944,27.19,Heavy,0.50,Medium
+,East Coast Refining System PBF (Delaware and Paulsboro),2021,VGO - Low Sulphur,FCC,30.0,11.85,27.19,Heavy,0.50,Medium
+,East Coast Refining System PBF (Delaware and Paulsboro),2022,Atres - High Sulphur,VDU,27.0,10.112,16.86,Heavy,3.06,High
+,East Coast Refining System PBF (Delaware and Paulsboro),2024,Atres - High Sulphur,VDU,45.0,15.183,16.86,Heavy,3.06,High
+,East Coast Refining System PBF (Delaware and Paulsboro),2023,Atres - High Sulphur,VDU,60.0,18.711,16.86,Heavy,3.06,High
+,East Coast Refining System PBF (Delaware and Paulsboro),2023,Naphtha,NHT,15.0,4.678,56.00,Light,,High
+,East Coast Refining System PBF (Delaware and Paulsboro),2021,Atres - High Sulphur,VDU,40.0,15.801,16.86,Heavy,3.06,High
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,2017,VGO - Low Sulphur,FCC,0.1,0.099,24.91,Heavy,1.00,Medium
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,2019,VGO - Low Sulphur,FCC,0.1,0.109,24.91,Heavy,1.00,Medium
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,2020,VGO - Low Sulphur,FCC,0.1,0.117,27.19,Heavy,0.25,Low
+MARATHON_SAINT_PAUL_PARK,St. Paul Park,2017,Butane,Blender,2.72,2.555,0.56,Heavy,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2023,I-Butane,IC4Imports,1.61,3.967,120.01,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2020,Naphtha,NHT,2.0,5.603,56.00,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2020,VGO - Low Sulphur,DHCU,0.8,2.241,27.19,Heavy,0.50,Medium
+HF_WOODS_CROSS,Woods Cross Holly Corp,2021,I-Butane,IC4Imports,1.55,3.9,120.01,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2021,Naphtha,NHT,2.0,5.022,56.00,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2021,VGO - Low Sulphur,DHCU,5.8,14.563,27.19,Heavy,0.50,Medium
+HF_WOODS_CROSS,Woods Cross Holly Corp,2022,Naphtha,NHT,2.0,5.019,56.00,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2023,VGO - Low Sulphur,DHCU,5.8,14.317,27.19,Heavy,0.50,Medium
+HF_WOODS_CROSS,Woods Cross Holly Corp,2022,VGO - Low Sulphur,DHCU,5.8,14.556,27.19,Heavy,0.50,Medium
+HF_WOODS_CROSS,Woods Cross Holly Corp,2020,I-Butane,IC4Imports,1.85,5.176,120.01,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2022,I-Butane,IC4Imports,1.55,3.879,120.01,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2019,Naphtha,NHT,2.0,5.391,53.71,Light,0.05,Low
+HF_WOODS_CROSS,Woods Cross Holly Corp,2019,I-Butane,IC4Imports,1.26,3.398,120.01,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2018,VGO - Low Sulphur,DHCU,2.8,7.053,21.79,Heavy,0.34,Low
+HF_WOODS_CROSS,Woods Cross Holly Corp,2018,Naphtha,NHT,2.0,5.038,53.71,Light,0.05,Low
+HF_WOODS_CROSS,Woods Cross Holly Corp,2018,I-Butane,IC4Imports,1.11,2.786,120.01,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2017,VGO - Low Sulphur,DHCU,0.8,2.003,21.79,Heavy,0.34,Low
+HF_WOODS_CROSS,Woods Cross Holly Corp,2017,Naphtha,NHT,2.0,5.008,53.71,Light,0.05,Low
+HF_WOODS_CROSS,Woods Cross Holly Corp,2017,I-Butane,IC4Imports,1.22,3.061,120.01,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2023,Naphtha,NHT,2.0,4.937,56.00,Light,,High
+HF_WOODS_CROSS,Woods Cross Holly Corp,2019,VGO - Low Sulphur,DHCU,2.0,5.391,21.79,Heavy,0.34,Low
+HF_WOODS_CROSS,Woods Cross Holly Corp,2024,VGO - Low Sulphur,DHCU,5.8,12.266,27.19,Heavy,0.50,Medium
+HF_WOODS_CROSS,Woods Cross Holly Corp,2024,I-Butane,IC4Imports,2.15,4.558,120.01,Light,,High
+MOTIVA_PAR,Port Arthur Motiva,2018,Atres,VDU,10.67,1.783,16.86,Heavy,3.06,High
+MOTIVA_PAR,Port Arthur Motiva,2017,I-Butane,IC4Imports,2.1,0.352,120.01,Light,,High
+MOTIVA_PAR,Port Arthur Motiva,2022,Atres - High Sulphur,VDU,26.0,4.154,16.86,Heavy,3.06,High
+MOTIVA_PAR,Port Arthur Motiva,2018,I-Butane,IC4Imports,1.94,0.325,120.01,Light,,High
+MOTIVA_PAR,Port Arthur Motiva,2019,Atres,VDU,33.5,5.591,16.86,Heavy,3.06,High
+MOTIVA_PAR,Port Arthur Motiva,2019,I-Butane,IC4Imports,2.4,0.401,120.01,Light,,High
+MOTIVA_PAR,Port Arthur Motiva,2020,Atres - High Sulphur,VDU,20.0,4.066,16.86,Heavy,3.06,High
+MOTIVA_PAR,Port Arthur Motiva,2020,I-Butane,IC4imports,1.81,0.368,120.01,Light,,High
+MOTIVA_PAR,Port Arthur Motiva,2021,Atres - High Sulphur,VDU,26.0,4.704,16.86,Heavy,3.06,High
+MOTIVA_PAR,Port Arthur Motiva,2021,I-Butane,IC4imports,2.16,0.391,120.01,Light,,High
+MOTIVA_PAR,Port Arthur Motiva,2023,I-Butane,IC4imports,0.86,0.134,120.01,Light,,High
+MOTIVA_PAR,Port Arthur Motiva,2023,Atres - High Sulphur,VDU,38.0,5.907,16.86,Heavy,3.06,High
+MOTIVA_PAR,Port Arthur Motiva,2022,I-Butane,IC4imports,1.13,0.181,120.01,Light,,High
+MOTIVA_PAR,Port Arthur Motiva,2017,Atres,Coker,2.67,0.447,17.56,Heavy,3.00,High
+MOTIVA_PAR,Port Arthur Motiva,2024,Atres - High Sulphur,VDU,17.0,2.735,16.86,Heavy,3.06,High
+MOTIVA_PAR,Port Arthur Motiva,2024,I-Butane,IC4imports,0.68,0.109,120.01,Light,,High
+MARATHON_ROBINSON,Robinson,2017,I-Butane,IC4Imports,2.21,0.941,120.01,Light,,High
+MARATHON_ROBINSON,Robinson,2022,VGO - Low Sulphur,DHCU,2.0,0.799,27.19,Heavy,0.50,Medium
+MARATHON_ROBINSON,Robinson,2017,VGO - High Sulphur,LVGO Spl,3.16,1.349,25.72,Heavy,2.50,High
+MARATHON_ROBINSON,Robinson,2018,VGO - High Sulphur,LVGO Spl,3.16,1.245,25.72,Heavy,2.50,High
+MARATHON_ROBINSON,Robinson,2019,I-Butane,IC4Imports,1.89,0.78,120.01,Light,,High
+MARATHON_ROBINSON,Robinson,2019,VGO - High Sulphur,LVGO Spl,3.16,1.306,25.72,Heavy,2.50,High
+MARATHON_ROBINSON,Robinson,2020,I-Butane,IC4Imports,1.08,0.48,120.01,Light,,High
+MARATHON_ROBINSON,Robinson,2020,VGO - High Sulphur,LVGO Spl,3.16,1.403,24.15,Heavy,1.60,High
+MARATHON_ROBINSON,Robinson,2021,I-Butane,IC4Imports,1.22,0.468,120.01,Light,,High
+MARATHON_ROBINSON,Robinson,2021,VGO - High Sulphur,LVGO Spl,3.16,1.218,24.15,Heavy,1.60,High
+MARATHON_ROBINSON,Robinson,2021,VGO - Low Sulphur,DHCU,15.0,5.776,27.19,Heavy,0.50,Medium
+MARATHON_ROBINSON,Robinson,2018,I-Butane,IC4Imports,1.81,0.713,120.01,Light,,High
+MARATHON_ROBINSON,Robinson,2022,VGO - High Sulphur,LVGO Spl,3.16,1.263,24.15,Heavy,1.60,High
+MARATHON_ROBINSON,Robinson,2022,I-Butane,IC4Imports,1.31,0.523,120.01,Light,,High
+MARATHON_ROBINSON,Robinson,2023,I-Butane,IC4Imports,1.77,0.741,120.01,Light,,High
+MARATHON_ROBINSON,Robinson,2024,I-Butane,IC4Imports,1.33,0.532,120.01,Light,,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2021,I-Butane,IC4imports,2.12,0.692,120.01,Light,,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2018,VGO - High Sulphur,LVGO Spl,14.29,3.756,24.91,Heavy,2.50,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2021,Atres - High Sulphur,VDU,16.0,5.221,16.86,Heavy,3.06,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2020,Atres - High Sulphur,VDU,41.37,12.813,16.86,Heavy,3.06,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2019,Atres,VDU,30.0,7.926,16.86,Heavy,3.06,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2019,VGO - High Sulphur,LVGO Spl,27.0,7.133,24.91,Heavy,2.50,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2018,Atres,VDU,30.37,7.979,16.86,Heavy,3.06,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2020,VGO - High Sulphur,DHCU,10.0,3.097,24.15,Heavy,1.60,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2018,I-Butane,IC4Imports,3.55,0.932,120.01,Light,,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2017,VGO - High Sulphur,LVGO Spl,34.29,8.73,24.91,Heavy,2.50,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2019,I-Butane,IC4Imports,4.86,1.284,120.01,Light,,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2017,Atres,VDU,42.37,10.786,16.86,Heavy,3.06,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2020,I-Butane,IC4imports,4.38,1.355,120.01,Light,,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2023,VGO - High Sulphur,DHCU,10.0,2.988,24.15,Heavy,1.60,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2023,I-Butane,IC4imports,5.3,1.583,120.01,Light,,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2023,Atres - High Sulphur,VDU,38.0,11.355,16.86,Heavy,3.06,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2022,VGO - High Sulphur,DHCU,10.0,3.212,24.15,Heavy,1.60,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2022,I-Butane,IC4imports,2.99,0.959,120.01,Light,,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2022,Atres - High Sulphur,VDU,16.0,5.14,16.86,Heavy,3.06,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2021,VGO - High Sulphur,DHCU,10.0,3.263,24.15,Heavy,1.60,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2017,I-Butane,IC4Imports,4.04,1.029,120.01,Light,,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2024,I-Butane,IC4imports,6.15,1.952,120.01,Light,,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2024,Atres - High Sulphur,VDU,20.0,6.349,16.86,Heavy,3.06,High
+VALERO_PORT_ARTHUR,Port Arthur Valero,2024,VGO - High Sulphur,DHCU,5.0,1.587,24.15,Heavy,1.60,High
+PHILLIPS_LOS_ANGELES,Los Angeles P66,2023,VGO - High Sulphur,FCC,8.0,5.639,24.15,Heavy,1.60,High
+PHILLIPS_LOS_ANGELES,Los Angeles P66,2022,VGO - High Sulphur,FCC,18.0,13.999,24.15,Heavy,1.60,High
+PHILLIPS_LOS_ANGELES,Los Angeles P66,2021,VGO - High Sulphur,FCC,18.0,14.252,24.15,Heavy,1.60,High
+PHILLIPS_LOS_ANGELES,Los Angeles P66,2020,VGO - High Sulphur,FCC,20.0,15.819,24.15,Heavy,1.60,High
+PHILLIPS_LOS_ANGELES,Los Angeles P66,2019,VGO - High Sulphur,DHCU,2.4,1.807,20.65,Heavy,2.00,High
+PHILLIPS_LOS_ANGELES,Los Angeles P66,2017,VGO - High Sulphur,DHCU,2.4,1.691,20.65,Heavy,2.00,High
+PHILLIPS_LOS_ANGELES,Los Angeles P66,2018,VGO - High Sulphur,DHCU,2.4,1.806,20.65,Heavy,2.00,High
+PHILLIPS_LOS_ANGELES,Los Angeles P66,2024,VGO - High Sulphur,FCC,8.0,5.947,24.15,Heavy,1.60,High
+PBF_PAULSBORO,Paulsboro PBF,2020,I-Butane,IC4imports,4.54,5.017,120.01,Light,,High
+PBF_PAULSBORO,Paulsboro PBF,2020,Atres - High Sulphur,VDU,0.48,0.53,16.86,Heavy,3.06,High
+PBF_PAULSBORO,Paulsboro PBF,2018,Atres,VDU,4.0,2.692,16.86,Heavy,3.06,High
+PBF_PAULSBORO,Paulsboro PBF,2017,VGO - Low Sulphur,FCC,1.44,0.936,20.00,Heavy,0.50,Medium
+PBF_PAULSBORO,Paulsboro PBF,2017,Atres,VDU,0.48,0.312,16.86,Heavy,3.06,High
+PBF_PAULSBORO,Paulsboro PBF,2020,VGO - Low Sulphur,FCC,2.0,2.212,27.19,Heavy,0.50,Medium
+VALERO_TEXAS_CITY,Texas City Valero,2017,Atres,VDU,35.63,14.631,16.86,Heavy,3.06,High
+VALERO_TEXAS_CITY,Texas City Valero,2022,Atres - High Sulphur,VDU,30.0,13.161,16.86,Heavy,3.06,High
+VALERO_TEXAS_CITY,Texas City Valero,2017,VGO - High Sulphur,RHT,22.11,9.079,22.00,Heavy,2.50,High
+VALERO_TEXAS_CITY,Texas City Valero,2023,VGO - High Sulphur,CFHT,10.0,4.26,24.15,Heavy,1.60,High
+VALERO_TEXAS_CITY,Texas City Valero,2023,I-Butane,IC4imports,3.96,1.686,120.01,Light,,High
+VALERO_TEXAS_CITY,Texas City Valero,2023,Atres - High Sulphur,VDU,30.0,12.781,16.86,Heavy,3.06,High
+VALERO_TEXAS_CITY,Texas City Valero,2022,VGO - High Sulphur,CFHT,10.0,4.387,24.15,Heavy,1.60,High
+VALERO_TEXAS_CITY,Texas City Valero,2022,I-Butane,IC4imports,0.0,0.0,120.01,Light,,High
+VALERO_TEXAS_CITY,Texas City Valero,2021,VGO - High Sulphur,CFHT,10.0,4.474,24.15,Heavy,1.60,High
+VALERO_TEXAS_CITY,Texas City Valero,2021,I-Butane,IC4imports,0.0,0.0,120.01,Light,,High
+VALERO_TEXAS_CITY,Texas City Valero,2019,Atres,VDU,55.63,21.353,16.86,Heavy,3.06,High
+VALERO_TEXAS_CITY,Texas City Valero,2017,I-Butane,IC4Imports,0.29,0.119,120.01,Light,,High
+VALERO_TEXAS_CITY,Texas City Valero,2018,VGO - High Sulphur,RHT,3.0,1.157,22.00,Heavy,2.50,High
+VALERO_TEXAS_CITY,Texas City Valero,2021,Atres - High Sulphur,VDU,30.0,13.421,16.86,Heavy,3.06,High
+VALERO_TEXAS_CITY,Texas City Valero,2019,I-Butane,IC4Imports,0.46,0.175,120.01,Light,,High
+VALERO_TEXAS_CITY,Texas City Valero,2020,Atres - High Sulphur,VDU,60.0,24.325,16.86,Heavy,3.06,High
+VALERO_TEXAS_CITY,Texas City Valero,2020,VGO - High Sulphur,CFHT,5.0,2.027,24.15,Heavy,1.60,High
+VALERO_TEXAS_CITY,Texas City Valero,2018,Atres,VDU,47.0,18.128,16.86,Heavy,3.06,High
+VALERO_TEXAS_CITY,Texas City Valero,2024,VGO - High Sulphur,CFHT,10.0,4.615,24.15,Heavy,1.60,High
+VALERO_TEXAS_CITY,Texas City Valero,2024,Atres - High Sulphur,VDU,10.0,4.615,16.86,Heavy,3.06,High
+VALERO_TEXAS_CITY,Texas City Valero,2024,I-Butane,IC4imports,3.97,1.831,120.01,Light,,High
+MARATHON_DETROIT,Detroit,2023,VGO - Low Sulphur,CFHT,11.0,7.272,27.19,Heavy,0.50,Medium
+PBF_TORRANCE,Torrance,2022,I-Butane,IC4imports,5.55,4.031,120.01,Light,,High
+PBF_TORRANCE,Torrance,2021,I-Butane,IC4imports,7.81,5.63,120.01,Light,,High
+PBF_TORRANCE,Torrance,2023,VGO - Low Sulphur,CFHT,10.0,7.816,27.19,Heavy,0.50,Medium
+PBF_TORRANCE,Torrance,2021,VGO - High Sulphur,CFHT,10.0,7.211,24.15,Heavy,1.60,High
+PBF_TORRANCE,Torrance,2020,VGO - High Sulphur,CFHT,2.0,1.707,24.15,Heavy,1.60,High
+PBF_TORRANCE,Torrance,2020,I-Butane,IC4imports,7.38,6.293,120.01,Light,,High
+PBF_TORRANCE,Torrance,2019,VGO - High Sulphur,CFHT,0.57,0.338,20.65,Heavy,2.50,High
+PBF_TORRANCE,Torrance,2019,I-Butane,IC4Imports,13.49,7.992,120.01,Light,,High
+PBF_TORRANCE,Torrance,2018,VGO - High Sulphur,CFHT,0.57,0.344,20.65,Heavy,2.50,High
+PBF_TORRANCE,Torrance,2018,I-Butane,IC4Imports,10.12,6.114,120.01,Light,,High
+PBF_TORRANCE,Torrance,2017,VGO - High Sulphur,CFHT,0.57,0.398,20.65,Heavy,2.50,High
+PBF_TORRANCE,Torrance,2017,I-Butane,IC4Imports,3.21,2.244,120.01,Light,,High
+PBF_TORRANCE,Torrance,2023,I-Butane,IC4imports,2.2,1.717,120.01,Light,,High
+PBF_TORRANCE,Torrance,2024,I-Butane,IC4imports,0.85,0.636,120.01,Light,,High
+PBF_TORRANCE,Torrance,2024,VGO - Low Sulphur,DHCUN,5.0,3.736,27.19,Heavy,0.50,Medium
+MONROE_TRAINER,Trainer,2018,I-Butane,IC4Imports,3.76,2.353,120.01,Light,,High
+MONROE_TRAINER,Trainer,2021,I-Butane,IC4imports,-0.79,-0.537,120.01,Light,,High
+MONROE_TRAINER,Trainer,2019,I-Butane,IC4Imports,1.75,1.013,120.01,Light,,High
+MONROE_TRAINER,Trainer,2017,I-Butane,IC4Imports,3.82,2.066,120.01,Light,,High
+MONROE_TRAINER,Trainer,2020,I-Butane,IC4imports,1.74,1.363,120.01,Light,,High
+CHEVRON_PASADENA,Pasadena,2020,VGO - High Sulphur,FCC,0.55,0.763,24.15,Heavy,1.60,High
+CHEVRON_PASADENA,Pasadena,2018,I-Butane,IC4Imports,2.88,2.351,120.01,Light,,High
+CHEVRON_PASADENA,Pasadena,2022,I-Butane,IC4Imports,0.2,0.258,120.01,Light,,High
+CHEVRON_PASADENA,Pasadena,2017,VGO - High Sulphur,FCC,0.55,0.498,24.91,Heavy,0.00,Low
+CHEVRON_PASADENA,Pasadena,2018,VGO - High Sulphur,FCC,20.0,16.357,24.91,Heavy,0.00,Low
+CHEVRON_PASADENA,Pasadena,2019,I-Butane,IC4Imports,2.89,2.419,120.01,Light,,High
+CHEVRON_PASADENA,Pasadena,2019,VGO - High Sulphur,FCC,17.0,14.248,24.91,Heavy,0.00,Low
+CHEVRON_PASADENA,Pasadena,2020,I-Butane,IC4Imports,2.3,3.204,120.01,Light,,High
+CHEVRON_PASADENA,Pasadena,2021,I-Butane,IC4Imports,0.2,0.258,120.01,Light,,High
+CHEVRON_PASADENA,Pasadena,2017,I-Butane,IC4Imports,3.28,2.983,120.01,Light,,High
+HF_ARTESIA,Navajo (Artesia),2022,Crude Veg Oils,HVOHT,0.97,0.897,23.99,Heavy,,High
+HF_ARTESIA,Navajo (Artesia),2023,I-Butane,IC4Imports,1.67,1.468,120.01,Light,,High
+HF_ARTESIA,Navajo (Artesia),2017,I-Butane,IC4Imports,1.05,0.98,120.01,Light,,High
+HF_ARTESIA,Navajo (Artesia),2021,VGO - Low Sulphur,VGOSPL,13.0,12.269,27.19,Heavy,0.50,Medium
+HF_ARTESIA,Navajo (Artesia),2023,VGO - Low Sulphur,VGOSPL,13.0,11.41,27.19,Heavy,0.50,Medium
+HF_ARTESIA,Navajo (Artesia),2023,Crude Veg Oils,HVOHT,3.04,2.671,23.99,Heavy,,High
+HF_ARTESIA,Navajo (Artesia),2023,Crude Animal Fats,HVOHT,3.06,2.684,23.99,Heavy,,High
+HF_ARTESIA,Navajo (Artesia),2022,VGO - Low Sulphur,VGOSPL,13.0,12.041,27.19,Heavy,0.50,Medium
+HF_ARTESIA,Navajo (Artesia),2022,I-Butane,IC4Imports,1.68,1.559,120.01,Light,,High
+HF_ARTESIA,Navajo (Artesia),2022,Crude Animal Fats,HVOHT,0.96,0.891,23.99,Heavy,,High
+HF_ARTESIA,Navajo (Artesia),2020,VGO - Low Sulphur,FCC,6.0,5.965,27.19,Heavy,0.50,Medium
+HF_ARTESIA,Navajo (Artesia),2020,I-Butane,IC4Imports,1.59,1.582,120.01,Light,,High
+HF_ARTESIA,Navajo (Artesia),2019,VGO - Low Sulphur,FCC,6.0,5.484,27.19,Heavy,0.50,Medium
+HF_ARTESIA,Navajo (Artesia),2019,I-Butane,IC4Imports,1.65,1.509,120.01,Light,,High
+HF_ARTESIA,Navajo (Artesia),2017,VGO - Low Sulphur,DHT,6.0,5.603,30.00,Medium,,High
+HF_ARTESIA,Navajo (Artesia),2018,VGO - Low Sulphur,FCC,4.4,3.807,27.19,Heavy,0.50,Medium
+HF_ARTESIA,Navajo (Artesia),2018,I-Butane,IC4Imports,1.72,1.492,120.01,Light,,High
+HF_ARTESIA,Navajo (Artesia),2021,I-Butane,IC4Imports,1.68,1.589,120.01,Light,,High
+HF_ARTESIA,Navajo (Artesia),2024,VGO - Low Sulphur,VGOSPL,15.0,13.11,27.19,Heavy,0.50,Medium
+HF_ARTESIA,Navajo (Artesia),2024,Crude Veg Oils,HVOHT,3.04,2.66,23.99,Heavy,,High
+HF_ARTESIA,Navajo (Artesia),2024,Crude Animal Fats,HVOHT,3.06,2.672,23.99,Heavy,,High
+HF_ARTESIA,Navajo (Artesia),2024,I-Butane,IC4Imports,1.32,1.152,120.01,Light,,High
+WRB_BORGER,Borger,2020,VGO - Low Sulphur,FCC,15.0,10.912,27.19,Heavy,0.50,Medium
+WRB_BORGER,Borger,2021,VGO - Low Sulphur,FCC,15.0,9.994,27.19,Heavy,0.50,Medium
+WRB_BORGER,Borger,2022,VGO - Low Sulphur,FCC,15.0,10.989,27.19,Heavy,0.50,Medium
+WRB_BORGER,Borger,2023,VGO - Low Sulphur,FCC,15.0,13.96,27.19,Heavy,0.50,Medium
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2021,VGO - Low Sulphur,CFHT,7.7,5.354,27.19,Heavy,0.50,Medium
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2020,VGO - Low Sulphur,CFHT,7.7,4.466,27.19,Heavy,0.50,Medium
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2023,Atres - High Sulphur,VDU,7.0,4.064,16.86,Heavy,3.06,High
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2023,I-Butane,IC4Imports,8.74,5.072,120.01,Light,,High
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2023,VGO - Low Sulphur,CFHT,7.7,4.473,27.19,Heavy,0.50,Medium
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2021,I-Butane,IC4Imports,7.43,5.161,120.01,Light,,High
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2022,VGO - Low Sulphur,CFHT,7.7,4.363,27.19,Heavy,0.50,Medium
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2017,VGO - Low Sulphur,CFHT,7.7,4.419,20.31,Heavy,0.54,Medium
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2024,I-Butane,IC4Imports,10.69,6.464,120.01,Light,,High
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2019,VGO - Low Sulphur,CFHT,26.71,16.275,20.31,Heavy,0.54,Medium
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2022,I-Butane,IC4Imports,9.93,5.624,120.01,Light,,High
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2019,I-Butane,IC4Imports,9.62,5.862,120.01,Light,,High
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2018,I-Butane,IC4Imports,8.8,5.533,120.01,Light,,High
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2017,I-Butane,IC4Imports,9.68,5.55,120.01,Light,,High
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2024,Atres - High Sulphur,VDU,7.0,4.232,21.92,Heavy,3.26,High
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2020,I-Butane,IC4Imports,9.19,5.329,120.01,Light,,High
+CITGO_CORPUS_CHRISTI,Corpus Christi Citgo,2018,VGO - Low Sulphur,CFHT,7.7,4.844,20.31,Heavy,0.54,Medium
+VALERO_THREE_RIVERS,Three Rivers,2017,Atres,VDU,12.6,14.615,16.86,Heavy,3.06,High
+VALERO_THREE_RIVERS,Three Rivers,2018,Atres,VDU,26.6,27.373,16.86,Heavy,3.06,High
+VALERO_THREE_RIVERS,Three Rivers,2019,Atres,VDU,10.0,10.45,16.86,Heavy,3.06,High
+VALERO_THREE_RIVERS,Three Rivers,2020,Atres - High Sulphur,VDU,12.6,15.252,16.86,Heavy,3.06,High
+VALERO_THREE_RIVERS,Three Rivers,2021,Atres - High Sulphur,VDU,11.5,14.378,16.86,Heavy,3.06,High
+VALERO_THREE_RIVERS,Three Rivers,2022,Atres - High Sulphur,VDU,11.5,12.595,16.86,Heavy,3.06,High
+VALERO_THREE_RIVERS,Three Rivers,2023,Atres - High Sulphur,VDU,15.0,16.311,16.86,Heavy,3.06,High
+VALERO_THREE_RIVERS,Three Rivers,2024,Atres - High Sulphur,VDU,7.0,7.463,16.86,Heavy,3.06,High
+VALERO_BENICIA,Benicia,2024,VGO - High Sulphur,FCC,22.0,19.234,24.15,Heavy,1.60,High
+VALERO_BENICIA,Benicia,2018,VGO - High Sulphur,FCC,3.74,2.715,24.91,Heavy,0.40,Low
+VALERO_BENICIA,Benicia,2019,VGO - High Sulphur,FCC,3.74,2.988,24.91,Heavy,0.40,Low
+VALERO_BENICIA,Benicia,2020,VGO - High Sulphur,FCC,34.0,22.647,24.15,Heavy,1.60,High
+VALERO_BENICIA,Benicia,2021,VGO - High Sulphur,FCC,22.0,15.069,24.15,Heavy,1.60,High
+VALERO_BENICIA,Benicia,2022,VGO - High Sulphur,FCC,22.0,15.917,24.15,Heavy,1.60,High
+VALERO_BENICIA,Benicia,2023,VGO - High Sulphur,FCC,22.0,15.259,24.15,Heavy,1.60,High
+VALERO_BENICIA,Benicia,2017,VGO - High Sulphur,FCC,3.74,2.962,24.91,Heavy,0.40,Low
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2021,I-Butane,IC4import,2.38,0.789,120.01,Light,,High
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2022,VGO - Low Sulphur,FCC,9.0,2.609,27.19,Heavy,0.50,Medium
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2019,VGO - Low Sulphur,FCC,5.0,1.537,20.00,Heavy,0.50,Medium
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2023,I-Butane,IC4imports,0.4,0.111,120.01,Light,,High
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2023,VGO - Low Sulphur,FCC,20.0,5.514,27.19,Heavy,0.50,Medium
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2021,VGO - Low Sulphur,FCC,9.0,2.982,27.19,Heavy,0.50,Medium
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2020,VGO - Low Sulphur,FCC,2.74,0.937,27.19,Heavy,0.50,Medium
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2019,Atres,VDU,8.83,2.715,16.86,Heavy,3.06,High
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2018,VGO - Low Sulphur,FCC,2.74,0.893,20.00,Heavy,0.50,Medium
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2018,Atres,VDU,10.85,3.533,16.86,Heavy,3.06,High
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2017,VGO - Low Sulphur,FCC,2.74,0.946,20.00,Heavy,0.50,Medium
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2017,Atres,VDU,3.83,1.322,16.86,Heavy,3.06,High
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2024,I-Butane,IC4imports,1.38,0.41,120.01,Light,,High
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2022,I-Butane,IC4imports,0.7,0.204,120.01,Light,,High
+FLINT_CORPUS_CHRISTI,Corpus Christi Flint Hills,2019,I-Butane,IC4Imports,0.0,0.0,120.01,Light,,High
+VERTEX_MOBILE,Saraland,2023,Crude Veg Oils,HVOHT,2.97,3.873,23.99,Heavy,,High
+VERTEX_MOBILE,Saraland,2024,Crude Veg Oils,HVOHT,2.97,4.65,23.99,Heavy,,High
+CITGO_LEMONT,Lemont,2018,I-Butane,IC4Imports,6.04,3.178,120.01,Light,,High
+CITGO_LEMONT,Lemont,2020,VGO - Low Sulphur,FCC,10.0,6.09,27.19,Heavy,0.50,Medium
+CITGO_LEMONT,Lemont,2021,I-Butane,IC4Imports,6.61,3.697,120.01,Light,,High
+CITGO_LEMONT,Lemont,2021,VGO - Low Sulphur,FCC,10.0,5.59,27.19,Heavy,0.50,Medium
+CITGO_LEMONT,Lemont,2020,I-Butane,IC4Imports,6.04,3.676,120.01,Light,,High
+CITGO_LEMONT,Lemont,2019,VGO - Low Sulphur,FCC,9.5,5.731,18.00,Heavy,2.50,High
+CITGO_LEMONT,Lemont,2018,VGO - Low Sulphur,FCC,10.0,5.259,18.00,Heavy,2.50,High
+CITGO_LEMONT,Lemont,2022,I-Butane,IC4Imports,6.56,3.628,120.01,Light,,High
+CITGO_LEMONT,Lemont,2017,VGO - Low Sulphur,FCC,10.0,5.265,18.00,Heavy,2.50,High
+CITGO_LEMONT,Lemont,2017,I-Butane,IC4Imports,6.32,3.33,120.01,Light,,High
+CITGO_LEMONT,Lemont,2023,VGO - Low Sulphur,FCC,3.0,1.574,27.19,Heavy,0.50,Medium
+CITGO_LEMONT,Lemont,2023,I-Butane,IC4Imports,6.86,3.599,120.01,Light,,High
+CITGO_LEMONT,Lemont,2022,VGO - Low Sulphur,FCC,10.0,5.528,27.19,Heavy,0.50,Medium
+CITGO_LEMONT,Lemont,2019,I-Butane,IC4Imports,5.3,3.197,120.01,Light,,High
+CITGO_LEMONT,Lemont,2024,I-Butane,IC4Imports,6.53,3.572,120.01,Light,,High
+CITGO_LEMONT,Lemont,2024,VGO - Low Sulphur,FCC,3.0,1.641,27.19,Heavy,0.50,Medium
+VALERO_MEMPHIS,Memphis,2020,VGO - High Sulphur,RFCC,20.0,12.121,24.15,Heavy,1.60,High
+VALERO_MEMPHIS,Memphis,2021,VGO - High Sulphur,RFCC,5.0,2.995,24.15,Heavy,1.60,High
+VALERO_MEMPHIS,Memphis,2022,VGO - High Sulphur,RFCC,5.0,2.854,24.15,Heavy,1.60,High
+VALERO_MEMPHIS,Memphis,2023,VGO - High Sulphur,RFCC,5.0,2.915,24.15,Heavy,1.60,High
+,San Francisco (Rodeo and Santa Maria),2017,VGO - Low Sulphur,DHCU,0.56,0.455,20.65,Heavy,2.00,High
+,San Francisco (Rodeo and Santa Maria),2018,VGO - Low Sulphur,DHCU,0.56,0.491,20.65,Heavy,2.00,High
+,San Francisco (Rodeo and Santa Maria),2019,VGO - Low Sulphur,DHCU,0.56,0.487,20.65,Heavy,2.00,High
+,San Francisco (Rodeo and Santa Maria),2020,VGO - Low Sulphur,DHCU,0.56,0.596,27.19,Heavy,0.50,Medium
+,San Francisco (Rodeo and Santa Maria),2021,HVO Feedstock,HVOHT,3.04,3.123,23.99,Heavy,,High
+,San Francisco (Rodeo and Santa Maria),2022,Crude Veg Oils,HVOHT,6.86,6.653,23.99,Heavy,,High
+,San Francisco (Rodeo and Santa Maria),2023,Crude Veg Oils,HVOHT,8.65,11.886,23.99,Heavy,,High
+CHEVRON_RICHMOND,Richmond,2018,VGO - Low Sulphur,FCC,28.55,10.285,20.65,Heavy,0.40,Low
+CHEVRON_RICHMOND,Richmond,2023,VGO - Low Sulphur,DHCU,25.0,10.0,27.19,Heavy,0.50,Medium
+CHEVRON_RICHMOND,Richmond,2022,VGO - Low Sulphur,DHCU,25.0,12.69,27.19,Heavy,0.50,Medium
+CHEVRON_RICHMOND,Richmond,2019,VGO - Low Sulphur,FCC,28.55,10.79,20.65,Heavy,0.40,Low
+CHEVRON_RICHMOND,Richmond,2017,VGO - Low Sulphur,FCC,28.55,10.58,20.65,Heavy,0.40,Low
+CHEVRON_RICHMOND,Richmond,2022,VGO - High Sulphur,CFHT,5.0,2.538,24.15,Heavy,1.60,High
+CHEVRON_RICHMOND,Richmond,2024,VGO - Low Sulphur,DHCU,13.87,5.371,27.19,Heavy,0.50,Medium
+CHEVRON_RICHMOND,Richmond,2024,Naphtha,NHT,2.02,0.781,56.00,Light,,High
+FLINT_ROSEMOUNT,Pine Bend,2019,Atres,VDU,23.0,6.502,16.86,Heavy,3.06,High
+FLINT_ROSEMOUNT,Pine Bend,2017,Atres,VDU,1.05,0.316,16.86,Heavy,3.06,High
+FLINT_ROSEMOUNT,Pine Bend,2018,Atres,VDU,1.05,0.311,16.86,Heavy,3.06,High
+FLINT_ROSEMOUNT,Pine Bend,2020,Atres - High Sulphur,VDU,1.05,0.356,16.86,Heavy,3.06,High
+BP_WHITING,Whiting,2019,I-Butane,IC4Imports,3.69,0.913,120.01,Light,,High
+BP_WHITING,Whiting,2021,I-Butane,IC4Imports,1.63,0.401,120.01,Light,,High
+BP_WHITING,Whiting,2020,I-Butane,IC4Imports,6.27,1.499,120.01,Light,,High
+BP_WHITING,Whiting,2023,I-Butane,IC4Imports,4.66,1.08,120.01,Light,,High
+BP_WHITING,Whiting,2024,I-Butane,IC4Imports,5.72,1.499,120.01,Light,,High
+BP_WHITING,Whiting,2024,Reformate,PurRefor Spl,3.5,0.918,38.80,Light,,High
+BP_WHITING,Whiting,2024,VGO - Low Sulphur,FCC ZSM,5.8,1.521,27.19,Heavy,0.50,Medium
+BP_WHITING,Whiting,2024,Naphtha,NHT,5.3,1.39,56.00,Light,,High
+,Alliance,2020,I-Butane,IC4imports,1.65,1.21,120.01,Light,,High
+,Alliance,2017,VGO - High Sulphur,FCC,11.67,4.533,24.91,Heavy,1.00,Medium
+,Alliance,2018,I-Butane,ic4Imports,3.73,1.427,120.01,Light,,High
+,Alliance,2018,VGO - High Sulphur,FCC,16.17,6.184,24.91,Heavy,1.00,Medium
+,Alliance,2019,I-Butane,ic4Imports,3.26,1.222,120.01,Light,,High
+,Alliance,2020,VGO - High Sulphur,FCC,7.0,5.139,24.15,Heavy,1.60,High
+,Alliance,2021,I-Butane,IC4imports,1.67,1.213,120.01,Light,,High
+,Alliance,2021,VGO - High Sulphur,FCC,7.0,5.071,24.15,Heavy,1.60,High
+,Alliance,2019,VGO - High Sulphur,FCC,14.0,5.251,24.91,Heavy,1.00,Medium
+SHELL_CONVENT,Convent,2019,VGO - High Sulphur,FCC,8.9,3.369,20.65,Heavy,0.40,Low
+SHELL_CONVENT,Convent,2017,Atres,VDU,4.67,1.865,16.86,Heavy,3.06,High
+SHELL_CONVENT,Convent,2017,VGO - High Sulphur,FCC,8.9,3.55,20.65,Heavy,0.40,Low
+SHELL_CONVENT,Convent,2018,Atres,VDU,4.67,1.871,16.86,Heavy,3.06,High
+SHELL_CONVENT,Convent,2018,VGO - High Sulphur,FCC,8.9,3.562,20.65,Heavy,0.40,Low
+SHELL_CONVENT,Convent,2019,Atres,VDU,4.67,1.77,16.86,Heavy,3.06,High
+PBF_DELAWARE_CITY,Delaware City,2017,Naphtha,NHT,1.44,0.786,55.00,Light,0.20,Low
+PBF_DELAWARE_CITY,Delaware City,2017,I-Butane,IC4Imports,0.0,-0.0,120.01,Light,,High
+PBF_DELAWARE_CITY,Delaware City,2017,VGO - Low Sulphur,FCC,1.44,0.783,20.00,Heavy,0.50,Medium
+PBF_DELAWARE_CITY,Delaware City,2018,Atres,VDU,6.86,3.942,16.86,Heavy,3.06,High
+PBF_DELAWARE_CITY,Delaware City,2019,Atres,VDU,6.86,3.699,16.86,Heavy,3.06,High
+PBF_DELAWARE_CITY,Delaware City,2019,VGO - Low Sulphur,FCC,1.44,0.776,20.00,Heavy,0.50,Medium
+PBF_DELAWARE_CITY,Delaware City,2020,Atres - High Sulphur,VDU,1.5,1.04,16.86,Heavy,3.06,High
+PBF_DELAWARE_CITY,Delaware City,2020,VGO - Low Sulphur,FCC,1.5,1.04,27.19,Heavy,0.50,Medium
+PBF_DELAWARE_CITY,Delaware City,2017,Atres,VDU,6.86,3.735,16.86,Heavy,3.06,High
+PBF_DELAWARE_CITY,Delaware City,2018,VGO - Low Sulphur,FCC,1.44,0.827,20.00,Heavy,0.50,Medium
+VALERO_MERAUX,Meraux,2017,VGO - High Sulphur,DHCU,3.48,3.061,20.00,Heavy,2.50,High
+VALERO_MERAUX,Meraux,2020,Atres - High Sulphur,VDU,13.0,12.112,16.86,Heavy,3.06,High
+VALERO_MERAUX,Meraux,2020,VGO - High Sulphur,DHCU,4.0,3.727,24.15,Heavy,1.60,High
+VALERO_MERAUX,Meraux,2021,Atres - High Sulphur,VDU,10.0,8.513,16.86,Heavy,3.06,High
+VALERO_MERAUX,Meraux,2021,VGO - High Sulphur,DHCU,4.0,3.405,24.15,Heavy,1.60,High
+VALERO_MERAUX,Meraux,2022,Atres - High Sulphur,VDU,10.0,9.287,16.86,Heavy,3.06,High
+VALERO_MERAUX,Meraux,2022,VGO - High Sulphur,DHCU,4.0,3.715,24.15,Heavy,1.60,High
+VALERO_MERAUX,Meraux,2023,Atres - High Sulphur,VDU,9.0,6.98,16.86,Heavy,3.06,High
+VALERO_MERAUX,Meraux,2023,VGO - High Sulphur,DHCU,3.0,2.327,24.15,Heavy,1.60,High
+VALERO_MERAUX,Meraux,2018,Atres,VDU,5.48,3.997,16.86,Heavy,3.06,High
+VALERO_MERAUX,Meraux,2019,Atres,VDU,10.0,9.288,16.86,Heavy,3.06,High
+VALERO_MERAUX,Meraux,2017,Atres,VDU,0.48,0.426,16.86,Heavy,3.06,High
+VALERO_MERAUX,Meraux,2018,VGO - High Sulphur,DHCU,5.48,3.992,20.00,Heavy,2.50,High
+UNITED_WARREN,Warren,2019,I-Butane,IC4Imports,0.73,1.164,120.01,Light,,High
+UNITED_WARREN,Warren,2023,I-Butane,IC4imports,0.85,1.334,120.01,Light,,High
+UNITED_WARREN,Warren,2022,VGO - High Sulphur,FCC,2.0,3.176,24.15,Heavy,1.60,High
+UNITED_WARREN,Warren,2020,I-Butane,IC4imports,0.71,1.147,120.01,Light,,High
+UNITED_WARREN,Warren,2022,I-Butane,IC4imports,0.92,1.463,120.01,Light,,High
+UNITED_WARREN,Warren,2021,VGO - High Sulphur,FCC,2.0,3.811,24.15,Heavy,1.60,High
+UNITED_WARREN,Warren,2023,VGO - High Sulphur,FCC,2.0,3.131,24.15,Heavy,1.60,High
+UNITED_WARREN,Warren,2019,VGO - Low Sulphur,FCC,0.38,0.603,20.00,Heavy,0.10,Low
+UNITED_WARREN,Warren,2018,I-Butane,IC4Imports,0.69,1.022,120.01,Light,,High
+UNITED_WARREN,Warren,2017,VGO - Low Sulphur,FCC,0.38,0.548,20.00,Heavy,0.10,Low
+UNITED_WARREN,Warren,2017,I-Butane,IC4Imports,0.81,1.176,120.01,Light,,High
+UNITED_WARREN,Warren,2021,I-Butane,IC4imports,0.79,1.498,120.01,Light,,High
+UNITED_WARREN,Warren,2024,I-Butane,IC4imports,0.85,1.383,120.01,Light,,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2019,VGO - High Sulphur,FCC,18.0,4.243,22.30,Heavy,0.89,Medium
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2017,Atres,VDU,0.78,0.207,16.86,Heavy,3.06,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2017,VGO - High Sulphur,FCC,8.25,2.195,22.30,Heavy,0.89,Medium
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2024,I-Butane,IC4Imports,3.32,0.763,120.01,Light,,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2018,I-Butane,IC4Imports,1.64,0.373,120.01,Light,,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2019,I-Butane,IC4Imports,5.3,1.25,120.01,Light,,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2018,Atres,VDU,20.0,4.561,16.86,Heavy,3.06,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2020,Atres - High Sulphur,VDU,0.78,0.278,16.86,Heavy,3.06,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2020,I-Butane,IC4Imports,2.28,0.812,120.01,Light,,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2020,VGO - High Sulphur,FCC,20.0,7.137,24.15,Heavy,1.60,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2021,I-Butane,IC4Imports,4.0,1.061,120.01,Light,,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2021,VGO - High Sulphur,FCC,20.0,5.301,24.15,Heavy,1.60,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2022,I-Butane,IC4Imports,3.02,0.659,120.01,Light,,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2022,VGO - High Sulphur,FCC,20.0,4.361,24.15,Heavy,1.60,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2023,I-Butane,IC4Imports,2.33,0.535,120.01,Light,,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2023,VGO - High Sulphur,FCC,5.0,1.145,24.15,Heavy,1.60,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2019,Atres,VDU,15.0,3.536,16.86,Heavy,3.06,High
+CITGO_LAKE_CHARLES,Lake Charles Citgo,2018,VGO - High Sulphur,FCC,11.05,2.52,22.30,Heavy,0.89,Medium
+PHILLIPS_FERNDALE,Ferndale P66,2022,Butane,NC4Imports,1.08,1.283,112.47,Light,,High
+PHILLIPS_FERNDALE,Ferndale P66,2023,Butane,NC4Imports,1.23,1.218,112.47,Light,,High
+PHILLIPS_FERNDALE,Ferndale P66,2024,Butane,NC4Imports,1.53,1.54,112.47,Light,,High
+MARATHON_GARYVILLE,Garyville,2024,Naphtha,CCR,30.0,4.208,56.00,Light,,High
+MARATHON_GARYVILLE,Garyville,2024,RuGo,DHT,30.0,4.208,38.98,Light,0.20,Low
+MARATHON_GARYVILLE,Garyville,2024,VGO - Low Sulphur,LVGO Spl,85.0,11.922,27.19,Heavy,0.50,Medium
+MARATHON_GARYVILLE,Garyville,2023,VGO - Low Sulphur,LVGO Spl,40.0,6.179,27.19,Heavy,0.50,Medium
+MARATHON_GARYVILLE,Garyville,2023,Naphtha,CCR,6.0,0.927,56.00,Light,,High
+MARATHON_GARYVILLE,Garyville,2022,VGO - Low Sulphur,LVGO Spl,30.0,4.801,27.19,Heavy,0.50,Medium
+MARATHON_GARYVILLE,Garyville,2022,Naphtha,CCR,10.5,1.68,56.00,Light,,High
+MARATHON_GARYVILLE,Garyville,2021,VGO - Low Sulphur,LVGO Spl,30.0,4.72,27.19,Heavy,0.50,Medium
+MARATHON_GARYVILLE,Garyville,2020,VGO - Low Sulphur,LVGO Spl,35.0,6.106,27.19,Heavy,0.50,Medium
+MARATHON_GARYVILLE,Garyville,2020,Naphtha,CCR,10.5,1.832,56.00,Light,,High
+MARATHON_GARYVILLE,Garyville,2019,VGO - Low Sulphur,LVGO Spl,70.0,11.198,25.00,Heavy,0.25,Low
+MARATHON_GARYVILLE,Garyville,2019,Naphtha,CCR,16.5,2.64,56.00,Light,,High
+MARATHON_GARYVILLE,Garyville,2017,VGO - Low Sulphur,LVGO Spl,65.01,10.607,25.00,Heavy,0.25,Low
+MARATHON_GARYVILLE,Garyville,2018,Naphtha,CCR,16.5,2.448,56.00,Light,,High
+MARATHON_GARYVILLE,Garyville,2018,VGO - Low Sulphur,LVGO Spl,83.0,12.316,25.00,Heavy,0.25,Low
+MARATHON_GARYVILLE,Garyville,2021,Naphtha,CCR,10.5,1.652,56.00,Light,,High
+MARATHON_GARYVILLE,Garyville,2017,Naphtha,NHT,14.67,2.394,53.71,Light,0.05,Low
+VALERO_HOUSTON,Houston Valero,2017,VGO - High Sulphur,FCC,12.88,7.561,20.65,Heavy,0.40,Low
+VALERO_HOUSTON,Houston Valero,2023,I-Butane,IC4imports,8.87,4.197,120.01,Light,,High
+VALERO_HOUSTON,Houston Valero,2022,VGO - High Sulphur,VGO Spl,10.0,4.547,24.15,Heavy,1.60,High
+VALERO_HOUSTON,Houston Valero,2022,I-Butane,IC4imports,8.19,3.723,120.01,Light,,High
+VALERO_HOUSTON,Houston Valero,2021,VGO - High Sulphur,FCC,20.0,10.788,24.15,Heavy,1.60,High
+VALERO_HOUSTON,Houston Valero,2021,I-Butane,IC4imports,7.89,4.258,120.01,Light,,High
+VALERO_HOUSTON,Houston Valero,2020,VGO - High Sulphur,FCC,12.88,6.014,24.15,Heavy,1.60,High
+VALERO_HOUSTON,Houston Valero,2020,I-Butane,IC4imports,5.22,2.438,120.01,Light,,High
+VALERO_HOUSTON,Houston Valero,2020,Atres - High Sulphur,VDU,3.42,1.596,16.86,Heavy,3.06,High
+VALERO_HOUSTON,Houston Valero,2019,VGO - High Sulphur,FCC,26.5,11.775,20.65,Heavy,0.40,Low
+VALERO_HOUSTON,Houston Valero,2019,I-Butane,IC4Imports,6.84,3.039,120.01,Light,,High
+VALERO_HOUSTON,Houston Valero,2018,I-Butane,IC4Imports,2.22,0.956,120.01,Light,,High
+VALERO_HOUSTON,Houston Valero,2017,I-Butane,IC4Imports,3.08,1.805,120.01,Light,,High
+VALERO_HOUSTON,Houston Valero,2017,Atres,VDU,3.42,2.007,16.86,Heavy,3.06,High
+VALERO_HOUSTON,Houston Valero,2024,I-Butane,IC4imports,12.37,5.564,120.01,Light,,High
+VALERO_HOUSTON,Houston Valero,2018,VGO - High Sulphur,FCC,20.0,8.613,20.65,Heavy,0.40,Low
+MARATHON_EL_PASO,El Paso,2021,I-Butane,IC4Imports,0.0,0.0,120.01,Light,,High
+MARATHON_EL_PASO,El Paso,2024,Butane,NC4Imports,1.8,1.424,112.47,Light,,High
+MARATHON_EL_PASO,El Paso,2023,Butane,NC4Imports,2.16,1.945,112.47,Light,,High
+MARATHON_EL_PASO,El Paso,2020,VGO - Low Sulphur,FCC,3.56,3.659,27.19,Heavy,0.50,Medium
+MARATHON_EL_PASO,El Paso,2017,VGO - Low Sulphur,FCC,3.56,2.674,53.00,Light,0.50,Medium
+MARATHON_EL_PASO,El Paso,2018,VGO - Low Sulphur,FCC,3.56,2.751,53.00,Light,0.50,Medium
+MARATHON_EL_PASO,El Paso,2022,Butane,NC4Imports,1.97,1.544,112.47,Light,,High
+MARATHON_EL_PASO,El Paso,2019,VGO - Low Sulphur,FCC,3.56,2.625,53.00,Light,0.50,Medium
+MARATHON_EL_PASO,El Paso,2022,I-Butane,IC4Imports,0.0,0.0,120.01,Light,,High
+DELEK_KROTZ_SPRINGS,Krotz Springs,2019,I-Butane,IC4Imports,2.26,3.223,120.01,Light,,High
+CENOVUS_LIMA,Lima,2023,Naphtha,NHT,9.0,5.566,56.00,Light,,High
+CENOVUS_LIMA,Lima,2018,Naphtha,NHT,12.0,7.747,56.00,Light,,High
+CENOVUS_LIMA,Lima,2019,Naphtha,NHT,12.0,8.086,56.00,Light,,High
+CENOVUS_LIMA,Lima,2020,Naphtha,NHT,7.0,4.762,56.00,Light,,High
+CENOVUS_LIMA,Lima,2022,Naphtha,NHT,10.0,5.956,56.00,Light,,High
+CENOVUS_LIMA,Lima,2021,Naphtha,NHT,10.0,7.305,56.00,Light,,High
+CENOVUS_LIMA,Lima,2024,Naphtha,NHT,10.0,6.158,56.00,Light,,High
+PHILLIPS_LINDEN,Bayway,2022,VGO - High Sulphur,FCC,5.0,1.917,24.15,Heavy,1.60,High
+PHILLIPS_LINDEN,Bayway,2017,VGO - High Sulphur,FCC,18.93,7.157,21.79,Heavy,0.54,Medium
+PHILLIPS_LINDEN,Bayway,2019,Atres,VDU,4.33,1.583,16.86,Heavy,3.06,High
+PHILLIPS_LINDEN,Bayway,2019,VGO - High Sulphur,FCC,18.93,6.92,21.79,Heavy,0.54,Medium
+PHILLIPS_LINDEN,Bayway,2021,VGO - High Sulphur,FCC,5.0,2.106,24.15,Heavy,1.60,High
+PHILLIPS_LINDEN,Bayway,2023,VGO - High Sulphur,FCC,5.0,1.939,24.15,Heavy,1.60,High
+PHILLIPS_LINDEN,Bayway,2017,Atres,VDU,4.33,1.637,16.86,Heavy,3.06,High
+PHILLIPS_LINDEN,Bayway,2020,VGO - High Sulphur,FCC,1.0,0.482,24.15,Heavy,1.60,High
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2017,Atres,VDU,4.75,1.889,16.86,Heavy,3.06,High
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2017,VGO - Low Sulphur,FCC,0.81,0.321,24.91,Heavy,0.00,Low
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2018,VGO - Low Sulphur,FCC,39.84,13.699,24.91,Heavy,0.00,Low
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2019,Atres,VDU,30.0,9.238,16.86,Heavy,3.06,High
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2019,Reformate,BTX,19.66,6.056,38.80,Light,,High
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2019,VGO - Low Sulphur,FCC,7.5,2.31,24.91,Heavy,0.00,Low
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2020,Atres - High Sulphur,VDU,4.75,2.073,16.86,Heavy,3.06,High
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2020,VGO - Low Sulphur,FCC,0.81,0.353,27.19,Heavy,0.50,Medium
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2021,Atres - High Sulphur,VDU,7.0,2.896,16.86,Heavy,3.06,High
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2021,VGO - Low Sulphur,FCC,4.0,1.655,27.19,Heavy,0.50,Medium
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2022,Atres - High Sulphur,VDU,7.0,2.863,16.86,Heavy,3.06,High
+LYONDELLBASELL_HOUSTON,Houston Lyondell,2018,Atres,VDU,20.0,6.877,16.86,Heavy,3.06,High
+SHELL_NORCO,Norco,2022,VGO - Low Sulphur,FCC,32.42,12.315,22.30,Heavy,0.50,Medium
+SHELL_NORCO,Norco,2023,I-Butane,IC4imports,2.72,1.208,120.01,Light,,High
+SHELL_NORCO,Norco,2022,I-Butane,IC4imports,3.42,1.299,120.01,Light,,High
+SHELL_NORCO,Norco,2021,VGO - Low Sulphur,FCC,32.42,20.184,22.30,Heavy,0.50,Medium
+SHELL_NORCO,Norco,2021,I-Butane,IC4imports,3.22,2.003,120.01,Light,,High
+SHELL_NORCO,Norco,2020,VGO - Low Sulphur,FCC,32.67,14.87,22.30,Heavy,0.50,Medium
+SHELL_NORCO,Norco,2020,I-Butane,IC4imports,3.43,1.56,120.01,Light,,High
+SHELL_NORCO,Norco,2019,VGO - Low Sulphur,LVGO Spl,37.0,13.471,22.30,Heavy,0.50,Medium
+SHELL_NORCO,Norco,2018,VGO - Low Sulphur,LVGO Spl,32.67,12.012,22.30,Heavy,0.50,Medium
+SHELL_NORCO,Norco,2017,VGO - Low Sulphur,LVGO Spl,32.67,12.438,22.30,Heavy,0.50,Medium
+SHELL_NORCO,Norco,2023,VGO - Low Sulphur,RFCC,23.0,10.207,22.30,Heavy,0.50,Medium
+SHELL_NORCO,Norco,2024,VGO - Low Sulphur,RFCC,7.0,2.977,22.30,Heavy,0.50,Medium
+SHELL_NORCO,Norco,2024,I-Butane,IC4imports,1.8,0.766,120.01,Light,,High
+CHEVRON_PASCAGOULA,Pascagoula,2022,Atres - High Sulphur,VDU,20.0,5.818,16.86,Heavy,3.06,High
+CHEVRON_PASCAGOULA,Pascagoula,2020,Atres - High Sulphur,VDU,23.91,7.084,16.86,Heavy,3.06,High
+CHEVRON_PASCAGOULA,Pascagoula,2023,VGO - Low Sulphur,DHCU,3.0,0.8,27.19,Heavy,0.50,Medium
+CHEVRON_PASCAGOULA,Pascagoula,2023,I-Butane,IC4Imports,0.77,0.206,120.01,Light,,High
+CHEVRON_PASCAGOULA,Pascagoula,2023,Atres - High Sulphur,VDU,25.0,6.671,16.86,Heavy,3.06,High
+CHEVRON_PASCAGOULA,Pascagoula,2022,VGO - Low Sulphur,DHCU,3.0,0.873,27.19,Heavy,0.50,Medium
+CHEVRON_PASCAGOULA,Pascagoula,2022,I-Butane,IC4Imports,0.75,0.217,120.01,Light,,High
+CHEVRON_PASCAGOULA,Pascagoula,2019,VGO - Low Sulphur,DHCU,7.58,2.006,24.91,Heavy,0.00,Low
+CHEVRON_PASCAGOULA,Pascagoula,2017,Atres,VDU,23.91,6.288,16.86,Heavy,3.06,High
+CHEVRON_PASCAGOULA,Pascagoula,2017,I-Butane,IC4Imports,1.67,0.439,120.01,Light,,High
+CHEVRON_PASCAGOULA,Pascagoula,2017,VGO - Low Sulphur,DHCU,7.58,1.993,24.91,Heavy,0.00,Low
+CHEVRON_PASCAGOULA,Pascagoula,2018,Atres,VDU,23.91,6.221,16.86,Heavy,3.06,High
+CHEVRON_PASCAGOULA,Pascagoula,2018,I-Butane,IC4Imports,0.79,0.206,120.01,Light,,High
+CHEVRON_PASCAGOULA,Pascagoula,2018,VGO - Low Sulphur,DHCU,27.58,7.177,24.91,Heavy,0.00,Low
+CHEVRON_PASCAGOULA,Pascagoula,2019,Atres,VDU,10.0,2.647,16.86,Heavy,3.06,High
+CHEVRON_PASCAGOULA,Pascagoula,2020,VGO - Low Sulphur,DHCU,7.58,2.246,27.19,Heavy,0.50,Medium
+CHEVRON_PASCAGOULA,Pascagoula,2019,I-Butane,IC4Imports,2.23,0.59,120.01,Light,,High
+CHEVRON_PASCAGOULA,Pascagoula,2021,VGO - Low Sulphur,DHCU,3.0,0.856,27.19,Heavy,0.50,Medium
+CHEVRON_PASCAGOULA,Pascagoula,2020,I-Butane,IC4Imports,0.99,0.294,120.01,Light,,High
+CHEVRON_PASCAGOULA,Pascagoula,2021,Atres - High Sulphur,VDU,13.5,3.853,16.86,Heavy,3.06,High
+CHEVRON_PASCAGOULA,Pascagoula,2021,I-Butane,IC4Imports,0.92,0.263,120.01,Light,,High
+CHEVRON_PASCAGOULA,Pascagoula,2024,VGO - Low Sulphur,FCC,5.0,1.455,27.19,Heavy,0.50,Medium
+CHEVRON_PASCAGOULA,Pascagoula,2024,I-Butane,IC4Imports,1.56,0.454,120.01,Light,,High
+SINCLAIR_SINCLAIR,Sinclair,2022,Crude Veg Oils,HVOHT,6.75,9.059,23.99,Heavy,,High
+SINCLAIR_SINCLAIR,Sinclair,2023,Crude Veg Oils,HVOHT,5.08,7.305,23.99,Heavy,,High
+SINCLAIR_SINCLAIR,Sinclair,2021,HVO Feedstock,HVOHT,6.75,7.861,23.99,Heavy,,High
+SINCLAIR_SINCLAIR,Sinclair,2024,Crude Veg Oils,HVOHT,5.08,5.498,23.99,Heavy,,High
+CENOVUS_TOLEDO,Toledo Cenovus,2020,I-Butane,IC4imports,1.63,1.258,120.01,Light,,High
+CENOVUS_TOLEDO,Toledo Cenovus,2023,I-Butane,IC4imports,1.07,1.275,120.01,Light,,High
+CENOVUS_TOLEDO,Toledo Cenovus,2021,I-Butane,IC4imports,1.67,1.177,120.01,Light,,High
+CENOVUS_TOLEDO,Toledo Cenovus,2019,I-Butane,IC4Imports,1.47,1.154,120.01,Light,,High
+CENOVUS_TOLEDO,Toledo Cenovus,2018,I-Butane,IC4Imports,1.92,1.235,120.01,Light,,High
+CENOVUS_TOLEDO,Toledo Cenovus,2017,I-Butane,IC4Imports,2.18,1.403,120.01,Light,,High
+CENOVUS_TOLEDO,Toledo Cenovus,2022,I-Butane,IC4imports,0.72,0.978,120.01,Light,,High
+CENOVUS_TOLEDO,Toledo Cenovus,2024,I-Butane,IC4imports,2.28,1.684,120.01,Light,,High
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,2020,Atres - High Sulphur,VDU,15.0,6.329,16.86,Heavy,3.06,High
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,2023,Atres - High Sulphur,VDU,30.0,10.721,16.86,Heavy,3.06,High
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,2021,Atres - High Sulphur,VDU,15.0,6.298,16.86,Heavy,3.06,High
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,2019,Atres,AtRes Spl,35.0,13.379,16.86,Heavy,3.06,High
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,2018,Atres,AtRes Spl,32.0,11.448,16.86,Heavy,3.06,High
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,2017,Atres,AtRes Spl,44.92,17.41,16.86,Heavy,3.06,High
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,2024,Atres - High Sulphur,VDU,40.0,13.868,16.86,Heavy,3.06,High
+VALERO_CORPUS_CHRISTI,Corpus Christi Valero,2022,Atres - High Sulphur,VDU,15.0,5.713,16.86,Heavy,3.06,High
+PHILLIPS_SWEENY,Sweeny,2019,Atres,VDU,25.0,9.143,16.86,Heavy,3.06,High
+PHILLIPS_SWEENY,Sweeny,2020,VGO - High Sulphur,CFHT,0.07,0.031,24.15,Heavy,1.60,High
+PHILLIPS_SWEENY,Sweeny,2017,I-Butane,IC4Imports,4.63,1.741,120.01,Light,,High
+PHILLIPS_SWEENY,Sweeny,2017,VGO - High Sulphur,FCC,0.07,0.028,24.91,Heavy,1.00,Medium
+PHILLIPS_SWEENY,Sweeny,2018,Atres,VDU,18.5,6.554,16.86,Heavy,3.06,High
+PHILLIPS_SWEENY,Sweeny,2018,I-Butane,IC4Imports,4.51,1.598,120.01,Light,,High
+PHILLIPS_SWEENY,Sweeny,2018,VGO - High Sulphur,FCC,14.27,5.057,24.91,Heavy,1.00,Medium
+PHILLIPS_SWEENY,Sweeny,2019,I-Butane,IC4Imports,3.69,1.348,120.01,Light,,High
+PHILLIPS_SWEENY,Sweeny,2019,VGO - High Sulphur,FCC,5.0,1.829,24.91,Heavy,1.00,Medium
+PHILLIPS_SWEENY,Sweeny,2020,I-Butane,IC4imports,4.23,1.747,120.01,Light,,High
+PHILLIPS_SWEENY,Sweeny,2023,VGO - High Sulphur,CFHT,7.0,2.389,24.15,Heavy,1.60,High
+PHILLIPS_SWEENY,Sweeny,2021,Atres - High Sulphur,VDU,12.0,4.817,16.86,Heavy,3.06,High
+PHILLIPS_SWEENY,Sweeny,2021,I-Butane,IC4imports,3.24,1.302,120.01,Light,,High
+PHILLIPS_SWEENY,Sweeny,2021,VGO - High Sulphur,CFHT,0.07,0.03,24.15,Heavy,1.60,High
+PHILLIPS_SWEENY,Sweeny,2022,Atres - High Sulphur,VDU,12.0,4.196,16.86,Heavy,3.06,High
+PHILLIPS_SWEENY,Sweeny,2022,I-Butane,IC4imports,3.66,1.28,120.01,Light,,High
+PHILLIPS_SWEENY,Sweeny,2022,VGO - High Sulphur,CFHT,0.07,0.026,24.15,Heavy,1.60,High
+PHILLIPS_SWEENY,Sweeny,2023,Atres - High Sulphur,VDU,12.0,4.096,16.86,Heavy,3.06,High
+PHILLIPS_SWEENY,Sweeny,2023,I-Butane,IC4imports,4.57,1.56,120.01,Light,,High
+PHILLIPS_SWEENY,Sweeny,2020,Atres - High Sulphur,VDU,12.0,4.952,16.86,Heavy,3.06,High
+PHILLIPS_SWEENY,Sweeny,2024,VGO - High Sulphur,CFHT,15.0,5.049,24.15,Heavy,1.60,High
+PHILLIPS_SWEENY,Sweeny,2024,I-Butane,IC4imports,4.14,1.392,120.01,Light,,High
+PHILLIPS_SWEENY,Sweeny,2024,Atres - High Sulphur,VDU,20.0,6.732,16.86,Heavy,3.06,High
+,Los Angeles Marathon,2023,VGO - High Sulphur,CFHT,17.0,5.078,24.15,Heavy,1.60,High
+,Los Angeles Marathon,2022,VGO - High Sulphur,CFHT,17.0,4.87,24.15,Heavy,1.60,High
+,Los Angeles Marathon,2021,VGO - High Sulphur,CFHT,9.5,2.865,24.15,Heavy,1.60,High
+,Los Angeles Marathon,2020,VGO - High Sulphur,CFHT,11.52,3.663,24.15,Heavy,1.60,High
+,Los Angeles Marathon,2024,VGO - High Sulphur,CFHT,17.0,4.614,24.15,Heavy,1.60,High
+CVR_COFFEYVILLE,Coffeyville,2019,Naphtha,NHT,1.5,1.109,55.00,Light,0.20,Low
+CVR_COFFEYVILLE,Coffeyville,2024,VGO - Low Sulphur,FCC,2.0,1.48,27.19,Heavy,0.50,Medium
+CVR_COFFEYVILLE,Coffeyville,2024,I-Butane,IC4Imports,3.37,2.491,120.01,Light,,High
+CVR_COFFEYVILLE,Coffeyville,2017,Naphtha,NHT,3.0,2.179,55.00,Light,0.20,Low
+CVR_COFFEYVILLE,Coffeyville,2018,I-Butane,IC4Imports,3.16,2.348,120.01,Light,,High
+CVR_COFFEYVILLE,Coffeyville,2024,Atres - High Sulphur,AtRes Spl,6.0,4.44,9.95,Heavy,2.88,High
+CVR_COFFEYVILLE,Coffeyville,2019,I-Butane,IC4Imports,3.93,2.908,120.01,Light,,High
+CVR_COFFEYVILLE,Coffeyville,2017,I-Butane,IC4Imports,3.1,2.255,120.01,Light,,High
+CVR_COFFEYVILLE,Coffeyville,2020,I-Butane,IC4Imports,4.3,4.023,120.01,Light,,High
+CVR_COFFEYVILLE,Coffeyville,2020,Naphtha,NHT,1.99,1.86,56.00,Light,,High
+CVR_COFFEYVILLE,Coffeyville,2021,I-Butane,IC4Imports,1.39,1.134,120.01,Light,,High
+CVR_COFFEYVILLE,Coffeyville,2022,I-Butane,IC4Imports,1.23,0.953,120.01,Light,,High
+CVR_COFFEYVILLE,Coffeyville,2023,I-Butane,IC4Imports,2.79,2.107,120.01,Light,,High
+CVR_COFFEYVILLE,Coffeyville,2023,VGO - Low Sulphur,FCC,6.5,4.913,27.19,Heavy,0.50,Medium
+CVR_COFFEYVILLE,Coffeyville,2018,Naphtha,NHT,5.0,3.713,55.00,Light,0.20,Low
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,2024,I-Butane,IC4Imports,0.0,0.0,120.01,Light,,High
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,2017,VGO - High Sulphur,CFHT,4.28,5.498,15.41,Heavy,2.00,High
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,2018,VGO - High Sulphur,CFHT,1.31,1.973,15.41,Heavy,2.00,High
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,2019,VGO - High Sulphur,CFHT,1.58,2.815,15.41,Heavy,2.00,High
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,2020,I-Butane,IC4Imports,0.0,0.0,120.01,Light,,High
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,2020,VGO - High Sulphur,FCC,3.0,4.088,24.15,Heavy,1.60,High
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,2023,Atres - Low Sulphur,VDU,3.0,3.731,23.01,Heavy,0.37,Low
+DELEK_EL_DORADO_AR,El Dorado Lion Oil,2024,Atres - High Sulphur,VDU,2.89,3.568,9.95,Heavy,2.88,High
+XOM_BAYTOWN,Baytown,2023,VGO - High Sulphur,CFHT,18.7,3.157,24.15,Heavy,1.60,High
+XOM_BAYTOWN,Baytown,2020,VGO - High Sulphur,CFHT,8.7,1.637,24.15,Heavy,1.60,High
+XOM_BAYTOWN,Baytown,2020,VGO - Low Sulphur,FCC,4.0,0.752,27.19,Heavy,0.50,Medium
+XOM_BAYTOWN,Baytown,2021,I-Butane,IC4imports,4.79,0.906,120.01,Light,,High
+XOM_BAYTOWN,Baytown,2021,VGO - High Sulphur,CFHT,18.7,3.534,24.15,Heavy,1.60,High
+XOM_BAYTOWN,Baytown,2021,VGO - Low Sulphur,FCC,14.0,2.646,27.19,Heavy,0.50,Medium
+XOM_BAYTOWN,Baytown,2023,VGO - Low Sulphur,FCC,14.0,2.363,27.19,Heavy,0.50,Medium
+XOM_BAYTOWN,Baytown,2022,VGO - Low Sulphur,FCC,14.0,2.488,27.19,Heavy,0.50,Medium
+XOM_BAYTOWN,Baytown,2023,I-Butane,IC4imports,5.24,0.884,120.01,Light,,High
+XOM_BAYTOWN,Baytown,2020,I-Butane,IC4imports,3.79,0.713,120.01,Light,,High
+XOM_BAYTOWN,Baytown,2022,VGO - High Sulphur,CFHT,18.7,3.323,24.15,Heavy,1.60,High
+XOM_BAYTOWN,Baytown,2023,VGO - Low Sulphur,DHCU,5.0,0.844,27.19,Heavy,0.50,Medium
+XOM_BAYTOWN,Baytown,2020,Atres - High Sulphur,VDU,0.0,0.0,16.86,Heavy,3.06,High
+XOM_BAYTOWN,Baytown,2024,VGO - Low Sulphur,FCC,80.0,12.44,27.19,Heavy,0.50,Medium
+XOM_BAYTOWN,Baytown,2024,VGO - High Sulphur,CFHT,20.0,3.11,24.15,Heavy,1.60,High
+XOM_BAYTOWN,Baytown,2019,VGO - Low Sulphur,FCC,40.0,7.07,27.19,Heavy,0.50,Medium
+XOM_BAYTOWN,Baytown,2019,VGO - High Sulphur,CFHT,30.0,5.303,24.15,Heavy,1.60,High
+XOM_BAYTOWN,Baytown,2019,I-Butane,IC4Imports,7.38,1.305,120.01,Light,,High
+XOM_BAYTOWN,Baytown,2022,I-Butane,IC4imports,5.55,0.987,120.01,Light,,High
+XOM_BAYTOWN,Baytown,2017,I-Butane,IC4Imports,5.21,1.024,120.01,Light,,High
+XOM_BAYTOWN,Baytown,2019,Atres,VDU,35.0,6.186,16.86,Heavy,3.06,High
+XOM_BAYTOWN,Baytown,2018,VGO - High Sulphur,FCC,60.0,10.517,24.15,Heavy,1.60,High
+XOM_BAYTOWN,Baytown,2018,I-Butane,IC4Imports,5.32,0.933,120.01,Light,,High
+XOM_BAYTOWN,Baytown,2018,Atres,VDU,0.0,0.0,16.86,Heavy,3.06,High
+XOM_BAYTOWN,Baytown,2017,VGO - High Sulphur,FCC,8.7,1.71,20.65,Heavy,0.40,Low
+XOM_BAYTOWN,Baytown,2017,Atres,VDU,0.0,0.0,16.86,Heavy,3.06,High
+PHILLIPS_WESTLAKE,Lake Charles P66,2022,Atres - High Sulphur,VDU,6.0,2.71,16.86,Heavy,3.06,High
+PHILLIPS_WESTLAKE,Lake Charles P66,2017,Atres,VDU,10.97,4.671,16.86,Heavy,3.06,High
+PHILLIPS_WESTLAKE,Lake Charles P66,2017,VGO - Low Sulphur,RHT,2.38,1.012,24.91,Heavy,0.50,Medium
+PHILLIPS_WESTLAKE,Lake Charles P66,2018,Atres,VDU,10.0,4.141,16.86,Heavy,3.06,High
+PHILLIPS_WESTLAKE,Lake Charles P66,2018,VGO - High Sulphur,CFHT,1.5,0.621,24.91,Heavy,0.50,Medium
+PHILLIPS_WESTLAKE,Lake Charles P66,2019,Atres,VDU,25.0,9.406,16.86,Heavy,3.06,High
+PHILLIPS_WESTLAKE,Lake Charles P66,2020,Atres - High Sulphur,VDU,6.0,3.139,16.86,Heavy,3.06,High
+PHILLIPS_WESTLAKE,Lake Charles P66,2021,Atres - High Sulphur,VDU,6.0,2.555,16.86,Heavy,3.06,High
+HF_TULSA,Tulsa,2017,Atres,FCC,3.6,3.064,20.00,Heavy,2.50,High
+HF_TULSA,Tulsa,2018,Atres,FCC,3.6,3.169,20.00,Heavy,2.50,High
+HF_TULSA,Tulsa,2019,Atres,FCC,3.6,2.745,20.00,Heavy,2.50,High
+HF_TULSA,Tulsa,2020,Atres - High Sulphur,VDU,3.6,2.886,16.86,Heavy,3.06,High
+HF_TULSA,Tulsa,2024,VGO - Low Sulphur,FCC,7.0,5.979,27.19,Heavy,0.50,Medium
+HF_TULSA,Tulsa,2024,Atres - High Sulphur,VDU,2.0,1.708,9.95,Heavy,2.88,High
+TOTAL_PORT_ARTHUR,Port Arthur Total,2019,VGO - High Sulphur,CFHT,8.76,3.621,21.47,Heavy,1.84,High
+TOTAL_PORT_ARTHUR,Port Arthur Total,2017,Atres,VDU,3.46,2.174,16.86,Heavy,3.06,High
+TOTAL_PORT_ARTHUR,Port Arthur Total,2019,Atres,VDU,17.46,7.22,16.86,Heavy,3.06,High
+TOTAL_PORT_ARTHUR,Port Arthur Total,2018,VGO - High Sulphur,CFHT,4.0,1.667,21.47,Heavy,1.84,High
+TOTAL_PORT_ARTHUR,Port Arthur Total,2018,Atres,VDU,3.46,1.442,16.86,Heavy,3.06,High
+TOTAL_PORT_ARTHUR,Port Arthur Total,2017,VGO - High Sulphur,CFHT,8.76,5.501,21.47,Heavy,1.84,High
+TOTAL_PORT_ARTHUR,Port Arthur Total,2020,Atres - High Sulphur,VDU,3.46,2.611,16.86,Heavy,3.06,High
+TOTAL_PORT_ARTHUR,Port Arthur Total,2020,VGO - High Sulphur,CFHT,8.76,6.606,24.15,Heavy,1.60,High
+HF_EL_DORADO_KS,El Dorado Frontier,2024,Butane,NC4Imports,2.42,1.679,112.47,Light,,High
+HF_EL_DORADO_KS,El Dorado Frontier,2022,VGO - High Sulphur,LVGO Spl,9.0,5.919,24.15,Heavy,1.60,High
+HF_EL_DORADO_KS,El Dorado Frontier,2023,VGO - High Sulphur,LVGO Spl,5.0,3.777,24.15,Heavy,1.60,High
+HF_EL_DORADO_KS,El Dorado Frontier,2018,VGO - High Sulphur,LVGO Spl,8.0,5.43,18.00,Heavy,0.50,Medium
+HF_EL_DORADO_KS,El Dorado Frontier,2022,Butane,NC4Imports,2.12,1.391,112.47,Light,,High
+HF_EL_DORADO_KS,El Dorado Frontier,2023,Butane,NC4Imports,2.58,1.946,112.47,Light,,High
+HF_EL_DORADO_KS,El Dorado Frontier,2019,VGO - High Sulphur,LVGO Spl,6.0,4.532,18.00,Heavy,0.50,Medium
+HF_EL_DORADO_KS,El Dorado Frontier,2017,VGO - High Sulphur,LVGO Spl,8.0,5.142,18.00,Heavy,0.50,Medium
+HF_EL_DORADO_KS,El Dorado Frontier,2020,VGO - High Sulphur,LVGO Spl,8.0,6.249,24.15,Heavy,1.60,High
+HF_EL_DORADO_KS,El Dorado Frontier,2021,VGO - High Sulphur,LVGO Spl,8.0,5.815,24.15,Heavy,1.60,High
+DELEK_TYLER,Tyler,2018,I-Butane,IC4Imports,0.81,1.153,120.01,Light,,High
+DELEK_TYLER,Tyler,2019,I-Butane,IC4Imports,0.91,1.271,120.01,Light,,High
+DELEK_TYLER,Tyler,2020,I-Butane,IC4Imports,0.34,0.66,120.01,Light,,High
+DELEK_TYLER,Tyler,2021,I-Butane,IC4Imports,0.8,1.174,120.01,Light,,High
+DELEK_TYLER,Tyler,2022,I-Butane,IC4Imports,0.86,1.169,120.01,Light,,High
+DELEK_TYLER,Tyler,2023,I-Butane,IC4Imports,0.67,0.989,120.01,Light,,High
+DELEK_TYLER,Tyler,2017,I-Butane,IC4Imports,0.84,1.196,120.01,Light,,High
+DELEK_TYLER,Tyler,2024,I-Butane,IC4Imports,0.72,0.986,120.01,Light,,High
+HF_ANACORTES,Puget Sound,2022,I-Butane,IC4imports,1.39,1.254,120.01,Light,,High
+HF_ANACORTES,Puget Sound,2023,I-Butane,IC4imports,1.66,1.37,120.01,Light,,High
+HF_ANACORTES,Puget Sound,2021,I-Butane,IC4imports,1.44,1.27,120.01,Light,,High
+HF_ANACORTES,Puget Sound,2020,I-Butane,IC4imports,1.23,1.238,120.01,Light,,High
+HF_ANACORTES,Puget Sound,2017,I-Butane,IC4Imports,2.38,1.841,120.01,Light,,High
+HF_ANACORTES,Puget Sound,2018,I-Butane,IC4Imports,1.99,1.591,120.01,Light,,High
+HF_ANACORTES,Puget Sound,2019,I-Butane,IC4Imports,2.12,1.526,120.01,Light,,High
+HF_ANACORTES,Puget Sound,2024,I-Butane,IC4imports,1.5,1.529,120.01,Light,,High
+,Cheyenne,2017,I-Butane,IC4Imports,1.23,2.879,120.01,Light,,High
+,Cheyenne,2018,I-Butane,IC4Imports,1.44,3.548,120.01,Light,,High
+,Cheyenne,2019,I-Butane,IC4Imports,1.25,3.024,120.01,Light,,High
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2017,VGO - Low Sulphur,RFCC,2.5,3.851,20.00,Heavy,2.00,High
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2018,VGO - Low Sulphur,RFCC,2.5,4.183,20.00,Heavy,2.00,High
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2019,VGO - Low Sulphur,RFCC,2.5,4.049,20.00,Heavy,2.00,High
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2020,I-Butane,IC4Imports,2.68,4.435,120.01,Light,,High
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2020,VGO - Low Sulphur,RFCC,2.5,4.135,27.19,Heavy,0.50,Medium
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2021,I-Butane,IC4Imports,2.58,3.955,120.01,Light,,High
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2021,VGO - Low Sulphur,RFCC,2.5,3.837,27.19,Heavy,0.50,Medium
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2022,I-Butane,IC4Imports,2.69,4.428,120.01,Light,,High
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2022,VGO - Low Sulphur,RFCC,2.5,4.118,27.19,Heavy,0.50,Medium
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2023,I-Butane,IC4Imports,0.98,1.694,120.01,Light,,High
+MARATHON_SALT_LAKE_CITY,Salt Lake City Marathon,2024,I-Butane,IC4Imports,1.05,1.688,120.01,Light,,High
+PHILLIPS_PONCA_CITY,Ponca City,2021,VGO - High Sulphur,CFHT,5.0,2.587,24.15,Heavy,1.60,High
+PHILLIPS_PONCA_CITY,Ponca City,2023,VGO - High Sulphur,CFHT,5.0,2.262,24.15,Heavy,1.60,High
+PHILLIPS_PONCA_CITY,Ponca City,2023,I-Butane,IC4imports,2.6,1.177,120.01,Light,,High
+PHILLIPS_PONCA_CITY,Ponca City,2022,I-Butane,IC4imports,2.64,1.317,120.01,Light,,High
+PHILLIPS_PONCA_CITY,Ponca City,2021,I-Butane,IC4imports,2.47,1.277,120.01,Light,,High
+PHILLIPS_PONCA_CITY,Ponca City,2020,VGO - High Sulphur,CFHT,5.0,2.741,24.15,Heavy,1.60,High
+PHILLIPS_PONCA_CITY,Ponca City,2020,I-Butane,IC4imports,2.1,1.149,120.01,Light,,High
+PHILLIPS_PONCA_CITY,Ponca City,2019,I-Butane,IC4Imports,2.08,0.929,120.01,Light,,High
+PHILLIPS_PONCA_CITY,Ponca City,2018,I-Butane,IC4Imports,2.38,1.076,120.01,Light,,High
+PHILLIPS_PONCA_CITY,Ponca City,2017,I-Butane,IC4Imports,2.18,1.039,120.01,Light,,High
+PHILLIPS_PONCA_CITY,Ponca City,2022,VGO - High Sulphur,CFHT,5.0,2.494,24.15,Heavy,1.60,High
+PHILLIPS_PONCA_CITY,Ponca City,2024,VGO - High Sulphur,CFHT,5.0,2.449,24.15,Heavy,1.60,High
+PHILLIPS_PONCA_CITY,Ponca City,2024,I-Butane,IC4imports,1.95,0.954,120.01,Light,,High
+VALERO_LOS_ANGELES,Wilmington Valero,2019,VGO - Low Sulphur,CFHT,27.04,25.663,20.65,Heavy,0.40,Low
+VALERO_LOS_ANGELES,Wilmington Valero,2023,I-Butane,IC4imports,1.89,1.994,120.01,Light,,High
+VALERO_LOS_ANGELES,Wilmington Valero,2022,VGO - High Sulphur,CFHT,10.0,11.8,24.15,Heavy,1.60,High
+VALERO_LOS_ANGELES,Wilmington Valero,2022,I-Butane,IC4imports,1.66,1.962,120.01,Light,,High
+VALERO_LOS_ANGELES,Wilmington Valero,2021,VGO - High Sulphur,CFHT,10.0,12.687,24.15,Heavy,1.60,High
+VALERO_LOS_ANGELES,Wilmington Valero,2021,I-Butane,IC4imports,1.64,2.077,120.01,Light,,High
+VALERO_LOS_ANGELES,Wilmington Valero,2020,I-Butane,IC4imports,1.91,1.976,120.01,Light,,High
+VALERO_LOS_ANGELES,Wilmington Valero,2023,VGO - High Sulphur,CFHT,10.0,10.578,24.15,Heavy,1.60,High
+VALERO_LOS_ANGELES,Wilmington Valero,2019,I-Butane,IC4Imports,7.51,7.127,120.01,Light,,High
+VALERO_LOS_ANGELES,Wilmington Valero,2018,VGO - Low Sulphur,CFHT,27.04,23.981,20.65,Heavy,0.40,Low
+VALERO_LOS_ANGELES,Wilmington Valero,2018,I-Butane,IC4Imports,8.08,7.166,120.01,Light,,High
+VALERO_LOS_ANGELES,Wilmington Valero,2017,VGO - Low Sulphur,CFHT,27.04,29.607,20.65,Heavy,0.40,Low
+VALERO_LOS_ANGELES,Wilmington Valero,2017,I-Butane,IC4Imports,2.0,2.189,120.01,Light,,High
+VALERO_LOS_ANGELES,Wilmington Valero,2020,VGO - Low Sulphur,CFHT,27.04,27.947,27.19,Heavy,0.50,Medium
+VALERO_LOS_ANGELES,Wilmington Valero,2024,I-Butane,IC4imports,1.88,2.002,120.01,Light,,High
+VALERO_LOS_ANGELES,Wilmington Valero,2024,VGO - High Sulphur,CFHT,10.0,10.678,24.15,Heavy,1.60,High
+NCRA_MCPHERSON,McPherson,2023,VGO - Low Sulphur,DHCU,10.0,8.656,27.19,Heavy,0.50,Medium
+NCRA_MCPHERSON,McPherson,2022,VGO - Low Sulphur,DHCU,10.0,8.42,27.19,Heavy,0.50,Medium
+NCRA_MCPHERSON,McPherson,2024,VGO - Low Sulphur,FCC,6.0,4.977,27.19,Heavy,0.50,Medium
+VALERO_ARDMORE,Ardmore,2017,I-Butane,IC4Imports,1.09,1.341,120.01,Light,,High
+VALERO_ARDMORE,Ardmore,2019,I-Butane,IC4Imports,0.97,1.244,120.01,Light,,High
+VALERO_ARDMORE,Ardmore,2020,I-Butane,IC4imports,0.02,0.032,120.01,Light,,High
+VALERO_ARDMORE,Ardmore,2021,I-Butane,IC4imports,0.03,0.032,120.01,Light,,High
+VALERO_ARDMORE,Ardmore,2022,I-Butane,IC4imports,0.01,0.012,120.01,Light,,High
+VALERO_ARDMORE,Ardmore,2023,I-Butane,IC4imports,0.01,0.012,120.01,Light,,High
+VALERO_ARDMORE,Ardmore,2024,I-Butane,IC4imports,0.15,0.194,120.01,Light,,High
+VALERO_ARDMORE,Ardmore,2018,I-Butane,IC4Imports,1.21,1.423,120.01,Light,,High
+PBF_MARTINEZ,Martinez PBF,2019,VGO - Low Sulphur,DHCU,12.49,7.945,20.65,Heavy,2.50,High
+PBF_MARTINEZ,Martinez PBF,2023,VGO - Low Sulphur,FCC,30.0,21.203,27.19,Heavy,0.50,Medium
+PBF_MARTINEZ,Martinez PBF,2023,I-Butane,IC4imports,2.14,1.514,120.01,Light,,High
+PBF_MARTINEZ,Martinez PBF,2022,VGO - Low Sulphur,FCC,20.0,13.452,27.19,Heavy,0.50,Medium
+PBF_MARTINEZ,Martinez PBF,2022,I-Butane,IC4imports,3.76,2.526,120.01,Light,,High
+PBF_MARTINEZ,Martinez PBF,2021,VGO - Low Sulphur,FCC,24.0,16.928,27.19,Heavy,0.50,Medium
+PBF_MARTINEZ,Martinez PBF,2021,I-Butane,IC4imports,3.59,2.534,120.01,Light,,High
+PBF_MARTINEZ,Martinez PBF,2020,I-Butane,IC4imports,4.19,3.532,120.01,Light,,High
+PBF_MARTINEZ,Martinez PBF,2018,VGO - Low Sulphur,DHCU,12.49,8.795,20.65,Heavy,2.50,High
+PBF_MARTINEZ,Martinez PBF,2017,VGO - Low Sulphur,DHCU,12.49,8.511,20.65,Heavy,2.50,High
+PBF_MARTINEZ,Martinez PBF,2020,VGO - Low Sulphur,FCC,12.49,10.541,27.19,Heavy,0.50,Medium
+PBF_MARTINEZ,Martinez PBF,2024,I-Butane,IC4imports,1.77,1.101,120.01,Light,,High
+PBF_MARTINEZ,Martinez PBF,2024,VGO - Low Sulphur,FCC,37.0,22.948,27.19,Heavy,0.50,Medium
+EXXONMOBIL_BEAUMONT,Beaumont,2019,Naphtha,CCR Chem,25.0,6.942,56.00,Light,,High
+EXXONMOBIL_BEAUMONT,Beaumont,2022,VGO - Low Sulphur,LVGO Spl,20.0,5.23,27.19,Heavy,0.50,Medium
+EXXONMOBIL_BEAUMONT,Beaumont,2022,Atres - High Sulphur,VDU,2.27,0.594,16.86,Heavy,3.06,High
+EXXONMOBIL_BEAUMONT,Beaumont,2021,VGO - Low Sulphur,LVGO Spl,10.06,2.838,27.19,Heavy,0.50,Medium
+EXXONMOBIL_BEAUMONT,Beaumont,2021,Atres - High Sulphur,VDU,2.27,0.641,16.86,Heavy,3.06,High
+EXXONMOBIL_BEAUMONT,Beaumont,2020,VGO - Low Sulphur,LVGO Spl,1.06,0.305,27.19,Heavy,0.50,Medium
+EXXONMOBIL_BEAUMONT,Beaumont,2020,Naphtha,CCR Chem,32.43,9.338,56.00,Light,,High
+EXXONMOBIL_BEAUMONT,Beaumont,2020,Atres - High Sulphur,VDU,2.27,0.654,16.86,Heavy,3.06,High
+EXXONMOBIL_BEAUMONT,Beaumont,2019,VGO - Low Sulphur,LVGO Spl,15.0,4.165,27.19,Heavy,0.50,Medium
+EXXONMOBIL_BEAUMONT,Beaumont,2019,Atres,VDU,2.27,0.631,16.86,Heavy,3.06,High
+EXXONMOBIL_BEAUMONT,Beaumont,2018,VGO - Low Sulphur,FCC,1.06,0.306,20.65,Heavy,0.40,Low
+EXXONMOBIL_BEAUMONT,Beaumont,2017,VGO - Low Sulphur,FCC,1.06,0.307,20.65,Heavy,0.40,Low
+EXXONMOBIL_BEAUMONT,Beaumont,2017,Atres,VDU,2.27,0.658,16.86,Heavy,3.06,High
+EXXONMOBIL_BEAUMONT,Beaumont,2018,Atres,VDU,2.27,0.657,16.86,Heavy,3.06,High
+PBF_CHALMETTE,Chalmette,2021,Atres - High Sulphur,VDU,10.0,6.173,16.86,Heavy,3.06,High
+PBF_CHALMETTE,Chalmette,2024,Atres - High Sulphur,VDU,30.0,18.595,16.86,Heavy,3.06,High
+PBF_CHALMETTE,Chalmette,2023,VGO - Low Sulphur,FCC,10.0,5.806,27.19,Heavy,0.50,Medium
+PBF_CHALMETTE,Chalmette,2023,Atres - High Sulphur,VDU,20.0,11.612,16.86,Heavy,3.06,High
+PBF_CHALMETTE,Chalmette,2022,Butane,NC4Imports,2.54,1.562,112.47,Light,,High
+PBF_CHALMETTE,Chalmette,2022,Atres - High Sulphur,VDU,10.0,6.153,16.86,Heavy,3.06,High
+PBF_CHALMETTE,Chalmette,2021,Butane,NC4import,3.07,1.896,112.47,Light,,High
+PBF_CHALMETTE,Chalmette,2023,Butane,NC4Imports,2.87,1.666,112.47,Light,,High
+PBF_CHALMETTE,Chalmette,2020,VGO - Low Sulphur,CFHT,9.93,7.947,27.19,Heavy,0.50,Medium
+PBF_CHALMETTE,Chalmette,2019,VGO - Low Sulphur,CFHT,9.93,5.078,20.65,Heavy,0.40,Low
+PBF_CHALMETTE,Chalmette,2018,VGO - Low Sulphur,CFHT,2.0,1.066,20.65,Heavy,0.40,Low
+PBF_CHALMETTE,Chalmette,2017,VGO - Low Sulphur,CFHT,9.93,6.035,20.65,Heavy,0.40,Low
+PBF_CHALMETTE,Chalmette,2024,Butane,NC4Imports,2.03,1.26,112.47,Light,,High
+PBF_CHALMETTE,Chalmette,2021,VGO - Low Sulphur,CFHT,29.5,18.209,27.19,Heavy,0.50,Medium
+PEMEX_DEER_PARK,Deer Park,2024,I-Butane,IC4imports,4.79,1.688,120.01,Light,,High
+PEMEX_DEER_PARK,Deer Park,2024,VGO - High Sulphur,FCC,6.0,2.117,24.15,Heavy,1.60,High
+PEMEX_DEER_PARK,Deer Park,2020,I-Butane,IC4imports,0.4,0.167,120.01,Light,,High
+PEMEX_DEER_PARK,Deer Park,2020,VGO - High Sulphur,FCC,20.0,8.285,24.15,Heavy,1.60,High
+PEMEX_DEER_PARK,Deer Park,2021,I-Butane,IC4imports,0.98,0.377,120.01,Light,,High
+PEMEX_DEER_PARK,Deer Park,2021,VGO - High Sulphur,FCC,10.0,3.833,24.15,Heavy,1.60,High
+PEMEX_DEER_PARK,Deer Park,2022,I-Butane,IC4imports,1.4,0.502,120.01,Light,,High
+PEMEX_DEER_PARK,Deer Park,2022,VGO - High Sulphur,FCC,15.0,5.369,24.15,Heavy,1.60,High
+PEMEX_DEER_PARK,Deer Park,2023,I-Butane,IC4imports,4.12,1.52,120.01,Light,,High
+PEMEX_DEER_PARK,Deer Park,2019,VGO - High Sulphur,CFHT,34.34,12.491,24.15,Heavy,1.60,High
+EXXONMOBIL_JOLIET,Joliet,2018,I-Butane,IC4Imports,5.87,2.204,120.01,Light,,High
+EXXONMOBIL_JOLIET,Joliet,2023,I-Butane,IC4Imports,4.35,2.142,120.01,Light,,High
+EXXONMOBIL_JOLIET,Joliet,2021,I-Butane,IC4Imports,5.54,2.264,120.01,Light,,High
+EXXONMOBIL_JOLIET,Joliet,2022,I-Butane,IC4Imports,5.17,2.185,120.01,Light,,High
+EXXONMOBIL_JOLIET,Joliet,2020,I-Butane,IC4Imports,4.76,2.018,120.01,Light,,High
+EXXONMOBIL_JOLIET,Joliet,2019,I-Butane,IC4Imports,5.05,2.046,120.01,Light,,High
+EXXONMOBIL_JOLIET,Joliet,2017,I-Butane,IC4Imports,4.47,1.735,120.01,Light,,High
+EXXONMOBIL_JOLIET,Joliet,2024,I-Butane,IC4Imports,6.02,2.165,120.01,Light,,High
+MARATHON_MANDAN,Mandan,2021,I-Butane,IC4Imports,0.96,1.365,120.01,Light,,High
+MARATHON_MANDAN,Mandan,2023,I-Butane,IC4Imports,1.71,2.304,120.01,Light,,High
+MARATHON_MANDAN,Mandan,2022,VGO - Low Sulphur,RFCC,2.5,3.251,27.19,Heavy,0.50,Medium
+MARATHON_MANDAN,Mandan,2021,VGO - Low Sulphur,RFCC,2.5,3.555,27.19,Heavy,0.50,Medium
+MARATHON_MANDAN,Mandan,2020,VGO - Low Sulphur,RFCC,2.5,3.839,27.19,Heavy,0.50,Medium
+MARATHON_MANDAN,Mandan,2020,I-Butane,IC4Imports,1.12,1.714,120.01,Light,,High
+MARATHON_MANDAN,Mandan,2019,VGO - Low Sulphur,RFCC,2.5,3.601,23.00,Heavy,2.00,High
+MARATHON_MANDAN,Mandan,2019,I-Butane,IC4Imports,1.0,1.441,120.01,Light,,High
+MARATHON_MANDAN,Mandan,2018,VGO - Low Sulphur,RFCC,2.5,3.284,23.00,Heavy,2.00,High
+MARATHON_MANDAN,Mandan,2018,I-Butane,IC4Imports,0.82,1.078,120.01,Light,,High
+MARATHON_MANDAN,Mandan,2017,VGO - Low Sulphur,RFCC,2.5,3.894,23.00,Heavy,2.00,High
+MARATHON_MANDAN,Mandan,2022,I-Butane,IC4Imports,0.78,1.02,120.01,Light,,High
+MARATHON_MANDAN,Mandan,2017,I-Butane,IC4Imports,1.22,1.899,120.01,Light,,High
+MARATHON_MANDAN,Mandan,2024,I-Butane,IC4Imports,1.43,2.06,120.01,Light,,High
+ALON_BIG_SPRINGS,Big Spring,2023,Atres - Low Sulphur,VDU,3.0,4.669,23.01,Heavy,0.37,Low
+ALON_BIG_SPRINGS,Big Spring,2021,I-Butane,IC4Imports,0.77,1.105,120.01,Light,,High
+ALON_BIG_SPRINGS,Big Spring,2023,I-Butane,IC4Imports,1.01,1.574,120.01,Light,,High
+ALON_BIG_SPRINGS,Big Spring,2022,I-Butane,IC4Imports,0.68,1.123,120.01,Light,,High
+ALON_BIG_SPRINGS,Big Spring,2019,I-Butane,IC4Imports,0.8,1.1,120.01,Light,,High
+ALON_BIG_SPRINGS,Big Spring,2018,I-Butane,IC4Imports,0.76,1.075,120.01,Light,,High
+ALON_BIG_SPRINGS,Big Spring,2017,I-Butane,IC4Imports,0.9,1.272,120.01,Light,,High
+ALON_BIG_SPRINGS,Big Spring,2024,I-Butane,IC4Imports,0.54,0.803,120.01,Light,,High
+ALON_BIG_SPRINGS,Big Spring,2020,I-Butane,IC4Imports,0.69,1.103,120.01,Light,,High
+VALERO_SAINT_CHARLES,St. Charles,2020,VGO - High Sulphur,FCC,59.8,21.709,24.15,Heavy,1.60,High
+VALERO_SAINT_CHARLES,St. Charles,2021,Atres - High Sulphur,VDU,90.0,33.865,16.86,Heavy,3.06,High
+VALERO_SAINT_CHARLES,St. Charles,2023,VGO - High Sulphur,FCC,54.0,21.14,24.15,Heavy,1.60,High
+VALERO_SAINT_CHARLES,St. Charles,2023,I-Butane,IC4imports,3.9,1.526,120.01,Light,,High
+VALERO_SAINT_CHARLES,St. Charles,2023,Atres - High Sulphur,VDU,90.0,35.233,16.86,Heavy,3.06,High
+VALERO_SAINT_CHARLES,St. Charles,2022,VGO - High Sulphur,FCC,57.0,23.215,24.15,Heavy,1.60,High
+VALERO_SAINT_CHARLES,St. Charles,2022,Atres - High Sulphur,VDU,90.0,36.655,16.86,Heavy,3.06,High
+VALERO_SAINT_CHARLES,St. Charles,2019,I-Butane,IC4Imports,2.51,0.927,120.01,Light,,High
+VALERO_SAINT_CHARLES,St. Charles,2021,VGO - High Sulphur,FCC,57.0,21.448,24.15,Heavy,1.60,High
+VALERO_SAINT_CHARLES,St. Charles,2022,I-Butane,IC4imports,4.54,1.85,120.01,Light,,High
+VALERO_SAINT_CHARLES,St. Charles,2018,VGO - High Sulphur,VGO2 Spl,59.8,17.948,19.00,Heavy,1.00,Medium
+VALERO_SAINT_CHARLES,St. Charles,2021,I-Butane,IC4imports,4.66,1.753,120.01,Light,,High
+VALERO_SAINT_CHARLES,St. Charles,2017,Atres,VDU,51.69,17.362,16.86,Heavy,3.06,High
+VALERO_SAINT_CHARLES,St. Charles,2017,I-Butane,IC4Imports,3.67,1.232,120.01,Light,,High
+VALERO_SAINT_CHARLES,St. Charles,2017,VGO - High Sulphur,VGO2 Spl,59.8,20.084,19.00,Heavy,1.00,Medium
+VALERO_SAINT_CHARLES,St. Charles,2018,Atres,VDU,71.69,21.519,16.86,Heavy,3.06,High
+VALERO_SAINT_CHARLES,St. Charles,2020,Atres - High Sulphur,VDU,51.69,18.767,16.86,Heavy,3.06,High
+VALERO_SAINT_CHARLES,St. Charles,2018,I-Butane,IC4Imports,4.28,1.283,120.01,Light,,High
+VALERO_SAINT_CHARLES,St. Charles,2020,I-Butane,IC4imports,3.96,1.436,120.01,Light,,High
+VALERO_SAINT_CHARLES,St. Charles,2019,Atres,VDU,65.0,24.021,16.86,Heavy,3.06,High
+VALERO_SAINT_CHARLES,St. Charles,2019,VGO - High Sulphur,VGO2 Spl,25.0,9.239,19.00,Heavy,1.00,Medium
+VALERO_SAINT_CHARLES,St. Charles,2024,Atres - High Sulphur,VDU,90.0,37.228,16.86,Heavy,3.06,High
+VALERO_SAINT_CHARLES,St. Charles,2024,VGO - High Sulphur,FCC,30.0,12.409,24.15,Heavy,1.60,High
+VALERO_SAINT_CHARLES,St. Charles,2024,I-Butane,IC4imports,3.15,1.302,120.01,Light,,High
+MPC_GALV_BAY,Galveston Bay,2018,I-Butane,IC4Imports,6.35,0.942,120.01,Light,,High
+MPC_GALV_BAY,Galveston Bay,2020,I-Butane,IC4Imports,5.83,1.094,120.01,Light,,High
+MPC_GALV_BAY,Galveston Bay,2023,I-Butane,IC4Imports,5.89,1.03,120.01,Light,,High
+MPC_GALV_BAY,Galveston Bay,2022,VGO - High Sulphur,LVGO Spl,30.0,5.313,24.15,Heavy,1.60,High
+MPC_GALV_BAY,Galveston Bay,2022,I-Butane,IC4Imports,6.71,1.188,120.01,Light,,High
+MPC_GALV_BAY,Galveston Bay,2021,VGO - High Sulphur,LVGO Spl,30.0,5.556,24.15,Heavy,1.60,High
+MPC_GALV_BAY,Galveston Bay,2023,VGO - High Sulphur,LVGO Spl,38.0,6.652,24.15,Heavy,1.60,High
+MPC_GALV_BAY,Galveston Bay,2021,Naphtha,CCR Chem,75.0,13.89,56.00,Light,,High
+MPC_GALV_BAY,Galveston Bay,2021,I-Butane,IC4Imports,-19.32,-3.578,120.01,Light,,High
+MPC_GALV_BAY,Galveston Bay,2020,VGO - High Sulphur,LVGO Spl,17.16,3.216,24.15,Heavy,1.60,High
+MPC_GALV_BAY,Galveston Bay,2020,Naphtha,CCRChem,49.8,9.335,56.00,Light,,High
+MPC_GALV_BAY,Galveston Bay,2019,VGO - High Sulphur,LVGO Spl,57.0,8.491,24.91,Heavy,1.50,High
+MPC_GALV_BAY,Galveston Bay,2019,Naphtha,CCR,34.3,5.11,70.64,Light,1.10,Medium
+MPC_GALV_BAY,Galveston Bay,2019,I-Butane,IC4Imports,3.56,0.531,120.01,Light,,High
+MPC_GALV_BAY,Galveston Bay,2024,VGO - High Sulphur,LVGO Spl,33.0,5.47,24.15,Heavy,1.60,High
+MPC_GALV_BAY,Galveston Bay,2018,Naphtha,CCR,45.0,6.679,70.64,Light,1.10,Medium
+MPC_GALV_BAY,Galveston Bay,2017,VGO - High Sulphur,LVGO Spl,47.16,8.445,24.91,Heavy,1.50,High
+MPC_GALV_BAY,Galveston Bay,2017,Naphtha,CCR,49.3,8.829,70.64,Light,1.10,Medium
+MPC_GALV_BAY,Galveston Bay,2017,I-Butane,IC4Imports,3.7,0.663,120.01,Light,,High
+MPC_GALV_BAY,Galveston Bay,2024,I-Butane,IC4Imports,17.3,2.867,120.01,Light,,High
+MPC_GALV_BAY,Galveston Bay,2018,VGO - High Sulphur,LVGO Spl,28.0,4.156,24.91,Heavy,1.50,High
+CENOVUS_WOOD_RIVER,Wood River,2021,I-Butane,IC4imports,2.88,0.888,120.01,Light,,High
+CENOVUS_WOOD_RIVER,Wood River,2023,VGO - Low Sulphur,FCC,17.0,5.124,27.19,Heavy,0.50,Medium
+CENOVUS_WOOD_RIVER,Wood River,2023,I-Butane,IC4imports,3.31,0.998,120.01,Light,,High
+CENOVUS_WOOD_RIVER,Wood River,2022,VGO - Low Sulphur,FCC,20.0,6.153,27.19,Heavy,0.50,Medium
+CENOVUS_WOOD_RIVER,Wood River,2022,I-Butane,IC4imports,2.34,0.72,120.01,Light,,High
+CENOVUS_WOOD_RIVER,Wood River,2021,VGO - Low Sulphur,FCC,20.0,6.17,27.19,Heavy,0.50,Medium
+CENOVUS_WOOD_RIVER,Wood River,2020,I-Butane,IC4imports,2.27,0.741,120.01,Light,,High
+CENOVUS_WOOD_RIVER,Wood River,2019,I-Butane,IC4Imports,3.33,0.915,120.01,Light,,High
+CENOVUS_WOOD_RIVER,Wood River,2017,I-Butane,IC4Imports,1.6,0.502,120.01,Light,,High
+CENOVUS_WOOD_RIVER,Wood River,2020,VGO - Low Sulphur,FCC,20.0,6.525,27.19,Heavy,0.50,Medium
+CENOVUS_WOOD_RIVER,Wood River,2018,I-Butane,IC4Imports,2.52,0.821,120.01,Light,,High
+CENOVUS_WOOD_RIVER,Wood River,2024,VGO - Low Sulphur,FCC,10.0,2.637,27.19,Heavy,0.50,Medium
+CENOVUS_WOOD_RIVER,Wood River,2024,I-Butane,IC4imports,1.78,0.47,120.01,Light,,High
+CVR_WYNNEWOOD,Wynnewood,2020,I-Butane,IC4Imports,1.8,2.467,120.01,Light,,High
+CVR_WYNNEWOOD,Wynnewood,2023,Refined Veg Oils,HVOHT,5.53,7.343,23.99,Heavy,,High
+CVR_WYNNEWOOD,Wynnewood,2023,I-Butane,IC4Imports,1.5,1.999,120.01,Light,,High
+CVR_WYNNEWOOD,Wynnewood,2022,Refined Veg Oils,HVOHT,3.0,4.488,23.99,Heavy,,High
+CVR_WYNNEWOOD,Wynnewood,2022,I-Butane,IC4Imports,0.92,1.369,120.01,Light,,High
+CVR_WYNNEWOOD,Wynnewood,2017,I-Butane,IC4Imports,2.14,2.814,120.01,Light,,High
+CVR_WYNNEWOOD,Wynnewood,2020,VGO - Low Sulphur,FCC,0.51,0.696,27.19,Heavy,0.50,Medium
+CVR_WYNNEWOOD,Wynnewood,2019,VGO - Low Sulphur,FCC,3.51,4.448,24.00,Heavy,2.00,High
+CVR_WYNNEWOOD,Wynnewood,2019,I-Butane,IC4Imports,2.19,2.77,120.01,Light,,High
+CVR_WYNNEWOOD,Wynnewood,2018,VGO - Low Sulphur,FCC,3.5,4.485,24.00,Heavy,2.00,High
+CVR_WYNNEWOOD,Wynnewood,2018,I-Butane,IC4Imports,1.99,2.549,120.01,Light,,High
+CVR_WYNNEWOOD,Wynnewood,2017,VGO - Low Sulphur,FCC,0.61,0.801,24.00,Heavy,2.00,High
+CVR_WYNNEWOOD,Wynnewood,2021,I-Butane,IC4Imports,0.42,0.57,120.01,Light,,High
+CVR_WYNNEWOOD,Wynnewood,2024,Refined Veg Oils,HVOHT,5.53,8.826,23.99,Heavy,,High
+CVR_WYNNEWOOD,Wynnewood,2024,I-Butane,IC4Imports,0.77,1.224,120.01,Light,,High
+PBF_MARTINEZ,Martinez Marathon,2017,VGO - High Sulphur,LVGO Spl,10.03,6.643,20.65,Heavy,2.40,High
+PBF_MARTINEZ,Martinez Marathon,2018,VGO - High Sulphur,LVGO Spl,10.03,6.496,20.65,Heavy,2.40,High
+PBF_MARTINEZ,Martinez Marathon,2019,VGO - High Sulphur,LVGO Spl,10.03,7.24,20.65,Heavy,2.40,High
+PLACID_PORT_ALLEN,Port Allen,2020,VGO - High Sulphur,FCC,8.04,10.633,24.15,Heavy,1.60,High
+PLACID_PORT_ALLEN,Port Allen,2017,I-Butane,IC4Imports,1.1,1.384,120.01,Light,,High
+PLACID_PORT_ALLEN,Port Allen,2017,VGO - High Sulphur,FCC,8.04,10.096,20.65,Heavy,,High
+PLACID_PORT_ALLEN,Port Allen,2018,I-Butane,IC4Imports,1.98,2.245,120.01,Light,,High
+PLACID_PORT_ALLEN,Port Allen,2018,VGO - High Sulphur,FCC,7.5,8.527,20.65,Heavy,,High
+PLACID_PORT_ALLEN,Port Allen,2019,I-Butane,IC4Imports,1.58,1.977,120.01,Light,,High
+PLACID_PORT_ALLEN,Port Allen,2019,VGO - High Sulphur,FCC,6.0,7.481,20.65,Heavy,,High
+PLACID_PORT_ALLEN,Port Allen,2020,I-Butane,IC4Imports,1.54,2.034,120.01,Light,,High
+PLACID_PORT_ALLEN,Port Allen,2021,I-Butane,IC4Imports,1.81,2.449,120.01,Light,,High
+PLACID_PORT_ALLEN,Port Allen,2023,I-Butane,IC4Imports,1.79,2.343,120.01,Light,,High
+PLACID_PORT_ALLEN,Port Allen,2022,I-Butane,IC4Imports,1.74,2.309,120.01,Light,,High
+PLACID_PORT_ALLEN,Port Allen,2024,I-Butane,IC4Imports,1.63,2.242,120.01,Light,,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2023,Atres - High Sulphur,VDU,22.0,3.973,16.86,Heavy,3.06,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2020,I-Butane,IC4imports,8.37,1.79,120.01,Light,,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2020,VGO - High Sulphur,FCC,14.33,3.064,24.15,Heavy,1.60,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2023,VGO - High Sulphur,FCC,14.33,2.588,24.15,Heavy,1.60,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2021,Atres - High Sulphur,VDU,2.59,0.5,16.86,Heavy,3.06,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2021,I-Butane,IC4imports,6.85,1.321,120.01,Light,,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2022,Atres - High Sulphur,VDU,22.0,3.779,16.86,Heavy,3.06,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2020,Atres - High Sulphur,VDU,2.59,0.554,16.86,Heavy,3.06,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2022,VGO - High Sulphur,FCC,14.33,2.462,24.15,Heavy,1.60,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2018,Atres,VDU,20.0,3.491,16.86,Heavy,3.06,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2022,I-Butane,IC4imports,6.18,1.062,120.01,Light,,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2021,VGO - High Sulphur,FCC,14.33,2.766,24.15,Heavy,1.60,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2019,VGO - High Sulphur,FCC,50.0,9.005,20.65,Heavy,0.40,Low
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2019,I-Butane,IC4Imports,4.03,0.726,120.01,Light,,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2019,Atres,VDU,35.0,6.303,16.86,Heavy,3.06,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2018,I-Butane,IC4Imports,2.09,0.364,120.01,Light,,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2024,VGO - High Sulphur,FCC,35.0,5.818,24.15,Heavy,1.60,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2024,Atres - High Sulphur,VDU,38.0,6.316,16.86,Heavy,3.06,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2024,I-Butane,IC4imports,6.44,1.071,120.01,Light,,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2023,I-Butane,IC4imports,6.71,1.211,120.01,Light,,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2017,VGO - High Sulphur,FCC,14.33,2.853,20.65,Heavy,0.40,Low
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2017,I-Butane,IC4Imports,7.75,1.542,120.01,Light,,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2017,Atres,AtRes Spl,2.59,0.516,16.86,Heavy,3.06,High
+EXXONMOBIL_BATON_ROUGE,Baton Rouge,2018,VGO - High Sulphur,FCC,50.0,8.728,20.65,Heavy,0.40,Low
+MARATHON_CANTON,Canton,2021,I-Butane,IC4Imports,1.66,1.772,120.01,Light,,High
+MARATHON_CANTON,Canton,2024,I-Butane,IC4Imports,1.45,1.444,120.01,Light,,High
+MARATHON_CANTON,Canton,2017,I-Butane,IC4Imports,2.23,2.299,120.01,Light,,High
+MARATHON_CANTON,Canton,2018,I-Butane,IC4Imports,2.47,2.345,120.01,Light,,High
+MARATHON_CANTON,Canton,2023,I-Butane,IC4Imports,2.01,2.138,120.01,Light,,High
+MARATHON_CANTON,Canton,2020,I-Butane,IC4Imports,1.8,2.08,120.01,Light,,High
+MARATHON_CANTON,Canton,2022,I-Butane,IC4Imports,2.25,2.29,120.01,Light,,High
+MARATHON_CANTON,Canton,2019,I-Butane,IC4Imports,2.0,2.191,120.01,Light,,High
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,2022,Butane,NC4Imports,0.9,1.673,112.47,Light,,High
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,2023,Butane,NC4Imports,0.34,0.628,112.47,Light,,High
+CHEVRON_SALT_LAKE_CITY,Salt Lake City Chevron,2024,Butane,NC4Imports,0.48,0.975,112.47,Light,,High
+BP_FERNDALE,Cherry Point,2021,HVO Feedstock,HVOHT,2.7,1.289,23.99,Heavy,,High
+BP_FERNDALE,Cherry Point,2022,Crude Animal Fats,HVOHT,3.26,1.441,23.99,Heavy,,High
+BP_FERNDALE,Cherry Point,2024,Crude UCO,HVOHT,0.61,0.256,23.99,Heavy,,High
+BP_FERNDALE,Cherry Point,2022,Crude UCO,HVOHT,0.61,0.269,23.99,Heavy,,High
+BP_FERNDALE,Cherry Point,2023,Crude Animal Fats,HVOHT,3.26,1.5,23.99,Heavy,,High
+BP_FERNDALE,Cherry Point,2023,Crude UCO,HVOHT,0.61,0.28,23.99,Heavy,,High
+BP_FERNDALE,Cherry Point,2024,Crude Animal Fats,HVOHT,3.26,1.369,23.99,Heavy,,High
+BP_FERNDALE,Cherry Point,2017,Atres,VDU,2.0,0.933,16.86,Heavy,3.06,High
+VALERO_SUNRAY,McKee,2023,VGO - High Sulphur,FCC,16.0,8.224,24.15,Heavy,1.60,High
+VALERO_SUNRAY,McKee,2022,VGO - High Sulphur,FCC,19.0,10.804,24.15,Heavy,1.60,High
+VALERO_SUNRAY,McKee,2021,VGO - High Sulphur,FCC,19.0,9.791,24.15,Heavy,1.60,High
+VALERO_SUNRAY,McKee,2020,VGO - High Sulphur,FCC,20.0,11.574,24.15,Heavy,1.60,High
+PBF_TOLEDO,Toledo PBF,2021,VGO - High Sulphur,FCC,7.0,5.076,24.15,Heavy,1.60,High
+PBF_TOLEDO,Toledo PBF,2022,VGO - High Sulphur,FCC,7.0,4.634,24.15,Heavy,1.60,High
+PBF_TOLEDO,Toledo PBF,2023,VGO - High Sulphur,RFCC,2.0,1.474,24.15,Heavy,1.60,High
+PBF_TOLEDO,Toledo PBF,2024,VGO - High Sulphur,RFCC,10.0,6.636,24.15,Heavy,1.60,High
+HUNT_TUSCALOOSA,Tuscaloosa,2018,VacResid,Coker,12.0,23.095,7.38,Heavy,2.78,High
+HUNT_TUSCALOOSA,Tuscaloosa,2019,VacResid,VacResid Spl,25.0,36.227,7.38,Heavy,2.78,High
+,Philadelphia,2017,I-Butane,IC4Imports,1.55,0.49,120.01,Light,,High
+,Philadelphia,2017,Naphtha,REF,5.0,1.583,57.52,Light,0.00,Low
+,Philadelphia,2018,I-Butane,IC4Imports,2.68,0.954,120.01,Light,,High
+,Philadelphia,2018,Naphtha,REF,5.0,1.781,57.52,Light,0.00,Low
+MPC_GALV_BAY,Texas City Marathon,2017,I-Butane,IC4Imports,4.35,4.331,120.01,Light,,High
+MPC_GALV_BAY,Texas City Marathon,2017,VGO - Low Sulphur,FCC,15.28,15.197,24.91,Heavy,0.09,Low
+,Kapolei Island Energy,2018,VGO - Low Sulphur,FCC,0.55,1.215,23.00,Heavy,0.50,Medium
+,Kapolei Island Energy,2017,VGO - Low Sulphur,FCC,0.55,2.57,23.00,Heavy,0.50,Medium
+MARATHON_CARSON,Carson,2017,VGO - High Sulphur,FCC,11.52,4.316,24.91,Heavy,1.00,Medium

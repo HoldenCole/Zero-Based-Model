@@ -185,6 +185,31 @@ the Python engine.
 All commands accept `--start YYYY-MM-DD` and `--weeks N` to move the forward
 window.
 
+## Methodology sequence (desk plan)
+
+1. **Nameplate capacity** — stated unit capacities (REM 2026 + EA site
+   nameplate). DONE, in the boxes.
+2. **Effective capacity** — nameplate is not how units actually run (India
+   tends to exceed nameplate; the US usually runs below it). Effective =
+   max demonstrated annual throughput 2017–2024 excl. 2020 (RDT actuals),
+   per unit, in `data/reference/effective_capacity.csv`, the boxes' "eff
+   cap" column, and `python -m naphtha_model capacity`. DONE — US CDUs:
+   17.7M b/d nameplate, 16.7M effective, ~15.5M running in 2024.
+3. **Crude slate** — actual crude diet per refinery (REM, 2010→present, in
+   `data/reference/crude_slate.csv`; purchased feedstocks incl. merchant
+   naphtha/reformate buying in `feedstock_slate.csv`).
+   `python -m naphtha_model slate <refinery_id>`. Feeds the naphtha-yield
+   discussion (light vs heavy slate). DATA IN — quality/API typing per
+   crude stream is the next desk decision.
+4. **The kit, unit by unit** — CDU → overhead distillation → naphtha
+   hydrofiner (NHT, now in the boxes) → reformer → mogas pool. This is the
+   yield-tuning walk: set per-unit naphtha cuts and reformer/isom pull so
+   each refinery's implied net naphtha matches its 2024 actual
+   (Calibration view).
+5. **Blend economics** — max-heavy vs max-light crude scenarios, yield
+   impact, logistics costs, and where blends clear vs market prices.
+   Needs: crude/product price feeds and freight assumptions.
+
 ## Status / roadmap
 
 - [x] Foundation: schema, assumption hierarchy, engine, balances, boxes,
