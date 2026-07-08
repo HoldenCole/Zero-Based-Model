@@ -145,11 +145,12 @@ class DeskWorkbook:
 
         # Boxes column map (1-indexed), dynamic in the number of cuts:
         # A type | B refinery | C padd | D unit | E unit_type | F cap |
-        # G eff cap | H mode toggle | I util_ovr | J util |
+        # G eff cap | H offline% | I mode toggle | J util_ovr | K util |
         # (ovr, yield) per cut | ysum | base | net wk1..wkW | off% wk1..wkW
         self.c_type, self.c_rid, self.c_padd, self.c_uid, self.c_utype = 1, 2, 3, 4, 5
-        self.c_cap, self.c_effcap, self.c_mode, self.c_utilov, self.c_util = 6, 7, 8, 9, 10
-        self.c_cut0 = 11                               # first cut override col
+        self.c_cap, self.c_effcap, self.c_out = 6, 7, 8
+        self.c_mode, self.c_utilov, self.c_util = 9, 10, 11
+        self.c_cut0 = 12                               # first cut override col
         self.c_ysum = self.c_cut0 + 2 * len(self.cuts)
         self.c_base = self.c_ysum + 1
         self.c_net0 = self.c_base + 1                  # first weekly net col
@@ -530,8 +531,8 @@ class DeskWorkbook:
         labels = {
             self.c_type: "row", self.c_rid: "refinery_id", self.c_padd: "padd",
             self.c_uid: "unit", self.c_utype: "type", self.c_cap: "cap kbd",
-            self.c_effcap: "eff cap", self.c_mode: "mode",
-            self.c_utilov: "util ovr", self.c_util: "util",
+            self.c_effcap: "eff cap", self.c_out: "offline %",
+            self.c_mode: "mode", self.c_utilov: "util ovr", self.c_util: "util",
             self.c_ysum: "Σ yield", self.c_base: "base net kbd",
         }
         for i, cut in enumerate(self.cuts):
@@ -559,7 +560,10 @@ class DeskWorkbook:
             first_unit = row
             ovl = get_column_letter(self.c_utilov)
             mdl = get_column_letter(self.c_mode)
+            outl = get_column_letter(self.c_out)
             total_row = first_unit + len(ref.units)
+            offx = (f"(1-MIN(1,MAX(N(${outl}{{row}}),"
+                    f"N(${outl}{total_row}))))")
             mode = f'IF(${mdl}{total_row}<>"",${mdl}{total_row},${mdl}{{row}})'
             for unit in ref.units:
                 ws.cell(row=row, column=self.c_type, value="UNIT").font = FONT_SMALL
@@ -572,6 +576,8 @@ class DeskWorkbook:
                 _style(ws.cell(row=row, column=self.c_effcap,
                                value=self.eff_caps.get((ref.refinery_id, unit.unit_id))),
                        fill=FILL_CALC, fmt="#,##0")
+                _style(ws.cell(row=row, column=self.c_out),
+                       fill=FILL_OVERRIDE, fmt="0%")
                 _style(ws.cell(row=row, column=self.c_mode, value="override"),
                        fill=FILL_INPUT)
 
@@ -583,7 +589,8 @@ class DeskWorkbook:
                 _style(ws.cell(
                     row=row, column=self.c_util,
                     value=(f'=IF(AND({mode.format(row=row)}="override",${ovl}{row}<>""),${ovl}{row},'
-                           f"SUMIFS({util_val},{util_padd},$C{row}))"),
+                           f"SUMIFS({util_val},{util_padd},$C{row}))"
+                           f"*{offx.format(row=row)}"),
                 ), fill=FILL_CALC, fmt="0.0%")
 
                 for i, cut in enumerate(self.cuts):
@@ -631,6 +638,8 @@ class DeskWorkbook:
                    fill=FILL_TOTAL, bold=True)
             _style(ws.cell(row=row, column=self.c_uid, value="NET NAPHTHA"),
                    fill=FILL_TOTAL, bold=True)
+            _style(ws.cell(row=row, column=self.c_out),
+                   fill=FILL_OVERRIDE, fmt="0%")
             _style(ws.cell(row=row, column=self.c_mode), fill=FILL_INPUT)
             base_l = get_column_letter(self.c_base)
             _style(ws.cell(row=row, column=self.c_base,
@@ -1101,7 +1110,24 @@ class SimpleWorkbook(DeskWorkbook):
             del self.wb["Sheet"]
         self.wb._sheets = [self.wb[n] for n in self.TAB_ORDER]
         for name in self.TAB_ORDER:
-            _theme(self.wb[name], TAB_COLORS.get(name))
+            ws = self.wb[name]
+            _theme(ws, TAB_COLORS.get(name))
+            # clean printing: landscape, fit to one page wide
+            from openpyxl.worksheet.properties import PageSetupProperties
+
+            ws.page_setup.orientation = "landscape"
+            ws.page_setup.fitToWidth = 1
+            ws.page_setup.fitToHeight = 0
+            ws.sheet_properties.pageSetUpPr = PageSetupProperties(fitToPage=True)
+        # sort/filter on the grid tabs
+        filters = {
+            "Data": f"A2:O{self.data_last_row}",
+            "Nameplate": f"A2:R{self.nameplate_last}",
+            "Effective": f"A2:T{2 + len(self.data.refineries)}",
+            "KitWalk": f"A2:O{2 + sum(1 for r in self.data.refineries if r.units and r.units[0].unit_id != 'CRUDE-EST')}",
+        }
+        for name, ref in filters.items():
+            self.wb[name].auto_filter.ref = ref
         out_path = Path(out_path)
         self.wb.save(out_path)
         return out_path
@@ -1220,7 +1246,9 @@ class SimpleWorkbook(DeskWorkbook):
         for i, (name, desc) in enumerate(guide):
             r = 30 + i
             n = ws.cell(row=r, column=3, value=name)
-            n.font = Font(bold=True, size=9, color=NAVY, name="Calibri")
+            n.font = Font(bold=True, size=9, color="1F5AA8",
+                          underline="single", name="Calibri")
+            n.hyperlink = f"#{name}!A1"
             d = ws.cell(row=r, column=5, value=desc)
             d.font = FONT_SMALL
 
@@ -1242,6 +1270,42 @@ class SimpleWorkbook(DeskWorkbook):
             "capacity views, KitWalk and BlendEcon re-price instantly."
         ))
         note.font = Font(size=9, italic=True, color="55617A", name="Calibri")
+
+        # refinery finder: pick an id, get the vitals + a jump link
+        _banner(ws, 48, "  REFINERY FINDER", 13)
+        pick = ws.cell(row=50, column=3, value="MOTIVA_PAR")
+        _style(pick, fill=FILL_INPUT)
+        dv = DataValidation(type="list",
+                            formula1=f"=Data!$A$3:$A${self.data_last_row}",
+                            allow_blank=True)
+        ws.add_data_validation(dv)
+        dv.add("C50")
+        d_id = f"Data!$A$3:$A${self.data_last_row}"
+        finder = [
+            ("name", f'=IFERROR(INDEX(Data!$B$3:$B${self.data_last_row},'
+                     f'MATCH($C$50,{d_id},0)),"")', None),
+            ("PADD", f'=IFERROR(INDEX(Data!$D$3:$D${self.data_last_row},'
+                     f'MATCH($C$50,{d_id},0)),"")', None),
+            ("crude kbd", f"=SUMIFS(Data!$G$3:$G${self.data_last_row},{d_id},$C$50)",
+             "#,##0"),
+            ("net naphtha kbd",
+             f'=SUMPRODUCT(({b_typ}="TOTAL")*(Boxes!$B$3:$B${self.box_last}=$C$50)'
+             f"*{b_net})", "0.0"),
+            ("2024 actual naphtha %",
+             f"=SUMIFS(Data!$N$3:$N${self.data_last_row},{d_id},$C$50)", "0.00%"),
+        ]
+        for i, (label, formula, fmt) in enumerate(finder):
+            rr = 52 + i
+            ws.cell(row=rr, column=3, value=label).font = FONT_SMALL
+            cell = ws.cell(row=rr, column=5, value=formula)
+            cell.font = Font(bold=True, size=10, color=NAVY, name="Calibri")
+            if fmt:
+                cell.number_format = fmt
+        jump = ws.cell(row=50, column=5, value=(
+            f'=HYPERLINK("#Boxes!A"&MATCH($C$50,Boxes!$B$1:$B$3000,0)-1,'
+            f'"→ open this refinery\'s box")'
+        ))
+        jump.font = Font(size=10, color="1F5AA8", underline="single", name="Calibri")
 
     def _simple_share_block(self) -> None:
         """Yield-mode cut split inputs, placed right of the lookup tables."""
@@ -1315,17 +1379,17 @@ class SimpleWorkbook(DeskWorkbook):
         _banner(
             ws, 1,
             "Refinery boxes — net naphtha = capacity x utilization x signed yields. "
-            "Blue = input, orange = manual override, grey = formula. The MODE "
-            "dropdown flips each unit between override and assumption (set it on "
-            "the NET NAPHTHA row to flip the whole refinery). Yield-mode rows "
-            "read the Data sheet.",
+            "Blue = input, orange = manual override, grey = formula. MODE flips a "
+            "unit between override and assumption; OFFLINE % knocks capacity out "
+            "(e.g. 1 = full outage, 0.5 = half rates). Set either on the NET "
+            "NAPHTHA row to apply refinery-wide. Yield-mode rows read Data.",
             last_col,
         )
         labels = {
             self.c_type: "row", self.c_rid: "refinery_id", self.c_padd: "padd",
             self.c_uid: "unit", self.c_utype: "type", self.c_cap: "cap kbd",
-            self.c_effcap: "eff cap", self.c_mode: "mode",
-            self.c_utilov: "util ovr", self.c_util: "util",
+            self.c_effcap: "eff cap", self.c_out: "offline %",
+            self.c_mode: "mode", self.c_utilov: "util ovr", self.c_util: "util",
             self.c_ysum: "Σ yield", self.c_base: "net naphtha kbd",
         }
         for i, cut in enumerate(self.cuts):
@@ -1347,8 +1411,10 @@ class SimpleWorkbook(DeskWorkbook):
         eff_c1 = get_column_letter(4 + len(self.UNIT_COLS))
         day1 = self.axis[0]
         row = 3
+        self.box_banner_rows: dict[str, int] = {}
         for ref in sorted(self.data.refineries,
                           key=lambda x: (x.padd, -x.crude_capacity_kbd, x.name)):
+            self.box_banner_rows[ref.refinery_id] = row
             _banner(ws, row, "", last_col)
             name = ref.name.replace('"', "'")
             owner = ref.owner.replace('"', "'")
@@ -1361,7 +1427,10 @@ class SimpleWorkbook(DeskWorkbook):
             first_unit = row
             ovl = get_column_letter(self.c_utilov)
             mdl = get_column_letter(self.c_mode)
+            outl = get_column_letter(self.c_out)
             total_row = first_unit + len(ref.units)
+            offx = (f"(1-MIN(1,MAX(N(${outl}{{row}}),"
+                    f"N(${outl}{total_row}))))")
             mode = f'IF(${mdl}{total_row}<>"",${mdl}{total_row},${mdl}{{row}})'
             for unit in ref.units:
                 est = unit.unit_id == "CRUDE-EST"
@@ -1387,6 +1456,8 @@ class SimpleWorkbook(DeskWorkbook):
                     row=row, column=self.c_effcap,
                     value=f'=IFERROR(IF({eff_inner}=0,"",{eff_inner}),"")',
                 ), fill=FILL_CALC, fmt="#,##0")
+                _style(ws.cell(row=row, column=self.c_out),
+                       fill=FILL_OVERRIDE, fmt="0%")
                 _style(ws.cell(row=row, column=self.c_mode, value="override"),
                        fill=FILL_INPUT)
 
@@ -1397,7 +1468,8 @@ class SimpleWorkbook(DeskWorkbook):
                 _style(ws.cell(
                     row=row, column=self.c_util,
                     value=(f'=IF(AND({mode.format(row=row)}="override",${ovl}{row}<>""),${ovl}{row},'
-                           f"SUMIFS({util_val},{util_padd},$C{row}))*{util_dial}"),
+                           f"SUMIFS({util_val},{util_padd},$C{row}))*{util_dial}"
+                           f"*{offx.format(row=row)}"),
                 ), fill=FILL_CALC, fmt="0.0%")
 
                 for i, cut in enumerate(self.cuts):
@@ -1446,6 +1518,8 @@ class SimpleWorkbook(DeskWorkbook):
                    fill=FILL_TOTAL, bold=True)
             _style(ws.cell(row=row, column=self.c_uid, value="NET NAPHTHA"),
                    fill=FILL_TOTAL, bold=True)
+            _style(ws.cell(row=row, column=self.c_out),
+                   fill=FILL_OVERRIDE, fmt="0%")
             _style(ws.cell(row=row, column=self.c_mode), fill=FILL_INPUT)
             base_l = get_column_letter(self.c_base)
             _style(ws.cell(row=row, column=self.c_base,
@@ -1455,7 +1529,8 @@ class SimpleWorkbook(DeskWorkbook):
             row += 2
 
         widths = {1: 7, 2: 22, 3: 5, 4: 12, 5: 12, 6: 8, 7: 8,
-                  self.c_mode: 11, self.c_utilov: 8, self.c_util: 7}
+                  self.c_out: 8, self.c_mode: 11, self.c_utilov: 8,
+                  self.c_util: 7}
         for i in range(len(self.cuts)):
             widths[self._cut_ovr_col(i)] = 8
             widths[self._cut_yld_col(i)] = 9
@@ -1529,6 +1604,15 @@ class SimpleWorkbook(DeskWorkbook):
         ws.column_dimensions[cl].width = 40
         ws.column_dimensions[vl].width = 10
 
+
+    LINK_FONT = Font(size=9, color="1F5AA8", underline="single", name="Calibri")
+
+    def _link_to_box(self, cell, rid: str) -> None:
+        row = getattr(self, "box_banner_rows", {}).get(rid)
+        if row:
+            cell.hyperlink = f"#Boxes!A{row}"
+            cell.font = self.LINK_FONT
+
     # -------------------------------------------------------- Nameplate tab
 
     UNIT_COLS = ["CDU", "VDU", "FCC", "RCC", "COKER", "FCOKER", "DHCU",
@@ -1555,7 +1639,8 @@ class SimpleWorkbook(DeskWorkbook):
         d_cap = f"Data!$G$3:$G${self.data_last_row}"
         r = 3
         for ref in self._grid_refineries():
-            _style(ws.cell(row=r, column=1, value=ref.refinery_id))
+            c = _style(ws.cell(row=r, column=1, value=ref.refinery_id))
+            self._link_to_box(c, ref.refinery_id)
             _style(ws.cell(row=r, column=2, value=ref.name))
             _style(ws.cell(row=r, column=3, value=ref.padd))
             _style(ws.cell(row=r, column=4,
@@ -1865,7 +1950,8 @@ class SimpleWorkbook(DeskWorkbook):
             if not ref.units or ref.units[0].unit_id == "CRUDE-EST":
                 continue
             rid = f"$A{r}"
-            _style(ws.cell(row=r, column=1, value=ref.refinery_id))
+            c = _style(ws.cell(row=r, column=1, value=ref.refinery_id))
+            self._link_to_box(c, ref.refinery_id)
             _style(ws.cell(row=r, column=2, value=ref.padd))
             _style(ws.cell(row=r, column=3, value=f'={by_unit(b_cap, rid, "CDU")}'),
                    fill=FILL_CALC, fmt="#,##0")
