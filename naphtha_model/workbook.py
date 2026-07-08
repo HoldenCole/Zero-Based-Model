@@ -1117,7 +1117,7 @@ class SimpleWorkbook(DeskWorkbook):
                 v = y.get(key)
                 _style(ws.cell(row=r, column=9 + j,
                                value=float(v) / 100.0 if v not in (None, "") else None),
-                       fmt="0.00%")
+                       fill=FILL_INPUT, fmt="0.00%")
             r += 1
         self.data_last_row = r - 1
         widths = [22, 30, 30, 6, 13, 15, 10, 9, 12, 9, 8, 9, 8, 9, 8]
@@ -1152,15 +1152,24 @@ class SimpleWorkbook(DeskWorkbook):
         data_id = f"Data!$A$3:$A${self.data_last_row}"
         data_cap = f"Data!$G$3:$G${self.data_last_row}"
         data_naph = f"Data!$N$3:$N${self.data_last_row}"
+        util_dial = self.dial_refs["Utilization scaler (100% = as-is)"]
+        yld_dial = self.dial_refs["Naphtha yield scaler (100% = as-is)"]
+        # Effective-tab grid geometry (built after Boxes; layout is fixed)
+        eff_last = 2 + len(self.data.refineries)
+        eff_c0 = get_column_letter(5)
+        eff_c1 = get_column_letter(4 + len(self.UNIT_COLS))
         day1 = self.axis[0]
         row = 3
         for ref in sorted(self.data.refineries,
                           key=lambda x: (x.padd, -x.crude_capacity_kbd, x.name)):
-            crude = (f"crude {ref.crude_capacity_kbd:,.0f} kbd"
-                     if ref.crude_capacity_kbd else "crude: pending capacity sheet")
-            _banner(ws, row,
-                    f"  {ref.name}  [{ref.refinery_id}]   —   {ref.owner}   —   "
-                    f"PADD {ref.padd}   —   {crude}", last_col)
+            _banner(ws, row, "", last_col)
+            name = ref.name.replace('"', "'")
+            owner = ref.owner.replace('"', "'")
+            ws.cell(row=row, column=1).value = (
+                f'="  {name}  [{ref.refinery_id}]   —   {owner}   —   '
+                f'PADD {ref.padd}   —   crude "&TEXT(SUMIFS({data_cap},{data_id},'
+                f'"{ref.refinery_id}"),"#,##0")&" kbd"'
+            )
             row += 1
             first_unit = row
             ovl = get_column_letter(self.c_utilov)
@@ -1179,9 +1188,15 @@ class SimpleWorkbook(DeskWorkbook):
                 else:
                     _style(ws.cell(row=row, column=self.c_cap, value=unit.capacity_kbd),
                            fill=FILL_INPUT, fmt="0")
-                _style(ws.cell(row=row, column=self.c_effcap,
-                               value=self.eff_caps.get((ref.refinery_id, unit.unit_id))),
-                       fill=FILL_CALC, fmt="0")
+                eff_inner = (
+                    f"INDEX(Effective!${eff_c0}$3:${eff_c1}${eff_last},"
+                    f"MATCH($B{row},Effective!$A$3:$A${eff_last},0),"
+                    f"MATCH($D{row},Effective!${eff_c0}$2:${eff_c1}$2,0))"
+                )
+                _style(ws.cell(
+                    row=row, column=self.c_effcap,
+                    value=f'=IFERROR(IF({eff_inner}=0,"",{eff_inner}),"")',
+                ), fill=FILL_CALC, fmt="0")
 
                 ov_util = self.book._find_override(ref, unit, day1, "utilization")
                 _style(ws.cell(row=row, column=self.c_utilov,
@@ -1190,7 +1205,7 @@ class SimpleWorkbook(DeskWorkbook):
                 _style(ws.cell(
                     row=row, column=self.c_util,
                     value=(f'=IF(${ovl}{row}<>"",${ovl}{row},'
-                           f"SUMIFS({util_val},{util_padd},$C{row}))"),
+                           f"SUMIFS({util_val},{util_padd},$C{row}))*{util_dial}"),
                 ), fill=FILL_CALC, fmt="0.0%")
 
                 for i, cut in enumerate(self.cuts):
@@ -1221,7 +1236,8 @@ class SimpleWorkbook(DeskWorkbook):
                     f"{get_column_letter(self._cut_yld_col(i))}{row}"
                     for i in range(len(self.cuts))
                 )
-                _style(ws.cell(row=row, column=self.c_ysum, value=f"={ysum}"),
+                _style(ws.cell(row=row, column=self.c_ysum,
+                               value=f"=({ysum})*{yld_dial}"),
                        fill=FILL_CALC, fmt="0.00%")
                 cap_l = get_column_letter(self.c_cap)
                 util_l = get_column_letter(self.c_util)
@@ -1266,7 +1282,7 @@ class SimpleWorkbook(DeskWorkbook):
         cl, vl = get_column_letter(col), get_column_letter(col + 1)
         r = 4 + len(self.cuts) + 3
 
-        def block(title, rows, fmt):
+        def block(title, rows, fmt, values=None):
             nonlocal r
             _hdr(ws, r, col, title)
             _hdr(ws, r, col + 1, fmt[1])
@@ -1274,11 +1290,21 @@ class SimpleWorkbook(DeskWorkbook):
             for label in rows:
                 r += 1
                 ws.cell(row=r, column=col, value=label).font = FONT_SMALL
-                _style(ws.cell(row=r, column=col + 1), fill=FILL_INPUT, fmt=fmt[0])
+                _style(ws.cell(row=r, column=col + 1,
+                               value=(values or {}).get(label)),
+                       fill=FILL_INPUT, fmt=fmt[0])
                 refs[label] = f"Assumptions!${vl}${r}"
             r += 2
             return refs
 
+        self.dial_refs = block(
+            "MASTER DIALS — one cell flexes the whole model",
+            ["Utilization scaler (100% = as-is)",
+             "Naphtha yield scaler (100% = as-is)"],
+            ("0%", "x"),
+            values={"Utilization scaler (100% = as-is)": 1.0,
+                    "Naphtha yield scaler (100% = as-is)": 1.0},
+        )
         self.price_refs = block(
             "Prices ($/bbl) — fill to activate BlendEcon",
             ["Gasoline (RBOB)", "Naphtha USGC (HVN)", "Naphtha LVN USGC",
@@ -1325,12 +1351,16 @@ class SimpleWorkbook(DeskWorkbook):
         b_rid = f"Boxes!$B$3:$B${self.box_last}"
         b_uid = f"Boxes!$D$3:$D${self.box_last}"
         b_cap = f"Boxes!$F$3:$F${self.box_last}"
+        d_id = f"Data!$A$3:$A${self.data_last_row}"
+        d_cap = f"Data!$G$3:$G${self.data_last_row}"
         r = 3
         for ref in self._grid_refineries():
             _style(ws.cell(row=r, column=1, value=ref.refinery_id))
             _style(ws.cell(row=r, column=2, value=ref.name))
             _style(ws.cell(row=r, column=3, value=ref.padd))
-            _style(ws.cell(row=r, column=4, value=ref.crude_capacity_kbd), fmt="0")
+            _style(ws.cell(row=r, column=4,
+                           value=f"=SUMIFS({d_cap},{d_id},$A{r})"),
+                   fill=FILL_CALC, fmt="0")
             for j, uid in enumerate(self.UNIT_COLS):
                 _style(ws.cell(
                     row=r, column=5 + j,
@@ -1364,23 +1394,28 @@ class SimpleWorkbook(DeskWorkbook):
         (RDT actuals). Same grid as Nameplate so the two compare row by row."""
         ws = self.wb.create_sheet("Effective")
         _banner(ws, 1, "Effective capacity (kbd) — max demonstrated annual throughput "
-                       "2017-2024 excl. 2020 (RefineryDataTool actuals). Nameplate is "
-                       "what's stated; this is what units have actually proven.",
+                       "2017-2024 excl. 2020 (RefineryDataTool actuals). BLUE = "
+                       "desk-adjustable: edits here flow into the Boxes 'eff cap' "
+                       "column. Nameplate is what's stated; this is what's proven.",
                 7 + len(self.UNIT_COLS))
         headers = (["refinery_id", "name", "padd", "crude kbd"] + self.UNIT_COLS
                    + ["CDU eff yr", "CDU eff/plate"])
         for c, h in enumerate(headers, start=1):
             _hdr(ws, 2, c, h)
+        d_id = f"Data!$A$3:$A${self.data_last_row}"
+        d_cap = f"Data!$G$3:$G${self.data_last_row}"
         r = 3
         for ref in self._grid_refineries():
             _style(ws.cell(row=r, column=1, value=ref.refinery_id))
             _style(ws.cell(row=r, column=2, value=ref.name))
             _style(ws.cell(row=r, column=3, value=ref.padd))
-            _style(ws.cell(row=r, column=4, value=ref.crude_capacity_kbd), fmt="0")
+            _style(ws.cell(row=r, column=4,
+                           value=f"=SUMIFS({d_cap},{d_id},$A{r})"),
+                   fill=FILL_CALC, fmt="0")
             for j, uid in enumerate(self.UNIT_COLS):
                 _style(ws.cell(row=r, column=5 + j,
                                value=self.eff_caps.get((ref.refinery_id, uid))),
-                       fill=FILL_CALC, fmt="0")
+                       fill=FILL_INPUT, fmt="0")
             _style(ws.cell(row=r, column=5 + len(self.UNIT_COLS),
                            value=self.eff_years.get((ref.refinery_id, "CDU"))))
             _style(ws.cell(

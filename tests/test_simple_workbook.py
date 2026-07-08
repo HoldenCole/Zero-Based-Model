@@ -114,3 +114,51 @@ def test_boxes_match_engine_and_capacity_lights_up(built, tmp_path):
     assert cap["PBF_DELAWARE_CITY"] == pytest.approx(
         500 * util * r.naphtha_yield_pct / 100, abs=0.01
     )
+
+
+@pytest.mark.skipif(shutil.which("soffice") is None, reason="LibreOffice not installed")
+def test_everything_propagates(built, tmp_path):
+    """The dynamism guarantee: master dials rescale every box, and an edit on
+    the Effective tab flows into the Boxes eff-cap column."""
+    data, out = built
+    wb = openpyxl.load_workbook(out)
+    a = wb["Assumptions"]
+    dial = {}
+    for row in a.iter_rows(min_row=1, max_row=100, min_col=10, max_col=30):
+        for c in row:
+            if c.value == "Utilization scaler (100% = as-is)":
+                dial["util"] = (c.row, c.column + 1)
+            if c.value == "Naphtha yield scaler (100% = as-is)":
+                dial["yield"] = (c.row, c.column + 1)
+    a.cell(row=dial["util"][0], column=dial["util"][1], value=0.9)
+    a.cell(row=dial["yield"][0], column=dial["yield"][1], value=1.2)
+    eff = wb["Effective"]
+    hdr = {eff.cell(row=2, column=c).value: c for c in range(1, 25)}
+    for r in range(3, 200):
+        if eff.cell(row=r, column=1).value == "MOTIVA_PAR":
+            eff.cell(row=r, column=hdr["CDU"], value=999)
+            break
+    modded = tmp_path / "modded.xlsx"
+    wb.save(modded)
+
+    profile = tmp_path / "loprofile"
+    for f in (out, modded):
+        subprocess.run(
+            ["soffice", f"-env:UserInstallation=file://{profile}", "--headless",
+             "--convert-to", "xlsx", "--outdir", str(tmp_path / "recalc"), str(f)],
+            check=True, capture_output=True, timeout=300,
+        )
+    base = _totals(tmp_path / "recalc" / Path(out).name)
+    mod = _totals(tmp_path / "recalc" / "modded.xlsx")
+    for rid in ("XOM_BAYTOWN", "CHEVRON_PASCAGOULA", "BASF_PORT_ARTHUR"):
+        assert mod[rid] == pytest.approx(base[rid] * 0.9 * 1.2, abs=0.05)
+
+    boxes = openpyxl.load_workbook(
+        tmp_path / "recalc" / "modded.xlsx", data_only=True)["Boxes"]
+    eff_cap = next(
+        boxes.cell(row=r, column=7).value for r in range(3, 3000)
+        if boxes.cell(row=r, column=1).value == "UNIT"
+        and boxes.cell(row=r, column=2).value == "MOTIVA_PAR"
+        and boxes.cell(row=r, column=4).value == "CDU"
+    )
+    assert eff_cap == 999
