@@ -42,21 +42,47 @@ from .loaders import ModelData
 from .schema import ProcessUnit, Refinery
 
 # ------------------------------------------------------------------ styling
+#
+# House theme: deep navy + gold accent, white-on-steel headers, no
+# gridlines, color-coded tabs. Inputs stay Excel-convention blue, manual
+# overrides orange, formulas soft grey.
 
-NAVY = "1F3864"
+NAVY = "16243D"           # banners / brand
+STEEL = "27406B"          # table headers
+GOLD = "C9A227"           # accent
 FILL_BANNER = PatternFill("solid", fgColor=NAVY)
-FILL_INPUT = PatternFill("solid", fgColor="DDEBF7")     # blue: editable input
+FILL_HDR = PatternFill("solid", fgColor=STEEL)
+FILL_GOLD = PatternFill("solid", fgColor=GOLD)
+FILL_INPUT = PatternFill("solid", fgColor="DCE9F7")     # blue: editable input
 FILL_OVERRIDE = PatternFill("solid", fgColor="FCE4D6")  # orange: manual override
-FILL_CALC = PatternFill("solid", fgColor="F2F2F2")      # grey: formula, don't type
-FILL_TOTAL = PatternFill("solid", fgColor="FFF2CC")     # yellow: totals
+FILL_CALC = PatternFill("solid", fgColor="F4F6FA")      # grey: formula, don't type
+FILL_TOTAL = PatternFill("solid", fgColor="F3E8C8")     # soft gold: totals
 FILL_PASS = PatternFill("solid", fgColor="C6EFCE")
 FILL_FAIL = PatternFill("solid", fgColor="FFC7CE")
 
-FONT_BANNER = Font(bold=True, color="FFFFFF", size=12)
-FONT_HDR = Font(bold=True, size=9)
-FONT_SMALL = Font(size=9)
-THIN = Side(style="thin", color="BFBFBF")
+FONT_BANNER = Font(bold=True, color="FFFFFF", size=12, name="Calibri")
+FONT_HDR = Font(bold=True, size=9, color="FFFFFF", name="Calibri")
+FONT_SMALL = Font(size=9, name="Calibri")
+THIN = Side(style="thin", color="D5DAE3")
 BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
+GOLD_EDGE = Side(style="medium", color=GOLD)
+
+TAB_COLORS = {
+    "Cover": GOLD,
+    "Data": "4472C4", "Assumptions": "4472C4",          # inputs: blue
+    "Boxes": NAVY,                                       # the engine
+    "Nameplate": "2E8677", "Effective": "2E8677",        # capacity views: teal
+    "CrudeSlate": "6B8E23",                              # slate: olive
+    "BlendEcon": "A23B3B",                               # economics: maroon
+    "KitWalk": "7A5195",                                 # tuning: plum
+}
+
+
+def _theme(ws, tab_color: str | None = None) -> None:
+    ws.sheet_view.showGridLines = False
+    ws.sheet_view.zoomScale = 90
+    if tab_color:
+        ws.sheet_properties.tabColor = tab_color
 
 # ------------------------------------------------------- scan-range budgets
 # Formulas scan fixed ranges so traders can append rows without re-wiring.
@@ -70,19 +96,24 @@ BOX_LO, BOX_HI = 4, 2600       # Boxes data rows
 
 def _banner(ws, row: int, text: str, span: int) -> None:
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=span)
+    ws.row_dimensions[row].height = 20
     c = ws.cell(row=row, column=1, value=text)
     c.fill = FILL_BANNER
     c.font = FONT_BANNER
-    for col in range(2, span + 1):
-        ws.cell(row=row, column=col).fill = FILL_BANNER
+    c.alignment = Alignment(vertical="center")
+    edge = Border(bottom=GOLD_EDGE)
+    for col in range(1, span + 1):
+        cc = ws.cell(row=row, column=col)
+        cc.fill = FILL_BANNER
+        cc.border = edge
 
 
 def _hdr(ws, row: int, col: int, text: str) -> None:
     c = ws.cell(row=row, column=col, value=text)
     c.font = FONT_HDR
-    c.fill = FILL_CALC
+    c.fill = FILL_HDR
     c.border = BORDER
-    c.alignment = Alignment(wrap_text=True, vertical="center")
+    c.alignment = Alignment(wrap_text=True, vertical="center", horizontal="center")
 
 
 def _style(cell, fill=None, fmt=None, bold=False, border=True):
@@ -91,7 +122,7 @@ def _style(cell, fill=None, fmt=None, bold=False, border=True):
     if fmt is not None:
         cell.number_format = fmt
     if bold:
-        cell.font = Font(bold=True, size=9)
+        cell.font = Font(bold=True, size=9, name="Calibri")
     else:
         cell.font = FONT_SMALL
     if border:
@@ -533,10 +564,10 @@ class DeskWorkbook:
                 _style(ws.cell(row=row, column=self.c_uid, value=unit.unit_id))
                 _style(ws.cell(row=row, column=self.c_utype, value=unit.unit_type))
                 _style(ws.cell(row=row, column=self.c_cap, value=unit.capacity_kbd),
-                       fill=FILL_INPUT, fmt="0")
+                       fill=FILL_INPUT, fmt="#,##0")
                 _style(ws.cell(row=row, column=self.c_effcap,
                                value=self.eff_caps.get((ref.refinery_id, unit.unit_id))),
-                       fill=FILL_CALC, fmt="0")
+                       fill=FILL_CALC, fmt="#,##0")
 
                 # manual override cells, prefilled from data/overrides when active
                 ov_util = self.book._find_override(ref, unit, day1, "utilization")
@@ -718,7 +749,7 @@ class DeskWorkbook:
             _style(ws.cell(row=r, column=1, value=ref.refinery_id))
             _style(ws.cell(row=r, column=2, value=ref.name))
             _style(ws.cell(row=r, column=3, value=ref.padd))
-            _style(ws.cell(row=r, column=4, value=ref.crude_capacity_kbd), fmt="0")
+            _style(ws.cell(row=r, column=4, value=ref.crude_capacity_kbd), fmt="#,##0")
             _style(ws.cell(row=r, column=5,
                            value=f"=SUMIFS({util_val},{util_padd},$C{r})"),
                    fill=FILL_CALC, fmt="0.0%")
@@ -760,7 +791,7 @@ class DeskWorkbook:
                    fill=FILL_CALC, fmt="0.00%")
             _style(ws.cell(row=row, column=3,
                            value=f"=COUNTIF($C$4:$C${last},$A{row})"),
-                   fill=FILL_CALC, fmt="0")
+                   fill=FILL_CALC, fmt="#,##0")
 
         widths = [22, 34, 6, 10, 9, 12, 12, 11, 11, 12]
         for c, w in enumerate(widths, start=1):
@@ -943,7 +974,7 @@ class DeskWorkbook:
         r = 4
         for label, formula in checks:
             ws.cell(row=r, column=1, value=label).font = FONT_SMALL
-            _style(ws.cell(row=r, column=2, value=formula), fill=FILL_CALC, fmt="0")
+            _style(ws.cell(row=r, column=2, value=formula), fill=FILL_CALC, fmt="#,##0")
             _style(ws.cell(row=r, column=3, value=f'=IF(B{r}=0,"PASS","FAIL")'),
                    fill=FILL_CALC, bold=True)
             r += 1
@@ -1038,8 +1069,8 @@ class SimpleWorkbook(DeskWorkbook):
                 reformer -> net, against the 2024 actual (yield tuning)
     """
 
-    TAB_ORDER = ["Data", "Boxes", "Assumptions", "Nameplate", "Effective",
-                 "CrudeSlate", "BlendEcon", "KitWalk"]
+    TAB_ORDER = ["Cover", "Data", "Boxes", "Assumptions", "Nameplate",
+                 "Effective", "CrudeSlate", "BlendEcon", "KitWalk"]
 
     def build(self, out_path: Path) -> Path:
         self._sheet_assumptions()
@@ -1052,12 +1083,150 @@ class SimpleWorkbook(DeskWorkbook):
         self._sheet_crudeslate()
         self._sheet_blendecon()
         self._sheet_kitwalk()
+        self._sheet_cover()
         if "Sheet" in self.wb.sheetnames:
             del self.wb["Sheet"]
         self.wb._sheets = [self.wb[n] for n in self.TAB_ORDER]
+        for name in self.TAB_ORDER:
+            _theme(self.wb[name], TAB_COLORS.get(name))
         out_path = Path(out_path)
         self.wb.save(out_path)
         return out_path
+
+    # ------------------------------------------------------------ Cover tab
+
+    def _sheet_cover(self) -> None:
+        from datetime import datetime as _dt
+
+        from openpyxl.chart import BarChart, Reference, Series
+
+        ws = self.wb.create_sheet("Cover")
+        for c in range(1, 14):
+            ws.column_dimensions[get_column_letter(c)].width = 11
+        ws.column_dimensions["A"].width = 3
+
+        # masthead
+        for r in range(2, 7):
+            for c in range(2, 14):
+                ws.cell(row=r, column=c).fill = FILL_BANNER
+            ws.cell(row=7, column=2)
+        for c in range(2, 14):
+            ws.cell(row=7, column=c).fill = FILL_GOLD
+        ws.row_dimensions[7].height = 4
+        t = ws.cell(row=3, column=3, value="US NAPHTHA — ZERO-BASED REFINERY MODEL")
+        t.font = Font(bold=True, size=20, color="FFFFFF", name="Calibri")
+        s = ws.cell(
+            row=5, column=3,
+            value=f"{len(self.data.refineries)} refineries · unit-level build · "
+                  f"PADD 1–5 · generated {_dt.now():%d %b %Y}",
+        )
+        s.font = Font(size=10, color="C9A227", name="Calibri")
+
+        # live KPI band
+        base_l = get_column_letter(self.c_base)
+        utl_l = get_column_letter(self.c_util)
+        b_typ = f"Boxes!$A$3:$A${self.box_last}"
+        b_pad = f"Boxes!$C$3:$C${self.box_last}"
+        b_uid = f"Boxes!$D$3:$D${self.box_last}"
+        b_cap = f"Boxes!$F$3:$F${self.box_last}"
+        b_utl = f"Boxes!${utl_l}$3:${utl_l}${self.box_last}"
+        b_net = f"Boxes!${base_l}$3:${base_l}${self.box_last}"
+        kpis = [
+            ("US net naphtha (kbd)",
+             f'=SUMPRODUCT(({b_typ}="TOTAL")*{b_net})', "#,##0"),
+            ("PADD 3 share",
+             f'=SUMPRODUCT(({b_typ}="TOTAL")*({b_pad}=3)*{b_net})'
+             f'/SUMPRODUCT(({b_typ}="TOTAL")*{b_net})', "0%"),
+            ("US crude runs (kbd)",
+             f'=SUMPRODUCT((({b_uid}="CDU")+({b_uid}="CRUDE-EST"))*{b_cap}*{b_utl})',
+             "#,##0"),
+            ("CDU nameplate (kbd)",
+             f'=SUMPRODUCT(({b_uid}="CDU")*{b_cap})', "#,##0"),
+            ("units modelled",
+             f'=SUMPRODUCT(({b_typ}="UNIT")*1)', "#,##0"),
+        ]
+        for i, (label, formula, fmt) in enumerate(kpis):
+            col = 3 + i * 2
+            v = ws.cell(row=9, column=col, value=formula)
+            v.font = Font(bold=True, size=18, color=NAVY, name="Calibri")
+            v.number_format = fmt
+            v.border = Border(top=GOLD_EDGE)
+            cap = ws.cell(row=10, column=col, value=label.upper())
+            cap.font = Font(size=7, color="7A8699", name="Calibri")
+
+        # hidden-ish chart feed: net naphtha by PADD
+        for i, p in enumerate(self.padds):
+            lbl = ws.cell(row=40 + i, column=16, value=f"PADD {p}")
+            val = ws.cell(row=40 + i, column=17,
+                          value=f'=SUMPRODUCT(({b_typ}="TOTAL")*({b_pad}={p})*{b_net})')
+            lbl.font = val.font = Font(size=8, color="AAAAAA")
+
+        ch1 = BarChart()
+        ch1.type = "col"
+        ch1.title = "Net naphtha by PADD (kbd)"
+        ch1.height, ch1.width = 7.5, 10.5
+        ch1.legend = None
+        ser = Series(
+            Reference(ws, min_col=17, min_row=40, max_row=39 + len(self.padds)),
+            title="net naphtha",
+        )
+        ser.graphicalProperties.solidFill = GOLD
+        ch1.series.append(ser)
+        ch1.set_categories(
+            Reference(ws, min_col=16, min_row=40, max_row=39 + len(self.padds)))
+        ws.add_chart(ch1, "C12")
+
+        ch2 = BarChart()
+        ch2.type = "col"
+        ch2.title = "CDU capacity by PADD: nameplate vs effective vs running (kbd)"
+        ch2.height, ch2.width = 7.5, 12.5
+        eff = self.wb["Effective"]
+        r0 = self.eff_rollup_first
+        r1 = r0 + len(self.padds) - 1
+        for col, label, color in ((2, "nameplate", NAVY), (3, "effective", "5B7BA8"),
+                                  (4, "running", GOLD)):
+            ser = Series(Reference(eff, min_col=col, min_row=r0, max_row=r1),
+                         title=label)
+            ser.graphicalProperties.solidFill = color
+            ch2.series.append(ser)
+        ch2.set_categories(Reference(eff, min_col=1, min_row=r0, max_row=r1))
+        ws.add_chart(ch2, "I12")
+
+        # tab directory
+        _banner(ws, 28, "  MODEL MAP", 13)
+        guide = [
+            ("Data", "imported registry, 2024 net yields, crude capacities (inputs)"),
+            ("Boxes", "the engine — every refinery unit by unit; net naphtha per site"),
+            ("Assumptions", "PADD yields & utilization, cut split, master dials, prices, freight"),
+            ("Nameplate", "stated unit capacities, refinery × unit, PADD totals"),
+            ("Effective", "demonstrated capacities (2017–24 max) vs nameplate vs running"),
+            ("CrudeSlate", "actual crude diet per refinery; merchant naphtha buyers flagged"),
+            ("BlendEcon", "spreads, arbs, max-light vs max-heavy — fill prices to activate"),
+            ("KitWalk", "CDU → SR naphtha → NHT → reformer → net, vs 2024 actuals"),
+        ]
+        for i, (name, desc) in enumerate(guide):
+            r = 30 + i
+            n = ws.cell(row=r, column=3, value=name)
+            n.font = Font(bold=True, size=9, color=NAVY, name="Calibri")
+            d = ws.cell(row=r, column=5, value=desc)
+            d.font = FONT_SMALL
+
+        # legend
+        _banner(ws, 40, "  HOW TO DRIVE IT", 13)
+        legend = [(FILL_INPUT, "blue — input: type here"),
+                  (FILL_OVERRIDE, "orange — manual override: beats assumptions; clear to revert"),
+                  (FILL_CALC, "grey — live formula: don't type")]
+        for i, (fill, text) in enumerate(legend):
+            r = 42 + i
+            sw = ws.cell(row=r, column=3)
+            sw.fill = fill
+            sw.border = BORDER
+            ws.cell(row=r, column=4, value=text).font = FONT_SMALL
+        note = ws.cell(row=46, column=3, value=(
+            "Everything is live: edit any input or assumption and Boxes, "
+            "capacity views, KitWalk and BlendEcon re-price instantly."
+        ))
+        note.font = Font(size=9, italic=True, color="55617A", name="Calibri")
 
     def _simple_share_block(self) -> None:
         """Yield-mode cut split inputs, placed right of the lookup tables."""
@@ -1111,7 +1280,7 @@ class SimpleWorkbook(DeskWorkbook):
             _style(ws.cell(row=r, column=5, value=ref.state))
             _style(ws.cell(row=r, column=6, value=ref.city))
             _style(ws.cell(row=r, column=7, value=ref.crude_capacity_kbd),
-                   fill=FILL_INPUT, fmt="0")
+                   fill=FILL_INPUT, fmt="#,##0")
             _style(ws.cell(row=r, column=8, value=ref.status))
             for j, key in enumerate(y_keys):
                 v = y.get(key)
@@ -1184,10 +1353,10 @@ class SimpleWorkbook(DeskWorkbook):
                 if est:
                     _style(ws.cell(row=row, column=self.c_cap,
                                    value=f"=SUMIFS({data_cap},{data_id},$B{row})"),
-                           fill=FILL_CALC, fmt="0")
+                           fill=FILL_CALC, fmt="#,##0")
                 else:
                     _style(ws.cell(row=row, column=self.c_cap, value=unit.capacity_kbd),
-                           fill=FILL_INPUT, fmt="0")
+                           fill=FILL_INPUT, fmt="#,##0")
                 eff_inner = (
                     f"INDEX(Effective!${eff_c0}$3:${eff_c1}${eff_last},"
                     f"MATCH($B{row},Effective!$A$3:$A${eff_last},0),"
@@ -1196,7 +1365,7 @@ class SimpleWorkbook(DeskWorkbook):
                 _style(ws.cell(
                     row=row, column=self.c_effcap,
                     value=f'=IFERROR(IF({eff_inner}=0,"",{eff_inner}),"")',
-                ), fill=FILL_CALC, fmt="0")
+                ), fill=FILL_CALC, fmt="#,##0")
 
                 ov_util = self.book._find_override(ref, unit, day1, "utilization")
                 _style(ws.cell(row=row, column=self.c_utilov,
@@ -1360,12 +1529,12 @@ class SimpleWorkbook(DeskWorkbook):
             _style(ws.cell(row=r, column=3, value=ref.padd))
             _style(ws.cell(row=r, column=4,
                            value=f"=SUMIFS({d_cap},{d_id},$A{r})"),
-                   fill=FILL_CALC, fmt="0")
+                   fill=FILL_CALC, fmt="#,##0")
             for j, uid in enumerate(self.UNIT_COLS):
                 _style(ws.cell(
                     row=r, column=5 + j,
                     value=f'=SUMIFS({b_cap},{b_rid},$A{r},{b_uid},"{uid}")',
-                ), fill=FILL_CALC, fmt="0")
+                ), fill=FILL_CALC, fmt="#,##0")
             r += 1
         last = r - 1
         r += 1
@@ -1411,11 +1580,11 @@ class SimpleWorkbook(DeskWorkbook):
             _style(ws.cell(row=r, column=3, value=ref.padd))
             _style(ws.cell(row=r, column=4,
                            value=f"=SUMIFS({d_cap},{d_id},$A{r})"),
-                   fill=FILL_CALC, fmt="0")
+                   fill=FILL_CALC, fmt="#,##0")
             for j, uid in enumerate(self.UNIT_COLS):
                 _style(ws.cell(row=r, column=5 + j,
                                value=self.eff_caps.get((ref.refinery_id, uid))),
-                       fill=FILL_INPUT, fmt="0")
+                       fill=FILL_INPUT, fmt="#,##0")
             _style(ws.cell(row=r, column=5 + len(self.UNIT_COLS),
                            value=self.eff_years.get((ref.refinery_id, "CDU"))))
             _style(ws.cell(
@@ -1443,15 +1612,24 @@ class SimpleWorkbook(DeskWorkbook):
                 row=rr, column=2,
                 value=f"=SUMIFS(Nameplate!$E$3:$E${self.nameplate_last},"
                       f"Nameplate!$C$3:$C${self.nameplate_last},{p})",
-            ), fill=FILL_TOTAL, fmt="0", bold=True)
+            ), fill=FILL_TOTAL, fmt="#,##0", bold=True)
             _style(ws.cell(row=rr, column=3,
                            value=f"=SUMIFS($E$3:$E${last},$C$3:$C${last},{p})"),
-                   fill=FILL_TOTAL, fmt="0", bold=True)
+                   fill=FILL_TOTAL, fmt="#,##0", bold=True)
             _style(ws.cell(
                 row=rr, column=4,
                 value=(f'=SUMPRODUCT(({b_uid}="CDU")'
                        f"*({b_pad}={p})*{b_cap}*{b_utl})"),
-            ), fill=FILL_TOTAL, fmt="0", bold=True)
+            ), fill=FILL_TOTAL, fmt="#,##0", bold=True)
+        self.eff_rollup_first = r + 2   # first PADD row of the rollup block
+        # gold data bars on demonstrated CDU capacity
+        from openpyxl.formatting.rule import DataBarRule
+
+        ws.conditional_formatting.add(
+            f"E3:E{last}",
+            DataBarRule(start_type="num", start_value=0, end_type="max",
+                        color=GOLD, showValue=True),
+        )
         widths = [22, 30, 6, 9] + [7] * len(self.UNIT_COLS) + [9, 10]
         for c, w in enumerate(widths, start=1):
             ws.column_dimensions[get_column_letter(c)].width = w
@@ -1598,7 +1776,7 @@ class SimpleWorkbook(DeskWorkbook):
                 row=r, column=2,
                 value=(f'=SUMPRODUCT((({b_uid}="CDU")+({b_uid}="CRUDE-EST"))'
                        f"*({b_pad}={p})*{b_cap}*{b_utl})"),
-            ), fill=FILL_CALC, fmt="0")
+            ), fill=FILL_CALC, fmt="#,##0")
             _style(ws.cell(
                 row=r, column=3,
                 value=f'=SUMPRODUCT(({b_typ}="TOTAL")*({b_pad}={p})*{b_net})',
@@ -1659,17 +1837,17 @@ class SimpleWorkbook(DeskWorkbook):
             _style(ws.cell(row=r, column=1, value=ref.refinery_id))
             _style(ws.cell(row=r, column=2, value=ref.padd))
             _style(ws.cell(row=r, column=3, value=f'={by_unit(b_cap, rid, "CDU")}'),
-                   fill=FILL_CALC, fmt="0")
+                   fill=FILL_CALC, fmt="#,##0")
             _style(ws.cell(row=r, column=4, value=f'={by_unit(b_utl, rid, "CDU")}'),
                    fill=FILL_CALC, fmt="0%")
             _style(ws.cell(row=r, column=5, value=f"=$C{r}*$D{r}"),
-                   fill=FILL_CALC, fmt="0")
+                   fill=FILL_CALC, fmt="#,##0")
             _style(ws.cell(row=r, column=6, value=f'={by_unit(b_ysm, rid, "CDU")}'),
                    fill=FILL_CALC, fmt="0.0%")
             _style(ws.cell(row=r, column=7, value=f"=$E{r}*$F{r}"),
                    fill=FILL_CALC, fmt="0.0")
             _style(ws.cell(row=r, column=8, value=f'={by_unit(b_cap, rid, "NHT")}'),
-                   fill=FILL_CALC, fmt="0")
+                   fill=FILL_CALC, fmt="#,##0")
             _style(ws.cell(
                 row=r, column=9,
                 value=(f'={by_unit(b_cap, rid, "REF")}*{by_unit(b_utl, rid, "REF")}'

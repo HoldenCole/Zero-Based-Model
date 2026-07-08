@@ -36,8 +36,14 @@ def _totals(path) -> dict[str, float]:
 def test_tab_layout(built):
     _, out = built
     wb = openpyxl.load_workbook(out)
-    assert wb.sheetnames == ["Data", "Boxes", "Assumptions", "Nameplate",
+    assert wb.sheetnames == ["Cover", "Data", "Boxes", "Assumptions", "Nameplate",
                              "Effective", "CrudeSlate", "BlendEcon", "KitWalk"]
+    # presentation layer: charts + live KPIs on the cover, themed tabs
+    cover = wb["Cover"]
+    assert len(cover._charts) == 2
+    assert str(cover.cell(row=9, column=3).value).startswith("=SUMPRODUCT")
+    assert wb["Boxes"].sheet_view.showGridLines is False
+    assert wb["Boxes"].sheet_properties.tabColor is not None
 
 
 def test_new_tabs_are_wired(built):
