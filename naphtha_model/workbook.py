@@ -70,7 +70,7 @@ GOLD_EDGE = Side(style="medium", color=GOLD)
 TAB_COLORS = {
     "Cover": GOLD,
     "Data": "4472C4", "Assumptions": "4472C4",          # inputs: blue
-    "Boxes": NAVY,                                       # the engine
+    "Boxes": NAVY, "Individual Refineries": NAVY,                                       # the engine
     "Nameplate": "2E8677", "Effective": "2E8677",        # capacity views: teal
     "CrudeSlate": "6B8E23",                              # slate: olive
     "BlendEcon": "A23B3B",                               # economics: maroon
@@ -1091,8 +1091,8 @@ class SimpleWorkbook(DeskWorkbook):
                 reformer -> net, against the 2024 actual (yield tuning)
     """
 
-    TAB_ORDER = ["Cover", "Data", "Boxes", "Assumptions", "Nameplate",
-                 "Effective", "CrudeSlate", "BlendEcon", "KitWalk"]
+    TAB_ORDER = ["Cover", "Assumptions", "Individual Refineries", "CrudeSlate",
+                 "BlendEcon", "KitWalk", "Nameplate", "Effective", "Data"]
 
     def build(self, out_path: Path) -> Path:
         self._sheet_assumptions()
@@ -1164,12 +1164,12 @@ class SimpleWorkbook(DeskWorkbook):
         # live KPI band
         base_l = get_column_letter(self.c_base)
         utl_l = get_column_letter(self.c_util)
-        b_typ = f"Boxes!$A$3:$A${self.box_last}"
-        b_pad = f"Boxes!$C$3:$C${self.box_last}"
-        b_uid = f"Boxes!$D$3:$D${self.box_last}"
-        b_cap = f"Boxes!$F$3:$F${self.box_last}"
-        b_utl = f"Boxes!${utl_l}$3:${utl_l}${self.box_last}"
-        b_net = f"Boxes!${base_l}$3:${base_l}${self.box_last}"
+        b_typ = f"'Individual Refineries'!$A$3:$A${self.box_last}"
+        b_pad = f"'Individual Refineries'!$C$3:$C${self.box_last}"
+        b_uid = f"'Individual Refineries'!$D$3:$D${self.box_last}"
+        b_cap = f"'Individual Refineries'!$F$3:$F${self.box_last}"
+        b_utl = f"'Individual Refineries'!${utl_l}$3:${utl_l}${self.box_last}"
+        b_net = f"'Individual Refineries'!${base_l}$3:${base_l}${self.box_last}"
         kpis = [
             ("US net naphtha (kbd)",
              f'=SUMPRODUCT(({b_typ}="TOTAL")*{b_net})', "#,##0"),
@@ -1235,7 +1235,7 @@ class SimpleWorkbook(DeskWorkbook):
         _banner(ws, 28, "  MODEL MAP", 13)
         guide = [
             ("Data", "imported registry, 2024 net yields, crude capacities (inputs)"),
-            ("Boxes", "the engine — every refinery unit by unit; net naphtha per site"),
+            ("Individual Refineries", "the engine — every refinery unit by unit; net naphtha per site"),
             ("Assumptions", "PADD yields & utilization, cut split, master dials, prices, freight"),
             ("Nameplate", "stated unit capacities, refinery × unit, PADD totals"),
             ("Effective", "demonstrated capacities (2017–24 max) vs nameplate vs running"),
@@ -1266,7 +1266,7 @@ class SimpleWorkbook(DeskWorkbook):
             sw.border = BORDER
             ws.cell(row=r, column=4, value=text).font = FONT_SMALL
         note = ws.cell(row=46, column=3, value=(
-            "Everything is live: edit any input or assumption and Boxes, "
+            "Everything is live: edit any input or assumption and the boxes, "
             "capacity views, KitWalk and BlendEcon re-price instantly."
         ))
         note.font = Font(size=9, italic=True, color="55617A", name="Calibri")
@@ -1289,7 +1289,8 @@ class SimpleWorkbook(DeskWorkbook):
             ("crude kbd", f"=SUMIFS(Data!$G$3:$G${self.data_last_row},{d_id},$C$50)",
              "#,##0"),
             ("net naphtha kbd",
-             f'=SUMPRODUCT(({b_typ}="TOTAL")*(Boxes!$B$3:$B${self.box_last}=$C$50)'
+             f'=SUMPRODUCT(({b_typ}="TOTAL")*'
+             f"('Individual Refineries'!$B$3:$B${self.box_last}=$C$50)"
              f"*{b_net})", "0.0"),
             ("2024 actual naphtha %",
              f"=SUMIFS(Data!$N$3:$N${self.data_last_row},{d_id},$C$50)", "0.00%"),
@@ -1302,8 +1303,9 @@ class SimpleWorkbook(DeskWorkbook):
             if fmt:
                 cell.number_format = fmt
         jump = ws.cell(row=50, column=5, value=(
-            f'=HYPERLINK("#Boxes!A"&MATCH($C$50,Boxes!$B$1:$B$3000,0)-1,'
-            f'"→ open this refinery\'s box")'
+            "=HYPERLINK(\"#'Individual Refineries'!A\""
+            "&MATCH($C$50,'Individual Refineries'!$B$1:$B$3000,0)-1,"
+            '"→ open this refinery\'s box")'
         ))
         jump.font = Font(size=10, color="1F5AA8", underline="single", name="Calibri")
 
@@ -1312,7 +1314,7 @@ class SimpleWorkbook(DeskWorkbook):
         ws = self.wb["Assumptions"]
         ws["A1"] = (
             "Assumptions — blue cells are inputs. Yields are % of unit throughput; "
-            "consumers (reformer/isom) are NEGATIVE. Edits flow straight into the Boxes sheet."
+            "consumers (reformer/isom) are NEGATIVE. Edits flow straight into the Individual Refineries sheet."
         )
         col = 6 + len(self.cuts) + 10
         _hdr(ws, 3, col, "Yield-mode cut split")
@@ -1374,7 +1376,7 @@ class SimpleWorkbook(DeskWorkbook):
         ws.freeze_panes = "A3"
 
     def _simple_boxes(self) -> None:
-        ws = self.wb.create_sheet("Boxes")
+        ws = self.wb.create_sheet("Individual Refineries")
         last_col = self.c_base
         _banner(
             ws, 1,
@@ -1410,6 +1412,16 @@ class SimpleWorkbook(DeskWorkbook):
         eff_c0 = get_column_letter(5)
         eff_c1 = get_column_letter(4 + len(self.UNIT_COLS))
         day1 = self.axis[0]
+        # live outage snapshot (desk offline-events export), if ingested
+        cur_out: dict[tuple[str, str], float] = {}
+        out_path = DATA_DIR / "reference" / "current_outages.csv"
+        if out_path.exists():
+            import csv as _csv
+
+            with out_path.open() as fh:
+                for orow in _csv.DictReader(fh):
+                    cur_out[(orow["refinery_id"], orow["unit_id"])] = float(
+                        orow["offline_frac"])
         row = 3
         self.box_banner_rows: dict[str, int] = {}
         for ref in sorted(self.data.refineries,
@@ -1456,7 +1468,8 @@ class SimpleWorkbook(DeskWorkbook):
                     row=row, column=self.c_effcap,
                     value=f'=IFERROR(IF({eff_inner}=0,"",{eff_inner}),"")',
                 ), fill=FILL_CALC, fmt="#,##0")
-                _style(ws.cell(row=row, column=self.c_out),
+                _style(ws.cell(row=row, column=self.c_out,
+                               value=cur_out.get((ref.refinery_id, unit.unit_id))),
                        fill=FILL_OVERRIDE, fmt="0%")
                 _style(ws.cell(row=row, column=self.c_mode, value="override"),
                        fill=FILL_INPUT)
@@ -1550,59 +1563,77 @@ class SimpleWorkbook(DeskWorkbook):
     # ----------------------------------------------- Assumptions: econ blocks
 
     def _econ_assumption_blocks(self) -> None:
-        """Price, logistics and blend-scenario inputs (blue, to be filled by
-        the desk) that drive the BlendEcon tab."""
+        """Master dials plus the desk's market-data block (prices with
+        Bloomberg BDP wiring, freight, blend scenarios) from
+        data/assumptions/market.yaml — layout: label | value | ticker | note."""
+        import yaml as _yaml
+
         ws = self.wb["Assumptions"]
         col = 6 + len(self.cuts) + 10           # same column as the share block
         cl, vl = get_column_letter(col), get_column_letter(col + 1)
+        tl, nl = get_column_letter(col + 2), get_column_letter(col + 3)
+        with (DATA_DIR / "assumptions" / "market.yaml").open() as fh:
+            mkt = _yaml.safe_load(fh)
         r = 4 + len(self.cuts) + 3
 
-        def block(title, rows, fmt, values=None):
+        # master dials
+        _hdr(ws, r, col, "MASTER DIALS — one cell flexes the whole model")
+        _hdr(ws, r, col + 1, "x")
+        self.dial_refs = {}
+        for label, val in [("Utilization scaler (100% = as-is)", 1.0),
+                           ("Naphtha yield scaler (100% = as-is)", 1.0)]:
+            r += 1
+            ws.cell(row=r, column=col, value=label).font = FONT_SMALL
+            _style(ws.cell(row=r, column=col + 1, value=val),
+                   fill=FILL_INPUT, fmt="0%")
+            self.dial_refs[label] = f"Assumptions!${vl}${r}"
+        r += 2
+
+        def market_block(title, hdr_val, rows, fmt):
             nonlocal r
             _hdr(ws, r, col, title)
-            _hdr(ws, r, col + 1, fmt[1])
+            _hdr(ws, r, col + 1, hdr_val)
+            _hdr(ws, r, col + 2, "BBG Codes")
+            hdr_row = r
             refs = {}
-            for label in rows:
+            for spec in rows:
                 r += 1
-                ws.cell(row=r, column=col, value=label).font = FONT_SMALL
-                _style(ws.cell(row=r, column=col + 1,
-                               value=(values or {}).get(label)),
-                       fill=FILL_INPUT, fmt=fmt[0])
-                refs[label] = f"Assumptions!${vl}${r}"
+                ws.cell(row=r, column=col, value=spec["label"]).font = FONT_SMALL
+                source = spec.get("source", "static")
+                if source == "bdp":
+                    value = f"=_xll.BDP(${tl}${r}, ${vl}${hdr_row})"
+                elif source == "formula":
+                    value = spec["formula"].replace("{next}", str(r + 1)) \
+                                           .replace("S", vl)
+                else:
+                    value = spec.get("value")
+                _style(ws.cell(row=r, column=col + 1, value=value),
+                       fill=FILL_INPUT, fmt=fmt)
+                if spec.get("ticker"):
+                    _style(ws.cell(row=r, column=col + 2, value=spec["ticker"]),
+                           fill=FILL_INPUT)
+                if spec.get("note"):
+                    # notes sit in the ticker column when there is no ticker
+                    # (matches the desk's layout), else one column further
+                    note_col = col + 3 if spec.get("ticker") else col + 2
+                    ws.cell(row=r, column=note_col,
+                            value=spec["note"]).font = FONT_SMALL
+                refs[spec["key"]] = f"Assumptions!${vl}${r}"
             r += 2
             return refs
 
-        self.dial_refs = block(
-            "MASTER DIALS — one cell flexes the whole model",
-            ["Utilization scaler (100% = as-is)",
-             "Naphtha yield scaler (100% = as-is)"],
-            ("0%", "x"),
-            values={"Utilization scaler (100% = as-is)": 1.0,
-                    "Naphtha yield scaler (100% = as-is)": 1.0},
-        )
-        self.price_refs = block(
-            "Prices ($/bbl) — fill to activate BlendEcon",
-            ["Gasoline (RBOB)", "Naphtha USGC (HVN)", "Naphtha LVN USGC",
-             "Naphtha NWE (CIF)", "Naphtha Asia (C+F Japan)", "Reformate",
-             "WTI", "Brent", "WCS diff to WTI", "Condensate diff"],
-            ("0.00", "$/bbl"),
-        )
-        self.freight_refs = block(
-            "Logistics / freight ($/bbl)",
-            ["USGC -> Asia", "USGC -> NWE", "NWE -> USGC",
-             "USGC -> USAC (Jones Act)", "PADD3 -> PADD2 pipeline",
-             "Storage ($/bbl/month)"],
-            ("0.00", "$/bbl"),
-        )
-        self.blend_refs = block(
-            "Blend scenario assumptions",
-            ["Max-light: naphtha yield uplift (pts on crude)",
-             "Max-heavy: naphtha yield reduction (pts on crude)",
-             "Max slate shift (% of crude runs)"],
-            ("0.00", "value"),
-        )
+        self.price_refs = market_block(
+            "Prices — live via Bloomberg BDP (needs terminal)",
+            mkt.get("header", "PX_LAST"), mkt["prices"], "0.00")
+        self.freight_refs = market_block(
+            "Logistics / freight ($/bbl)", "$/bbl", mkt["freight"], "0.00")
+        self.blend_refs = market_block(
+            "Blend scenario assumptions", "value",
+            mkt["blend_scenarios"], "0.00")
         ws.column_dimensions[cl].width = 40
-        ws.column_dimensions[vl].width = 10
+        ws.column_dimensions[vl].width = 12
+        ws.column_dimensions[tl].width = 14
+        ws.column_dimensions[nl].width = 26
 
 
     LINK_FONT = Font(size=9, color="1F5AA8", underline="single", name="Calibri")
@@ -1610,7 +1641,7 @@ class SimpleWorkbook(DeskWorkbook):
     def _link_to_box(self, cell, rid: str) -> None:
         row = getattr(self, "box_banner_rows", {}).get(rid)
         if row:
-            cell.hyperlink = f"#Boxes!A{row}"
+            cell.hyperlink = f"#'Individual Refineries'!A{row}"
             cell.font = self.LINK_FONT
 
     # -------------------------------------------------------- Nameplate tab
@@ -1623,18 +1654,18 @@ class SimpleWorkbook(DeskWorkbook):
                       key=lambda x: (x.padd, -x.crude_capacity_kbd, x.name))
 
     def _sheet_nameplate(self) -> None:
-        """Stated capacity pivot: refinery x unit, live SUMIFS over Boxes so
+        """Stated capacity pivot: refinery x unit, live SUMIFS over the boxes so
         capacity edits there flow through."""
         ws = self.wb.create_sheet("Nameplate")
         _banner(ws, 1, "Nameplate capacity (kbd) — stated unit capacities, live from "
-                       "the Boxes sheet. This is what's on paper; see Effective for "
+                       "Individual Refineries. This is what's on paper; see Effective for "
                        "what units have actually demonstrated.", 5 + len(self.UNIT_COLS))
         headers = ["refinery_id", "name", "padd", "crude kbd"] + self.UNIT_COLS
         for c, h in enumerate(headers, start=1):
             _hdr(ws, 2, c, h)
-        b_rid = f"Boxes!$B$3:$B${self.box_last}"
-        b_uid = f"Boxes!$D$3:$D${self.box_last}"
-        b_cap = f"Boxes!$F$3:$F${self.box_last}"
+        b_rid = f"'Individual Refineries'!$B$3:$B${self.box_last}"
+        b_uid = f"'Individual Refineries'!$D$3:$D${self.box_last}"
+        b_cap = f"'Individual Refineries'!$F$3:$F${self.box_last}"
         d_id = f"Data!$A$3:$A${self.data_last_row}"
         d_cap = f"Data!$G$3:$G${self.data_last_row}"
         r = 3
@@ -1680,7 +1711,7 @@ class SimpleWorkbook(DeskWorkbook):
         ws = self.wb.create_sheet("Effective")
         _banner(ws, 1, "Effective capacity (kbd) — max demonstrated annual throughput "
                        "2017-2024 excl. 2020 (RefineryDataTool actuals). BLUE = "
-                       "desk-adjustable: edits here flow into the Boxes 'eff cap' "
+                       "desk-adjustable: edits here flow into the boxes' 'eff cap' "
                        "column. Nameplate is what's stated; this is what's proven.",
                 7 + len(self.UNIT_COLS))
         headers = (["refinery_id", "name", "padd", "crude kbd"] + self.UNIT_COLS
@@ -1716,10 +1747,10 @@ class SimpleWorkbook(DeskWorkbook):
         _hdr(ws, r + 1, 2, "nameplate")
         _hdr(ws, r + 1, 3, "effective")
         _hdr(ws, r + 1, 4, "running now")
-        b_pad = f"Boxes!$C$3:$C${self.box_last}"
-        b_uid = f"Boxes!$D$3:$D${self.box_last}"
-        b_cap = f"Boxes!$F$3:$F${self.box_last}"
-        b_utl = f"Boxes!${get_column_letter(self.c_util)}$3:" \
+        b_pad = f"'Individual Refineries'!$C$3:$C${self.box_last}"
+        b_uid = f"'Individual Refineries'!$D$3:$D${self.box_last}"
+        b_cap = f"'Individual Refineries'!$F$3:$F${self.box_last}"
+        b_utl = f"'Individual Refineries'!${get_column_letter(self.c_util)}$3:" \
                 f"${get_column_letter(self.c_util)}${self.box_last}"
         for i, p in enumerate(self.padds):
             rr = r + 2 + i
@@ -1832,13 +1863,13 @@ class SimpleWorkbook(DeskWorkbook):
         _banner(ws, 3, "Blend value spreads ($/bbl)", 4)
         spreads = [
             ("Gasoline - HVN (naphtha pull into mogas when positive)",
-             f'={P["Gasoline (RBOB)"]}-{P["Naphtha USGC (HVN)"]}'),
+             f'={P["gasoline"]}-{P["naphtha_usgc"]}'),
             ("Gasoline - LVN",
-             f'={P["Gasoline (RBOB)"]}-{P["Naphtha LVN USGC"]}'),
+             f'={P["gasoline"]}-{P["naphtha_lvn"]}'),
             ("Reformate - HVN (reforming uplift)",
-             f'={P["Reformate"]}-{P["Naphtha USGC (HVN)"]}'),
+             f'={P["reformate"]}-{P["naphtha_usgc"]}'),
             ("Naphtha USGC - WTI (naphtha crack)",
-             f'={P["Naphtha USGC (HVN)"]}-{P["WTI"]}'),
+             f'={P["naphtha_usgc"]}-{P["wti"]}'),
         ]
         r = 4
         for label, formula in spreads:
@@ -1850,14 +1881,14 @@ class SimpleWorkbook(DeskWorkbook):
         _banner(ws, r, "Arbitrage netbacks ($/bbl) — positive = arb OPEN", 4)
         arbs = [
             ("USGC -> Asia",
-             f'={P["Naphtha Asia (C+F Japan)"]}-{P["Naphtha USGC (HVN)"]}'
-             f'-{F["USGC -> Asia"]}'),
+             f'={P["naphtha_asia"]}-{P["naphtha_usgc"]}'
+             f'-{F["usgc_asia"]}'),
             ("USGC -> NWE",
-             f'={P["Naphtha NWE (CIF)"]}-{P["Naphtha USGC (HVN)"]}'
-             f'-{F["USGC -> NWE"]}'),
+             f'={P["naphtha_nwe"]}-{P["naphtha_usgc"]}'
+             f'-{F["usgc_nwe"]}'),
             ("NWE -> USGC (imports)",
-             f'={P["Naphtha USGC (HVN)"]}-{P["Naphtha NWE (CIF)"]}'
-             f'-{F["NWE -> USGC"]}'),
+             f'={P["naphtha_usgc"]}-{P["naphtha_nwe"]}'
+             f'-{F["nwe_usgc"]}'),
         ]
         for label, formula in arbs:
             r += 1
@@ -1874,16 +1905,16 @@ class SimpleWorkbook(DeskWorkbook):
                                "max-light delta", "max-heavy delta",
                                "$k/day at stake (light, vs mogas)"], start=1):
             _hdr(ws, r, c, h)
-        b_pad = f"Boxes!$C$3:$C${self.box_last}"
-        b_uid = f"Boxes!$D$3:$D${self.box_last}"
-        b_typ = f"Boxes!$A$3:$A${self.box_last}"
-        b_cap = f"Boxes!$F$3:$F${self.box_last}"
-        b_utl = f"Boxes!${get_column_letter(self.c_util)}$3:" \
+        b_pad = f"'Individual Refineries'!$C$3:$C${self.box_last}"
+        b_uid = f"'Individual Refineries'!$D$3:$D${self.box_last}"
+        b_typ = f"'Individual Refineries'!$A$3:$A${self.box_last}"
+        b_cap = f"'Individual Refineries'!$F$3:$F${self.box_last}"
+        b_utl = f"'Individual Refineries'!${get_column_letter(self.c_util)}$3:" \
                 f"${get_column_letter(self.c_util)}${self.box_last}"
-        b_net = f"Boxes!${get_column_letter(self.c_base)}$3:" \
+        b_net = f"'Individual Refineries'!${get_column_letter(self.c_base)}$3:" \
                 f"${get_column_letter(self.c_base)}${self.box_last}"
-        uplift = B["Max-light: naphtha yield uplift (pts on crude)"]
-        cut = B["Max-heavy: naphtha yield reduction (pts on crude)"]
+        uplift = B["light_uplift"]
+        cut = B["heavy_cut"]
         spread = "$D$4"   # gasoline - HVN spread cell above
         for i, p in enumerate(self.padds):
             r += 1
@@ -1921,7 +1952,7 @@ class SimpleWorkbook(DeskWorkbook):
         ws = self.wb.create_sheet("KitWalk")
         _banner(ws, 1, "Kit walk — CDU -> overheads (SR naphtha) -> naphtha "
                        "hydrofiner -> reformer -> net naphtha vs 2024 actual. The "
-                       "yield-tuning workbench: adjust Assumptions/Boxes yields until "
+                       "yield-tuning workbench: adjust Assumptions/box yields until "
                        "delta ~ 0 per refinery.", 13)
         headers = ["refinery_id", "padd", "CDU cap", "CDU util", "CDU runs",
                    "SR naphtha %", "SR naphtha kbd", "NHT cap", "reformer feed",
@@ -1929,15 +1960,15 @@ class SimpleWorkbook(DeskWorkbook):
                    "delta (pts)", "flag"]
         for c, h in enumerate(headers, start=1):
             _hdr(ws, 2, c, h)
-        b_rid = f"Boxes!$B$3:$B${self.box_last}"
-        b_uid = f"Boxes!$D$3:$D${self.box_last}"
-        b_typ = f"Boxes!$A$3:$A${self.box_last}"
-        b_cap = f"Boxes!$F$3:$F${self.box_last}"
+        b_rid = f"'Individual Refineries'!$B$3:$B${self.box_last}"
+        b_uid = f"'Individual Refineries'!$D$3:$D${self.box_last}"
+        b_typ = f"'Individual Refineries'!$A$3:$A${self.box_last}"
+        b_cap = f"'Individual Refineries'!$F$3:$F${self.box_last}"
         utl_l = get_column_letter(self.c_util)
         ysm_l = get_column_letter(self.c_ysum)
-        b_utl = f"Boxes!${utl_l}$3:${utl_l}${self.box_last}"
-        b_ysm = f"Boxes!${ysm_l}$3:${ysm_l}${self.box_last}"
-        b_net = f"Boxes!${get_column_letter(self.c_base)}$3:" \
+        b_utl = f"'Individual Refineries'!${utl_l}$3:${utl_l}${self.box_last}"
+        b_ysm = f"'Individual Refineries'!${ysm_l}$3:${ysm_l}${self.box_last}"
+        b_net = f"'Individual Refineries'!${get_column_letter(self.c_base)}$3:" \
                 f"${get_column_letter(self.c_base)}${self.box_last}"
         d_id = f"Data!$A$3:$A${self.data_last_row}"
         d_np = f"Data!$N$3:$N${self.data_last_row}"

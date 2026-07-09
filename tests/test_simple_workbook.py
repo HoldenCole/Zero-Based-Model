@@ -25,7 +25,7 @@ def built(tmp_path_factory):
 
 def _totals(path) -> dict[str, float]:
     wb = openpyxl.load_workbook(path, data_only=True)
-    ws = wb["Boxes"]
+    ws = wb["Individual Refineries"]
     return {
         ws.cell(row=r, column=2).value: ws.cell(row=r, column=17).value
         for r in range(3, 3000)
@@ -36,21 +36,22 @@ def _totals(path) -> dict[str, float]:
 def test_tab_layout(built):
     _, out = built
     wb = openpyxl.load_workbook(out)
-    assert wb.sheetnames == ["Cover", "Data", "Boxes", "Assumptions", "Nameplate",
-                             "Effective", "CrudeSlate", "BlendEcon", "KitWalk"]
+    assert wb.sheetnames == ["Cover", "Assumptions", "Individual Refineries",
+                             "CrudeSlate", "BlendEcon", "KitWalk", "Nameplate",
+                             "Effective", "Data"]
     # presentation layer: charts + live KPIs on the cover, themed tabs
     cover = wb["Cover"]
     assert len(cover._charts) == 2
     assert str(cover.cell(row=9, column=3).value).startswith("=SUMPRODUCT")
-    assert wb["Boxes"].sheet_view.showGridLines is False
-    assert wb["Boxes"].sheet_properties.tabColor is not None
+    assert wb["Individual Refineries"].sheet_view.showGridLines is False
+    assert wb["Individual Refineries"].sheet_properties.tabColor is not None
 
 
 def test_new_tabs_are_wired(built):
     data, out = built
     wb = openpyxl.load_workbook(out)
     # Nameplate pivots live off Boxes
-    assert str(wb["Nameplate"].cell(row=3, column=5).value).startswith("=SUMIFS(Boxes!")
+    assert str(wb["Nameplate"].cell(row=3, column=5).value).startswith("=SUMIFS('Individual Refineries'!")
     # KitWalk has one row per unit-detail refinery, formulas over Boxes/Data
     kw = wb["KitWalk"]
     rids = [kw.cell(row=r, column=1).value for r in range(3, 300)
@@ -72,7 +73,7 @@ def test_new_tabs_are_wired(built):
 def test_every_refinery_has_a_box(built):
     data, out = built
     wb = openpyxl.load_workbook(out)
-    ws = wb["Boxes"]
+    ws = wb["Individual Refineries"]
     total_rows = [r for r in range(3, 3000) if ws.cell(row=r, column=1).value == "TOTAL"]
     assert len(total_rows) == len(data.refineries)
     # yield-mode capacity and yields read the Data sheet live
@@ -146,7 +147,7 @@ def test_everything_propagates(built, tmp_path):
             break
     # flip XOM_BAYTOWN's refinery-level mode toggle to 'assumption',
     # and knock CHEVRON_PASCAGOULA fully offline via the outage column
-    boxes_ws = wb["Boxes"]
+    boxes_ws = wb["Individual Refineries"]
     for r in range(3, 3000):
         t = boxes_ws.cell(row=r, column=1).value
         rid = boxes_ws.cell(row=r, column=2).value
@@ -186,7 +187,7 @@ def test_everything_propagates(built, tmp_path):
     assert mod["XOM_BAYTOWN"] == pytest.approx(xom * 0.9 * 1.2, abs=0.05)
 
     boxes = openpyxl.load_workbook(
-        tmp_path / "recalc" / "modded.xlsx", data_only=True)["Boxes"]
+        tmp_path / "recalc" / "modded.xlsx", data_only=True)["Individual Refineries"]
     eff_cap = next(
         boxes.cell(row=r, column=7).value for r in range(3, 3000)
         if boxes.cell(row=r, column=1).value == "UNIT"

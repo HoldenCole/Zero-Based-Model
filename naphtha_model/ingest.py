@@ -696,3 +696,191 @@ def ingest_reference(data_dir: Path = DATA_DIR) -> dict:
             n += 1
     out["us_balance_rows"] = n
     return out
+
+
+# ---------------------------------------------------- offline events (IIR-style)
+#
+# The desk's offline-events export (OEVs sheet): planned & unplanned outage
+# events per unit with dates and offline capacity. Ingestion writes
+#   data/reference/outage_events.csv    all US events ending 2023+ (matched)
+#   data/reference/current_outages.csv  offline fraction per refinery/unit
+#                                       as of a given date (feeds the boxes'
+#                                       OFFLINE % prefill)
+
+OEV_UNIT_MAP: dict[str, str] = {
+    "Atmospheric Distillation": "CDU",
+    "Vacuum Distillation": "VDU",
+    "FCCU (Fluid Catalytic Cracker)": "FCC",
+    "Delayed Coker": "COKER",
+    "Fluid Coker": "FCOKER",
+    "Flexicoker": "FCOKER",
+    "Distillate Hydrocracker": "DHCU",
+    "Resid Hydrocracker": "RHCU",
+    "Semiregen/Cyclic Reformer": "REF",
+    "CCR (Continuous Catalytic Reformer)": "CCR",
+    "Isomerization": "ISOM",
+    "Hydrofluoric Alkylation": "ALKY",
+    "Sulfuric Alkylation": "ALKY",
+    "Reformer Feed Hydrotreater": "NHT",
+    "Light Naphtha Hydrotreater": "NHT",
+    "Naphtha Hydrotreater": "NHT",
+}
+
+# plant-name|city -> refinery_id; None = not modelled (splitters not yet in
+# the registry, lube/wax/asphalt plants, shut sites). Cities often differ
+# between databases (Joliet=Channahon, Pine Bend=Inver Grove Heights, ...).
+EXXON_PLANT_ALIASES: dict[str, str | None] = {
+    "Big Spring Refinery|Big Spring": "ALON_BIG_SPRINGS",
+    "Channelview Condensate Splitter|Channelview": None,
+    "Cherry Point Refinery|Blaine": "BP_FERNDALE",
+    "Corpus Christi Condensate Splitter (ONEOK)|Corpus Christi": None,
+    "Denver Refinery - Plant 1 (West)|Commerce City": "SUNCOR_DENVER",
+    "Denver Refinery - Plant 2 (East)|Commerce City": "SUNCOR_DENVER",
+    "Eagle Springs Refinery|Ely": "FORELAND_TONOPAH",
+    "El Dorado Refinery (Delek)|El Dorado": "DELEK_EL_DORADO_AR",
+    "El Dorado Refinery (HF Sinclair)|El Dorado": "HF_EL_DORADO_KS",
+    "Galena Park Natural Gas Condensate Splitter|Galena Park": "KINDER_HOUSTON",
+    "Galveston Crude Refinery|Galveston": None,
+    "Houston Fractionation Refinery|Houston": None,
+    "Houston Refinery (Houston Refining)|Houston": "LYONDELLBASELL_HOUSTON",
+    "Joliet Refinery|Channahon": "EXXONMOBIL_JOLIET",
+    "Kenai Refinery|Kenai": "MARATHON_NIKISKI",
+    "Los Angeles Refinery - Wilmington (Marathon)|Wilmington": "MARATHON_LOS_ANGELES",
+    "Los Angeles Refinery - Wilmington|Wilmington": "PHILLIPS_LOS_ANGELES",
+    "Lovington Refinery|Lovington": "HF_ARTESIA",   # Artesia/Lovington complex
+    "Marrero Re-Refined Oil Lubricants|Marrero": None,
+    "Mobile Refinery (Vertex)|Saraland": "VERTEX_MOBILE",
+    "North Salt Lake Refinery|North Salt Lake": "BIG_NORTH_SLATERVILLE_CANAL",
+    "Par East Refinery|Kapolei": "PAR_EWA_BEACH",
+    "Pine Bend Refinery|Inver Grove Heights": "FLINT_ROSEMOUNT",
+    "Rodeo Refinery|Rodeo": None,                   # renewables conversion
+    "Salt Lake City Refinery (Chevron)|North Salt Lake": "CHEVRON_SALT_LAKE_CITY",
+    "Sandersville Refinery|Heidelberg": "HUNT_SANDERSVILLE",
+    "Smethport Waxes|Smethport": None,
+    "Sweeny Refinery|Old Ocean": "PHILLIPS_SWEENY",
+    "Toledo Refinery (Cenovus)|Oregon": "CENOVUS_TOLEDO",
+    "Toledo Refinery (PBF)|Oregon": "PBF_TOLEDO",
+    "Wilmington Asphalt Refinery|Wilmington": None,
+    "Wilmington Refinery|Wilmington": "VALERO_LOS_ANGELES",
+    "Wood River Refinery|Roxana": "CENOVUS_WOOD_RIVER",
+}
+
+
+def _match_plant(name: str, city: str, state: str, owner: str,
+                 registry: list[dict]) -> str | None:
+    key = f"{name}|{city}"
+    if key in EXXON_PLANT_ALIASES:
+        return EXXON_PLANT_ALIASES[key]
+    n_city = _norm(city or "")
+    cands = [r for r in registry if _norm(r["city"]) == n_city]
+    if len(cands) > 1:
+        hints = _norm(f"{name} {owner}")
+        hinted = [r for r in cands
+                  if any(tok in hints for tok in _norm(r["name"]).split()
+                         if len(tok) > 3)]
+        if len(hinted) == 1:
+            return hinted[0]["refinery_id"]
+        strong = [r for r in cands
+                  if _norm(r["owner"]).split()[0] in hints
+                  or _norm(r["name"]).split()[0] in hints]
+        if len(strong) == 1:
+            return strong[0]["refinery_id"]
+        return None
+    return cands[0]["refinery_id"] if cands else None
+
+
+def ingest_outages(
+    xlsx_path: Path, data_dir: Path = DATA_DIR, as_of: str = "2026-07-09"
+) -> dict:
+    registry = _read_registry(data_dir / "reference" / "refineries.csv")
+    wb = openpyxl.load_workbook(Path(xlsx_path), data_only=True, read_only=True)
+    ws = wb["OEVs"]
+    rows = ws.iter_rows(min_row=1, values_only=True)
+    hdr = [str(h) for h in next(rows)]
+    i = {h: n for n, h in enumerate(hdr)}
+
+    def d(v):  # '2023-03-25T05:00:00Z[UTC]' -> '2023-03-25'
+        return str(v)[:10] if v else ""
+
+    plant_cache: dict = {}
+    events = []
+    unmatched_plants = set()
+    for row in rows:
+        if row[i["plantPhysicalAddress.countryName"]] != "U.S.A.":
+            continue
+        end = d(row[i["eventEndDate"]])
+        if end < "2023-01-01":
+            continue
+        pid = row[i["associatedPlantId"]]
+        if pid not in plant_cache:
+            plant_cache[pid] = _match_plant(
+                str(row[i["plantName"]] or ""),
+                str(row[i["plantPhysicalAddress.city"]] or ""),
+                str(row[i["plantPhysicalAddress.stateName"]] or ""),
+                str(row[i["plantOwnerName"]] or ""), registry)
+        rid = plant_cache[pid]
+        if rid is None:
+            unmatched_plants.add(
+                f'{row[i["plantName"]]} ({row[i["plantPhysicalAddress.city"]]}, '
+                f'{row[i["plantPhysicalAddress.stateName"]]})')
+        events.append({
+            "refinery_id": rid or "",
+            "event_id": row[i["eventId"]],
+            "event_type": row[i["eventType"]],
+            "status": row[i["derivedEventStatusDesc"]],
+            "start": d(row[i["eventStartDate"]]),
+            "end": end,
+            "duration_days": row[i["eventDuration"]],
+            "unit_name": row[i["unitName"]],
+            "unit_type": row[i["unitTypeDesc"]],
+            "model_unit": OEV_UNIT_MAP.get(str(row[i["unitTypeDesc"]]), ""),
+            "unit_capacity": row[i["offlineCapacity.unitCapacity"]],
+            "capacity_offline": row[i["offlineCapacity.capacityOffline"]],
+            "uom": row[i["offlineCapacity.uom"]],
+            "confirmation": row[i["eventConfirmationStatus"]],
+            "cause": row[i["eventCause"]],
+            "plant_name": row[i["plantName"]],
+            "city": row[i["plantPhysicalAddress.city"]],
+            "state": row[i["plantPhysicalAddress.stateName"]],
+        })
+
+    ev_path = data_dir / "reference" / "outage_events.csv"
+    fields = list(events[0].keys())
+    with ev_path.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=fields)
+        w.writeheader()
+        w.writerows(sorted(events, key=lambda e: (e["start"], str(e["refinery_id"]))))
+
+    # as-of snapshot: offline fraction per (refinery, model unit)
+    groups: dict[tuple[str, str], list] = {}
+    for e in events:
+        if not e["refinery_id"] or not e["model_unit"]:
+            continue
+        if not (e["start"] <= as_of <= e["end"]):
+            continue
+        cap = float(e["unit_capacity"] or 0)
+        off = float(e["capacity_offline"] or 0)
+        if cap > 0:
+            groups.setdefault((e["refinery_id"], e["model_unit"]), []).append(
+                (off, cap, e["event_type"], e["event_id"]))
+    cur_path = data_dir / "reference" / "current_outages.csv"
+    with cur_path.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["refinery_id", "unit_id", "as_of", "offline_frac",
+                    "events", "event_types"])
+        for (rid, unit), recs in sorted(groups.items()):
+            frac = min(1.0, sum(o for o, *_ in recs) / max(sum(c for _, c, *_ in recs), 1e-9))
+            w.writerow([rid, unit, as_of, round(frac, 4),
+                        ";".join(str(x[3]) for x in recs),
+                        ";".join(sorted({x[2] for x in recs}))])
+
+    matched_plants = sum(1 for v in plant_cache.values() if v)
+    return {
+        "us_events_2023_plus": len(events),
+        "plants_matched": f"{matched_plants}/{len(plant_cache)}",
+        "current_outage_rows": len(groups),
+        "unmatched_plants": sorted(unmatched_plants),
+        "events_csv": str(ev_path),
+        "current_csv": str(cur_path),
+        "as_of": as_of,
+    }

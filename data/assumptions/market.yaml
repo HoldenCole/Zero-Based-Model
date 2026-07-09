@@ -1,0 +1,28 @@
+# Market data block on the Assumptions tab (desk-maintained).
+# Each price row renders as: label | value | ticker | note.
+# source: bdp    -> value cell gets =_xll.BDP($T$<row>, $S$<hdr>) (Bloomberg
+#                   add-in; shows #NAME? off-terminal, refreshes on terminal)
+# source: static -> value cell holds the number below
+header: PX_LAST
+prices:                       # order fixed: BlendEcon references these rows
+  - {key: gasoline,       label: RBOB,                                       source: bdp, ticker: XBA Comdty}
+  - {key: naphtha_usgc,   label: BBG FV ARA Naphtha CIF Cargo Month Index,   source: bdp, ticker: FSNNM1 Index, note: Need a non BBG FV code}
+  - {key: naphtha_lvn,    label: MB Naphtha,                                 source: bdp, ticker: MBGLM1 Index}
+  - {key: naphtha_nwe,    label: Naphtha NWE (CIF),                          source: bdp, ticker: BCAN26 Comdty}
+  - {key: naphtha_asia,   label: Naphtha Asia (C+F Japan),                   source: bdp, ticker: BBWN26 Comdty}
+  - {key: reformate,      label: Reformate,                                  source: bdp, ticker: PUSARFME Index}
+  - {key: wti,            label: WTI,                                        source: bdp, ticker: CL1 Comdty}
+  - {key: brent,          label: Brent,                                      source: bdp, ticker: CO1 Comdty}
+  - {key: wcs_diff,       label: WCS vs WTI,                                 source: bdp, ticker: GCM11635 Index}
+  - {key: condensate,     label: Condensate Dif,                             source: bdp, ticker: DGWA Comdty}
+freight:
+  - {key: usgc_asia,     label: USGC -> Asia,               source: formula, formula: "=S{next}", note: "*priced off USGC->NWE*"}
+  - {key: usgc_nwe,      label: USGC -> NWE,                source: static, value: 42.18, note: TC14}
+  - {key: nwe_usgc,      label: NWE -> USGC,                source: static, value: 20.91, note: TC2}
+  - {key: jones_act,     label: USGC -> USAC (Jones Act),   source: static, value: 15,    note: Made up for testing purposes}
+  - {key: pipeline,      label: PADD3 -> PADD2 pipeline,    source: static, value: 10.29, note: Explorer}
+  - {key: storage,       label: Storage ($/bbl/month),      source: static, value: 2,     note: Made up for testing purposes}
+blend_scenarios:
+  - {key: light_uplift,  label: "Max-light: naphtha yield uplift (pts on crude)",    value: 5, note: Made up for testing purposes}
+  - {key: heavy_cut,     label: "Max-heavy: naphtha yield reduction (pts on crude)", value: 5, note: Made up for testing purposes}
+  - {key: slate_shift,   label: "Max slate shift (% of crude runs)",                 value: 5, note: Made up for testing purposes}

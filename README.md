@@ -126,6 +126,8 @@ python -m naphtha_model scenario data/scenarios/example_scenario.yaml
 python -m naphtha_model export --out naphtha_model.xlsx   # THE desk workbook
 python -m naphtha_model export --dump --out flat.xlsx     # flat value dump
 python -m naphtha_model ingest-yields data/raw/estimated_refinery_outputs_2024.xlsx
+python -m naphtha_model ingest-outages data/raw/offline_events_units_db.xlsx
+python -m naphtha_model outages --days 90 --padd 3        # live + upcoming TARs
 python -m naphtha_model calibrate --padd 3                # model vs 2024 actuals
 
 pytest                                            # run the test suite

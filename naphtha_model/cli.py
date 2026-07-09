@@ -71,6 +71,17 @@ def main(argv: list[str] | None = None) -> int:
         help="extract crude slate / 2021 yields / US naphtha balance from data/raw",
     )
 
+    p_oev = sub.add_parser(
+        "ingest-outages", help="ingest the desk offline-events export (OEVs)"
+    )
+    p_oev.add_argument("path")
+    p_oev.add_argument("--as-of", default="2026-07-09",
+                       help="snapshot date for current_outages.csv")
+
+    p_out = sub.add_parser("outages", help="ongoing + upcoming outage events")
+    p_out.add_argument("--days", type=int, default=90)
+    p_out.add_argument("--padd", type=int)
+
     p_cal = sub.add_parser(
         "calibrate", help="model-implied net naphtha yield vs 2024 actuals"
     )
@@ -127,6 +138,19 @@ def main(argv: list[str] | None = None) -> int:
 
         for k, v in ingest_reference().items():
             print(f"{k}: {v}")
+        return 0
+
+    if args.command == "ingest-outages":
+        from .ingest import ingest_outages
+
+        result = ingest_outages(Path(args.path), as_of=args.as_of)
+        for k, v in result.items():
+            if isinstance(v, list):
+                print(f"{k} ({len(v)}):")
+                for x in v:
+                    print(f"    {x}")
+            else:
+                print(f"{k}: {v}")
         return 0
 
     if args.command == "ingest-capacity":
@@ -312,6 +336,34 @@ def main(argv: list[str] | None = None) -> int:
                 kbd = sum(float(f["kbd"]) for f in naph)
                 print(f"\n  >> buys {kbd:.1f} kbd of naphtha/reformate — "
                       f"a merchant naphtha BUYER")
+
+    elif args.command == "outages":
+        import csv as _csv
+        from datetime import timedelta
+
+        from .config import DATA_DIR
+
+        day = axis[0]
+        horizon = (day + timedelta(days=args.days)).isoformat()
+        padd_of = {r.refinery_id: r.padd for r in data.refineries}
+        with (DATA_DIR / "reference" / "outage_events.csv").open() as fh:
+            evs = [e for e in _csv.DictReader(fh)
+                   if e["refinery_id"] and e["model_unit"]
+                   and e["end"] >= day.isoformat() and e["start"] <= horizon
+                   and (args.padd is None or padd_of.get(e["refinery_id"]) == args.padd)]
+        print(f"naphtha-relevant outage events, {day} -> {horizon} "
+              f"({'PADD ' + str(args.padd) if args.padd else 'all PADDs'})\n")
+        print(f"{'start':<11} {'end':<11} {'refinery':<26} {'unit':<7} "
+              f"{'type':<10} {'offline kbd':>11}  cause")
+        print("-" * 100)
+        for e in sorted(evs, key=lambda x: (x["start"], x["refinery_id"])):
+            off = float(e["capacity_offline"] or 0) / 1000
+            live = "LIVE " if e["start"] <= day.isoformat() else ""
+            print(f"{e['start']:<11} {e['end']:<11} {e['refinery_id']:<26} "
+                  f"{e['model_unit']:<7} {live}{e['event_type']:<9} {off:>11,.1f}  "
+                  f"{(e['cause'] or '')[:30]}")
+        print(f"\n{len(evs)} events. Live events prefill the boxes' OFFLINE % "
+              f"column on the next export.")
 
     elif args.command == "export":
         if args.dump:
