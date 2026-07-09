@@ -37,8 +37,8 @@ def test_tab_layout(built):
     _, out = built
     wb = openpyxl.load_workbook(out)
     assert wb.sheetnames == ["Cover", "Assumptions", "Individual Refineries",
-                             "CrudeSlate", "BlendEcon", "KitWalk", "Nameplate",
-                             "Effective", "Data"]
+                             "Outages", "CrudeSlate", "BlendEcon", "KitWalk",
+                             "Nameplate", "Effective", "Data"]
     # presentation layer: charts + live KPIs on the cover, themed tabs
     cover = wb["Cover"]
     assert len(cover._charts) == 2
@@ -68,6 +68,13 @@ def test_new_tabs_are_wired(built):
     cs = wb["CrudeSlate"]
     col8 = [cs.cell(row=r, column=8).value for r in range(3, 2500)]
     assert "BUYER" in col8
+    # Outages tab: event rows, TODAY()-anchored strip, LIVE flag formulas
+    ot = wb["Outages"]
+    assert "TODAY()" in str(ot.cell(row=4, column=2).value)
+    assert "SUMPRODUCT" in str(ot.cell(row=5, column=2).value)
+    n_events = sum(1 for r in range(13, 2000) if ot.cell(row=r, column=1).value)
+    assert n_events > 100
+    assert len(ot._charts) == 1
 
 
 def test_every_refinery_has_a_box(built):

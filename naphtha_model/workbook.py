@@ -72,6 +72,7 @@ TAB_COLORS = {
     "Data": "4472C4", "Assumptions": "4472C4",          # inputs: blue
     "Boxes": NAVY, "Individual Refineries": NAVY,                                       # the engine
     "Nameplate": "2E8677", "Effective": "2E8677",        # capacity views: teal
+    "Outages": "B03A2E",
     "CrudeSlate": "6B8E23",                              # slate: olive
     "BlendEcon": "A23B3B",                               # economics: maroon
     "KitWalk": "7A5195",                                 # tuning: plum
@@ -1091,8 +1092,9 @@ class SimpleWorkbook(DeskWorkbook):
                 reformer -> net, against the 2024 actual (yield tuning)
     """
 
-    TAB_ORDER = ["Cover", "Assumptions", "Individual Refineries", "CrudeSlate",
-                 "BlendEcon", "KitWalk", "Nameplate", "Effective", "Data"]
+    TAB_ORDER = ["Cover", "Assumptions", "Individual Refineries", "Outages",
+                 "CrudeSlate", "BlendEcon", "KitWalk", "Nameplate", "Effective",
+                 "Data"]
 
     def build(self, out_path: Path) -> Path:
         self._sheet_assumptions()
@@ -1102,6 +1104,7 @@ class SimpleWorkbook(DeskWorkbook):
         self._simple_boxes()
         self._sheet_nameplate()
         self._sheet_effective()
+        self._sheet_outages_tab()
         self._sheet_crudeslate()
         self._sheet_blendecon()
         self._sheet_kitwalk()
@@ -1781,6 +1784,135 @@ class SimpleWorkbook(DeskWorkbook):
         for c, w in enumerate(widths, start=1):
             ws.column_dimensions[get_column_letter(c)].width = w
         ws.freeze_panes = "E3"
+
+
+    # --------------------------------------------------------- Outages tab
+
+    def _sheet_outages_tab(self) -> None:
+        """Forward TAR calendar from the desk offline-events export: weekly
+        supply-at-risk strip (anchored to TODAY(), so it stays current) over
+        a filterable event table. LIVE flags recompute on open."""
+        import csv as _csv
+        from datetime import date as _date
+
+        ws = self.wb.create_sheet("Outages")
+        _banner(
+            ws, 1,
+            "Outages & turnarounds — desk offline-events export (naphtha-relevant "
+            "units, matched refineries). The weekly strip and LIVE flags track "
+            "TODAY(). Live events also prefill OFFLINE % in the boxes at build "
+            "time; refresh via: python -m naphtha_model ingest-outages <file>",
+            13,
+        )
+
+        # events: live or future, next 12 months
+        ev_path = DATA_DIR / "reference" / "outage_events.csv"
+        events = []
+        if ev_path.exists():
+            as_of = self.axis[0].isoformat()
+            horizon = self.axis[0].replace(year=self.axis[0].year + 1).isoformat()
+            with ev_path.open() as fh:
+                for e in _csv.DictReader(fh):
+                    if (e["refinery_id"] and e["model_unit"]
+                            and e["end"] >= as_of and e["start"] <= horizon):
+                        events.append(e)
+            events.sort(key=lambda e: (e["start"], e["refinery_id"]))
+
+        # ---- weekly supply-at-risk strip (13 weeks, prorated by overlap)
+        WEEKS = 13
+        first_ev = 13                      # events table starts here (row)
+        last_ev = first_ev + max(len(events), 1) - 1
+        S, E = f"$D${first_ev}:$D${last_ev}", f"$E${first_ev}:$E${last_ev}"
+        OFF = f"$I${first_ev}:$I${last_ev}"
+        UNIT = f"$C${first_ev}:$C${last_ev}"
+        PADD = f"$B${first_ev}:$B${last_ev}"
+
+        _banner(ws, 3, "  CAPACITY OFFLINE BY WEEK (kbd, prorated)", 2 + WEEKS)
+        _hdr(ws, 4, 1, "week starting")
+        for k in range(WEEKS):
+            cell = ws.cell(row=4, column=2 + k,
+                           value=f"=TODAY()-WEEKDAY(TODAY(),3)+{k * 7}")
+            _style(cell, fill=FILL_HDR, fmt="m/d")
+            cell.font = FONT_HDR
+
+        def overlap(ws_ref, we_ref):
+            min_e = f"(({E}+{we_ref}-ABS({E}-{we_ref}))/2)"
+            max_s = f"(({S}+{ws_ref}+ABS({S}-{ws_ref}))/2)"
+            od = f"({min_e}-{max_s}+1)"
+            return f"(({od}+ABS({od}))/2)"
+
+        strips = [
+            ("US — CDU offline", f'({UNIT}="CDU")'),
+            ("PADD 3 — CDU offline", f'({UNIT}="CDU")*({PADD}=3)'),
+            ("US — reformer offline (REF+CCR)",
+             f'(({UNIT}="REF")+({UNIT}="CCR"))'),
+        ]
+        for i, (label, flt) in enumerate(strips):
+            r = 5 + i
+            _style(ws.cell(row=r, column=1, value=label), fill=FILL_CALC, bold=True)
+            for k in range(WEEKS):
+                col = get_column_letter(2 + k)
+                ws_ref, we_ref = f"{col}$4", f"({col}$4+6)"
+                _style(ws.cell(
+                    row=r, column=2 + k,
+                    value=(f"=SUMPRODUCT({flt}*{OFF}"
+                           f"*{overlap(ws_ref, we_ref)}/7)"),
+                ), fill=FILL_CALC, fmt="#,##0")
+
+        from openpyxl.chart import BarChart, Reference, Series
+
+        ch = BarChart()
+        ch.type = "col"
+        ch.title = "CDU capacity offline by week (kbd)"
+        ch.height, ch.width = 6.5, 22
+        ch.legend = None
+        ser = Series(Reference(ws, min_col=2, max_col=1 + WEEKS, min_row=5, max_row=5))
+        ser.graphicalProperties.solidFill = "B03A2E"
+        ch.series.append(ser)
+        ch.set_categories(Reference(ws, min_col=2, max_col=1 + WEEKS, min_row=4, max_row=4))
+        ws.add_chart(ch, f"P3")
+
+        # ---- events table
+        _banner(ws, first_ev - 2, "  EVENTS — live + next 12 months", 13)
+        headers = ["refinery", "padd", "unit", "start", "end", "days", "type",
+                   "live?", "offline kbd", "% of unit", "confirmed", "cause",
+                   "plant"]
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, first_ev - 1, c, h)
+        padd_of = {r.refinery_id: r.padd for r in self.data.refineries}
+        for j, e in enumerate(events):
+            r = first_ev + j
+            cell = _style(ws.cell(row=r, column=1, value=e["refinery_id"]))
+            self._link_to_box(cell, e["refinery_id"])
+            _style(ws.cell(row=r, column=2, value=padd_of.get(e["refinery_id"])))
+            _style(ws.cell(row=r, column=3, value=e["model_unit"]))
+            _style(ws.cell(row=r, column=4,
+                           value=_date.fromisoformat(e["start"])), fmt="yyyy-mm-dd")
+            _style(ws.cell(row=r, column=5,
+                           value=_date.fromisoformat(e["end"])), fmt="yyyy-mm-dd")
+            _style(ws.cell(row=r, column=6, value=f"=$E{r}-$D{r}"), fmt="0")
+            _style(ws.cell(row=r, column=7, value=e["event_type"]))
+            _style(ws.cell(
+                row=r, column=8,
+                value=f'=IF(AND($D{r}<=TODAY(),$E{r}>=TODAY()),"LIVE","")',
+            ))
+            off = float(e["capacity_offline"] or 0)
+            cap = float(e["unit_capacity"] or 0)
+            _style(ws.cell(row=r, column=9, value=off / 1000), fmt="#,##0.0")
+            _style(ws.cell(row=r, column=10,
+                           value=off / cap if cap else None), fmt="0%")
+            _style(ws.cell(row=r, column=11, value=e["confirmation"]))
+            _style(ws.cell(row=r, column=12, value=e["cause"]))
+            _style(ws.cell(row=r, column=13, value=e["plant_name"]))
+        last = first_ev + len(events) - 1
+        ws.auto_filter.ref = f"A{first_ev - 1}:M{last}"
+        ws.conditional_formatting.add(
+            f"H{first_ev}:H{last}",
+            CellIsRule(operator="equal", formula=['"LIVE"'], fill=FILL_FAIL))
+        widths = [24, 6, 7, 11, 11, 6, 10, 7, 11, 9, 11, 22, 30]
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = f"A{first_ev}"
 
     # ------------------------------------------------------- CrudeSlate tab
 
