@@ -15,6 +15,19 @@ from naphtha_model.workbook import build_simple_workbook
 AXIS = build_axis(date(2026, 7, 6), 8)
 
 
+def _bare_book():
+    """AssumptionBook with no overrides — what mode='assumption' resolves to."""
+    import yaml
+
+    from naphtha_model.assumptions import AssumptionBook
+    from naphtha_model.config import DATA_DIR
+    from naphtha_model.loaders import _read_global_cfg
+
+    padd_cfg = yaml.safe_load(
+        (DATA_DIR / "assumptions" / "padd_overrides.yaml").open()) or {}
+    return AssumptionBook(_read_global_cfg(DATA_DIR), padd_cfg, [])
+
+
 @pytest.fixture(scope="module")
 def built(tmp_path_factory):
     data = load_all()
@@ -37,7 +50,8 @@ def test_tab_layout(built):
     _, out = built
     wb = openpyxl.load_workbook(out)
     assert wb.sheetnames == ["Cover", "Assumptions", "Individual Refineries",
-                             "Outages", "CrudeSlate", "BlendEcon", "KitWalk",
+                             "Outages", "Outage History", "Kpler Flows",
+                             "US Balance", "CrudeSlate", "BlendEcon", "KitWalk",
                              "Nameplate", "Effective", "Data"]
     # presentation layer: charts + live KPIs on the cover, themed tabs
     cover = wb["Cover"]
@@ -75,6 +89,25 @@ def test_new_tabs_are_wired(built):
     n_events = sum(1 for r in range(13, 2000) if ot.cell(row=r, column=1).value)
     assert n_events > 100
     assert len(ot._charts) == 1
+    # Outage History: monthly series, stats and a big filterable history
+    oh = wb["Outage History"]
+    assert oh.cell(row=14, column=1).value == "Planned"
+    n_hist = sum(1 for r in range(19, 6000) if oh.cell(row=r, column=1).value)
+    assert n_hist > 1000
+    # Kpler landing zone aggregates live; US Balance ties model + Kpler + EA
+    kp = wb["Kpler Flows"]
+    assert "SUMIFS" in str(kp.cell(row=3, column=14).value)
+    ub = wb["US Balance"]
+    assert "SUMPRODUCT" in str(ub["C4"].value)
+    assert "'Kpler Flows'" in str(ub["C5"].value)
+    n_months = sum(1 for r in range(12, 100) if ub.cell(row=r, column=1).value)
+    assert n_months >= 40
+    assert len(wb["BlendEcon"]._charts) == 3
+    # unit mode defaults to assumption
+    ir = wb["Individual Refineries"]
+    modes = {ir.cell(row=r, column=9).value for r in range(3, 60)
+             if ir.cell(row=r, column=1).value == "UNIT"}
+    assert modes == {"assumption"}
 
 
 def test_every_refinery_has_a_box(built):
@@ -116,12 +149,13 @@ def test_boxes_match_engine_and_capacity_lights_up(built, tmp_path):
     cap = _totals(tmp_path / "recalc" / "capped.xlsx")
 
     day = AXIS[0]
+    bare = _bare_book()
     for rid in ("MOTIVA_PAR", "XOM_BAYTOWN", "MPC_GALV_BAY"):
-        py = refinery_day(data.refinery(rid), day, data.book, [], include_outages=False).net_kbd
+        py = refinery_day(data.refinery(rid), day, bare, [], include_outages=False).net_kbd
         assert base[rid] == pytest.approx(py, abs=0.05)
 
     r = data.refinery("PBF_DELAWARE_CITY")
-    util = data.book.utilization(r, r.units[0], day).value
+    util = bare.utilization(r, r.units[0], day).value
     assert base["PBF_DELAWARE_CITY"] == pytest.approx(
         r.crude_capacity_kbd * util * r.naphtha_yield_pct / 100, abs=0.01
     )
@@ -152,14 +186,14 @@ def test_everything_propagates(built, tmp_path):
         if eff.cell(row=r, column=1).value == "MOTIVA_PAR":
             eff.cell(row=r, column=hdr["CDU"], value=999)
             break
-    # flip XOM_BAYTOWN's refinery-level mode toggle to 'assumption',
-    # and knock CHEVRON_PASCAGOULA fully offline via the outage column
+    # flip XOM_BAYTOWN's refinery-level mode toggle to 'override' (units
+    # default to 'assumption' now), knock CHEVRON_PASCAGOULA fully offline
     boxes_ws = wb["Individual Refineries"]
     for r in range(3, 3000):
         t = boxes_ws.cell(row=r, column=1).value
         rid = boxes_ws.cell(row=r, column=2).value
         if t == "TOTAL" and rid == "XOM_BAYTOWN":
-            boxes_ws.cell(row=r, column=9, value="assumption")
+            boxes_ws.cell(row=r, column=9, value="override")
         if t == "TOTAL" and rid == "CHEVRON_PASCAGOULA":
             boxes_ws.cell(row=r, column=8, value=1.0)
     modded = tmp_path / "modded.xlsx"
@@ -179,18 +213,9 @@ def test_everything_propagates(built, tmp_path):
     # Pascagoula was set 100% offline -> zero net naphtha
     assert mod["CHEVRON_PASCAGOULA"] == pytest.approx(0.0, abs=0.01)
 
-    # XOM was flipped to 'assumption': expect the pure-assumption engine
-    # number (no overrides) scaled by the dials
-    import yaml
-
-    from naphtha_model.assumptions import AssumptionBook
-    from naphtha_model.config import DATA_DIR
-    from naphtha_model.loaders import _read_global_cfg
-
-    padd_cfg = yaml.safe_load(
-        (DATA_DIR / "assumptions" / "padd_overrides.yaml").open()) or {}
-    bare = AssumptionBook(_read_global_cfg(DATA_DIR), padd_cfg, [])
-    xom = refinery_day(data.refinery("XOM_BAYTOWN"), AXIS[0], bare, []).net_kbd
+    # XOM was flipped to 'override': expect the with-overrides engine number
+    # (RDT actual utilizations) scaled by the dials
+    xom = refinery_day(data.refinery("XOM_BAYTOWN"), AXIS[0], data.book, []).net_kbd
     assert mod["XOM_BAYTOWN"] == pytest.approx(xom * 0.9 * 1.2, abs=0.05)
 
     boxes = openpyxl.load_workbook(

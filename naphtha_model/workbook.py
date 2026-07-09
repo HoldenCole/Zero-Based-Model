@@ -72,7 +72,8 @@ TAB_COLORS = {
     "Data": "4472C4", "Assumptions": "4472C4",          # inputs: blue
     "Boxes": NAVY, "Individual Refineries": NAVY,                                       # the engine
     "Nameplate": "2E8677", "Effective": "2E8677",        # capacity views: teal
-    "Outages": "B03A2E",
+    "Outages": "B03A2E", "Outage History": "7A2A22",
+    "Kpler Flows": "1F6FB2", "US Balance": "216E5E",
     "CrudeSlate": "6B8E23",                              # slate: olive
     "BlendEcon": "A23B3B",                               # economics: maroon
     "KitWalk": "7A5195",                                 # tuning: plum
@@ -1093,8 +1094,8 @@ class SimpleWorkbook(DeskWorkbook):
     """
 
     TAB_ORDER = ["Cover", "Assumptions", "Individual Refineries", "Outages",
-                 "CrudeSlate", "BlendEcon", "KitWalk", "Nameplate", "Effective",
-                 "Data"]
+                 "Outage History", "Kpler Flows", "US Balance", "CrudeSlate",
+                 "BlendEcon", "KitWalk", "Nameplate", "Effective", "Data"]
 
     def build(self, out_path: Path) -> Path:
         self._sheet_assumptions()
@@ -1105,6 +1106,9 @@ class SimpleWorkbook(DeskWorkbook):
         self._sheet_nameplate()
         self._sheet_effective()
         self._sheet_outages_tab()
+        self._sheet_outage_history()
+        self._sheet_kpler()
+        self._sheet_usbalance()
         self._sheet_crudeslate()
         self._sheet_blendecon()
         self._sheet_kitwalk()
@@ -1474,7 +1478,7 @@ class SimpleWorkbook(DeskWorkbook):
                 _style(ws.cell(row=row, column=self.c_out,
                                value=cur_out.get((ref.refinery_id, unit.unit_id))),
                        fill=FILL_OVERRIDE, fmt="0%")
-                _style(ws.cell(row=row, column=self.c_mode, value="override"),
+                _style(ws.cell(row=row, column=self.c_mode, value="assumption"),
                        fill=FILL_INPUT)
 
                 ov_util = self.book._find_override(ref, unit, day1, "utilization")
@@ -1798,10 +1802,11 @@ class SimpleWorkbook(DeskWorkbook):
         ws = self.wb.create_sheet("Outages")
         _banner(
             ws, 1,
-            "Outages & turnarounds — desk offline-events export (naphtha-relevant "
-            "units, matched refineries). The weekly strip and LIVE flags track "
-            "TODAY(). Live events also prefill OFFLINE % in the boxes at build "
-            "time; refresh via: python -m naphtha_model ingest-outages <file>",
+            "CURRENT & PLANNED outages — the Snowflake live pull lands in this "
+            "table (wire the query here; refreshed today via ingest-outages). "
+            "Weekly strip and LIVE flags track TODAY(); live events prefill "
+            "OFFLINE % in the boxes. Scenario/unplanned simulation layer: "
+            "future improvement. History for forecasting: see Outage History.",
             13,
         )
 
@@ -1913,6 +1918,308 @@ class SimpleWorkbook(DeskWorkbook):
         for c, w in enumerate(widths, start=1):
             ws.column_dimensions[get_column_letter(c)].width = w
         ws.freeze_panes = f"A{first_ev}"
+
+
+    # -------------------------------------------------- Outage History tab
+
+    def _sheet_outage_history(self) -> None:
+        """Historical outages (2023 -> now): monthly offline series,
+        turnaround seasonality, planned-vs-unplanned stats and the full
+        filterable event history - the base for forecasting planned and
+        unplanned outages."""
+        import csv as _csv
+        from datetime import date as _date
+
+        ws = self.wb.create_sheet("Outage History")
+        _banner(
+            ws, 1,
+            "OUTAGE HISTORY (2023 -> today) — what normal looks like: monthly "
+            "offline capacity, TAR seasonality and unplanned frequency, to "
+            "benchmark forecasts of planned and unplanned outages.", 13)
+
+        ev_path = DATA_DIR / "reference" / "outage_events.csv"
+        as_of = self.axis[0]
+        past = []
+        if ev_path.exists():
+            with ev_path.open() as fh:
+                for e in _csv.DictReader(fh):
+                    if e["refinery_id"] and e["model_unit"] and \
+                            e["start"] < as_of.isoformat():
+                        past.append(e)
+
+        # monthly offline series (prorated), CDU and reformers
+        def month_axis():
+            y, m = 2023, 1
+            while (y, m) <= (as_of.year, as_of.month):
+                yield y, m
+                y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+
+        import calendar
+        series = {"CDU": [], "REFORMER": []}
+        months = list(month_axis())
+        for y, m in months:
+            days = calendar.monthrange(y, m)[1]
+            m0, m1 = _date(y, m, 1), _date(y, m, days)
+            tot = {"CDU": 0.0, "REFORMER": 0.0}
+            for e in past:
+                grp = ("CDU" if e["model_unit"] == "CDU" else
+                       "REFORMER" if e["model_unit"] in ("REF", "CCR") else None)
+                if grp is None:
+                    continue
+                s0 = _date.fromisoformat(e["start"])
+                s1 = _date.fromisoformat(e["end"])
+                ov = (min(s1, m1) - max(s0, m0)).days + 1
+                if ov > 0:
+                    tot[grp] += float(e["capacity_offline"] or 0) * ov / days
+            for k in series:
+                series[k].append(tot[k] / 1000.0)
+
+        _banner(ws, 3, "  CAPACITY OFFLINE BY MONTH (kbd, prorated history)",
+                2 + len(months))
+        _hdr(ws, 4, 1, "month")
+        for j, (y, m) in enumerate(months):
+            cell = ws.cell(row=4, column=2 + j, value=_date(y, m, 1))
+            _style(cell, fill=FILL_HDR, fmt="mmm-yy")
+            cell.font = FONT_HDR
+        for i, (label, vals) in enumerate(
+                [("US CDU offline", series["CDU"]),
+                 ("US reformer offline", series["REFORMER"])]):
+            _style(ws.cell(row=5 + i, column=1, value=label),
+                   fill=FILL_CALC, bold=True)
+            for j, v in enumerate(vals):
+                _style(ws.cell(row=5 + i, column=2 + j, value=round(v, 1)),
+                       fill=FILL_CALC, fmt="#,##0")
+
+        # TAR seasonality: average CDU offline by calendar month
+        _banner(ws, 8, "  TAR SEASONALITY — avg CDU kbd offline by calendar month", 13)
+        for m in range(1, 13):
+            vals = [series["CDU"][j] for j, (y, mm) in enumerate(months) if mm == m]
+            _hdr(ws, 9, 1 + m, _date(2000, m, 1).strftime("%b"))
+            _style(ws.cell(row=10, column=1 + m,
+                           value=round(sum(vals) / len(vals), 1) if vals else None),
+                   fill=FILL_CALC, fmt="#,##0")
+        _style(ws.cell(row=10, column=1, value="avg kbd offline"),
+               fill=FILL_CALC, bold=True)
+
+        # planned vs unplanned stats
+        _banner(ws, 12, "  PLANNED vs UNPLANNED (naphtha-relevant events, 2023 ->)", 13)
+        for c, h in enumerate(["type", "events", "avg days", "avg kbd offline",
+                               "offline kbd-days / yr"], start=1):
+            _hdr(ws, 13, c, h)
+        yrs = max((as_of - _date(2023, 1, 1)).days / 365.25, 1e-9)
+        for i, typ in enumerate(["Planned", "Unplanned"]):
+            evs = [e for e in past if e["event_type"] == typ]
+            durs = [float(e["duration_days"] or 0) for e in evs]
+            offs = [float(e["capacity_offline"] or 0) / 1000 for e in evs]
+            kbd_days = sum(o * d for o, d in zip(offs, durs))
+            r = 14 + i
+            _style(ws.cell(row=r, column=1, value=typ), bold=True)
+            _style(ws.cell(row=r, column=2, value=len(evs)), fmt="#,##0")
+            _style(ws.cell(row=r, column=3,
+                           value=round(sum(durs) / max(len(durs), 1), 1)), fmt="0.0")
+            _style(ws.cell(row=r, column=4,
+                           value=round(sum(offs) / max(len(offs), 1), 1)), fmt="0.0")
+            _style(ws.cell(row=r, column=5, value=round(kbd_days / yrs)), fmt="#,##0")
+
+        from openpyxl.chart import BarChart, LineChart, Reference, Series
+
+        ch = LineChart()
+        ch.title = "US CDU capacity offline by month (kbd)"
+        ch.height, ch.width = 7, 24
+        ch.legend = None
+        ser = Series(Reference(ws, min_col=2, max_col=1 + len(months),
+                               min_row=5, max_row=5))
+        ser.graphicalProperties.line.solidFill = "B03A2E"
+        ch.series.append(ser)
+        ch.set_categories(Reference(ws, min_col=2, max_col=1 + len(months),
+                                    min_row=4, max_row=4))
+        ws.add_chart(ch, "P3")
+
+        # event history detail
+        first = 19
+        _banner(ws, first - 2, "  EVENT HISTORY — filterable detail", 13)
+        headers = ["refinery", "padd", "unit", "start", "end", "days", "type",
+                   "offline kbd", "% of unit", "confirmed", "cause", "plant"]
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, first - 1, c, h)
+        padd_of = {r.refinery_id: r.padd for r in self.data.refineries}
+        past.sort(key=lambda e: e["start"], reverse=True)
+        for j, e in enumerate(past):
+            r = first + j
+            cell = _style(ws.cell(row=r, column=1, value=e["refinery_id"]))
+            self._link_to_box(cell, e["refinery_id"])
+            _style(ws.cell(row=r, column=2, value=padd_of.get(e["refinery_id"])))
+            _style(ws.cell(row=r, column=3, value=e["model_unit"]))
+            _style(ws.cell(row=r, column=4,
+                           value=_date.fromisoformat(e["start"])), fmt="yyyy-mm-dd")
+            _style(ws.cell(row=r, column=5,
+                           value=_date.fromisoformat(e["end"])), fmt="yyyy-mm-dd")
+            _style(ws.cell(row=r, column=6,
+                           value=float(e["duration_days"] or 0)), fmt="0")
+            _style(ws.cell(row=r, column=7, value=e["event_type"]))
+            off = float(e["capacity_offline"] or 0)
+            cap = float(e["unit_capacity"] or 0)
+            _style(ws.cell(row=r, column=8, value=off / 1000), fmt="#,##0.0")
+            _style(ws.cell(row=r, column=9,
+                           value=off / cap if cap else None), fmt="0%")
+            _style(ws.cell(row=r, column=10, value=e["confirmation"]))
+            _style(ws.cell(row=r, column=11, value=e["cause"]))
+            _style(ws.cell(row=r, column=12, value=e["plant_name"]))
+        ws.auto_filter.ref = f"A{first - 1}:L{first + len(past) - 1}"
+        widths = [24, 6, 7, 11, 11, 6, 10, 11, 9, 11, 22, 30]
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = f"A{first}"
+
+    # ------------------------------------------------------ Kpler Flows tab
+
+    KPLER_ROWS = 400
+
+    def _sheet_kpler(self) -> None:
+        """Landing zone for Kpler ship-tracking exports: paste (or API-wire)
+        cargoes here; the monthly aggregation and US Balance read it live."""
+        ws = self.wb.create_sheet("Kpler Flows")
+        _banner(
+            ws, 1,
+            "KPLER SHIP TRACKING — paste the Kpler naphtha flows export here "
+            "(or wire the API). import = into US, export = out. Monthly totals "
+            "aggregate live and feed the US Balance tab.", 11)
+        headers = ["date", "direction", "grade", "volume kbd", "origin",
+                   "destination", "vessel", "status", "charterer", "source",
+                   "notes"]
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, 2, c, h)
+        for r in range(3, 3 + self.KPLER_ROWS):
+            for c in range(1, 12):
+                _style(ws.cell(row=r, column=c), fill=FILL_INPUT,
+                       fmt="yyyy-mm-dd" if c == 1 else ("0.0" if c == 4 else None))
+        dv = DataValidation(type="list", formula1='"import,export"',
+                            allow_blank=True)
+        ws.add_data_validation(dv)
+        dv.add(f"B3:B{2 + self.KPLER_ROWS}")
+
+        # monthly aggregation (last 12 months, live off the table)
+        AGG = 13
+        _hdr(ws, 2, AGG, "month")
+        _hdr(ws, 2, AGG + 1, "imports kbd")
+        _hdr(ws, 2, AGG + 2, "exports kbd")
+        _hdr(ws, 2, AGG + 3, "net kbd")
+        dcol = f"$A$3:$A${2 + self.KPLER_ROWS}"
+        dircol = f"$B$3:$B${2 + self.KPLER_ROWS}"
+        vcol = f"$D$3:$D${2 + self.KPLER_ROWS}"
+        for k in range(12):
+            r = 3 + k
+            mcell = f"${get_column_letter(AGG)}{r}"
+            _style(ws.cell(row=r, column=AGG,
+                           value=f"=EOMONTH(TODAY(),{k - 12})+1"),
+                   fill=FILL_CALC, fmt="mmm-yy")
+            for j, d in enumerate(("import", "export")):
+                _style(ws.cell(
+                    row=r, column=AGG + 1 + j,
+                    value=(f'=SUMIFS({vcol},{dircol},"{d}",{dcol},">="&{mcell},'
+                           f"{dcol},\"<\"&EOMONTH({mcell},0)+1)"),
+                ), fill=FILL_CALC, fmt="0.0")
+            _style(ws.cell(row=r, column=AGG + 3,
+                           value=f"={get_column_letter(AGG+1)}{r}"
+                                 f"-{get_column_letter(AGG+2)}{r}"),
+                   fill=FILL_CALC, fmt="+0.0;-0.0")
+        widths = [11, 9, 10, 10, 14, 14, 16, 12, 12, 10, 24, 3, 10, 11, 11, 9]
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = "A3"
+        self.kpler_agg_col = AGG
+
+    # ------------------------------------------------------- US Balance tab
+
+    def _sheet_usbalance(self) -> None:
+        """US total naphtha balance: EA monthly actuals (2023 -> present)
+        plus a live tie-in of the model's net naphtha and Kpler flows."""
+        import csv as _csv
+        from datetime import date as _date
+
+        ws = self.wb.create_sheet("US Balance")
+        _banner(
+            ws, 1,
+            "US NAPHTHA BALANCE — EA monthly actuals below; live tie-in on top "
+            "combines the model's net naphtha with Kpler flows to nowcast the "
+            "balance.", 12)
+
+        # live tie-in block
+        base_l = get_column_letter(self.c_base)
+        b_typ = f"'Individual Refineries'!$A$3:$A${self.box_last}"
+        b_net = (f"'Individual Refineries'!${base_l}$3:"
+                 f"${base_l}${self.box_last}")
+        kag = get_column_letter(self.kpler_agg_col)
+        _banner(ws, 3, "  LIVE TIE-IN (kbd)", 6)
+        ties = [
+            ("Model net naphtha supply (boxes, now)",
+             f'=SUMPRODUCT(({b_typ}="TOTAL")*{b_net})', "#,##0.0", FILL_CALC),
+            ("Kpler imports (current month)",
+             f"='Kpler Flows'!{get_column_letter(self.kpler_agg_col + 1)}14",
+             "0.0", FILL_CALC),
+            ("Kpler exports (current month)",
+             f"='Kpler Flows'!{get_column_letter(self.kpler_agg_col + 2)}14",
+             "0.0", FILL_CALC),
+            ("Demand assumption (kbd; default = latest EA month)",
+             None, "#,##0", FILL_INPUT),
+            ("IMPLIED BALANCE (supply + imports - exports - demand)",
+             "=$C$4+$C$5-$C$6-$C$7", "+#,##0.0;-#,##0.0", FILL_TOTAL),
+        ]
+        for i, (label, formula, fmt, fill) in enumerate(ties):
+            r = 4 + i
+            _style(ws.cell(row=r, column=1, value=label),
+                   fill=FILL_CALC, bold=(i == 4))
+            _style(ws.cell(row=r, column=3, value=formula), fill=fill,
+                   fmt=fmt, bold=(i == 4))
+
+        # EA monthly actuals
+        bal_path = DATA_DIR / "reference" / "us_naphtha_balance_monthly.csv"
+        flows = ["REFGROUT", "TOTIMPSB", "TOTEXPSB", "TOTDEMO", "BLENDING",
+                 "STOCKCH", "CLOSTLV", "BALANCE"]
+        labels = ["refinery gross out", "imports", "exports", "demand",
+                  "blending", "stock change", "closing stocks", "balance"]
+        table: dict[str, dict[str, float]] = {}
+        if bal_path.exists():
+            with bal_path.open() as fh:
+                for row in _csv.DictReader(fh):
+                    table.setdefault(row["month"], {})[row["flow"]] = float(
+                        row["kbd"] or 0)
+        months = sorted(table)
+        first = 12
+        _banner(ws, first - 2, "  EA MONTHLY ACTUALS (kbd)", 2 + len(flows))
+        _hdr(ws, first - 1, 1, "month")
+        for c, lab in enumerate(labels, start=2):
+            _hdr(ws, first - 1, c, lab)
+        for j, m in enumerate(months):
+            r = first + j
+            _style(ws.cell(row=r, column=1,
+                           value=_date.fromisoformat(m + "-01")), fmt="mmm-yy")
+            for c, fl in enumerate(flows, start=2):
+                _style(ws.cell(row=r, column=c, value=table[m].get(fl)),
+                       fmt="#,##0" if fl == "CLOSTLV" else "0.0")
+        last = first + len(months) - 1
+        # default demand input = latest EA demand
+        if months:
+            ws["C7"] = table[months[-1]].get("TOTDEMO")
+
+        from openpyxl.chart import LineChart, Reference, Series
+
+        ch = LineChart()
+        ch.title = "US naphtha: imports, exports, balance (kbd, monthly)"
+        ch.height, ch.width = 8, 22
+        for col, lab, color in ((3, "imports", "1F6FB2"),
+                                (4, "exports", "B03A2E"),
+                                (9, "balance", GOLD)):
+            ser = Series(Reference(ws, min_col=col, min_row=first, max_row=last),
+                         title=lab)
+            ser.graphicalProperties.line.solidFill = color
+            ch.series.append(ser)
+        ch.set_categories(Reference(ws, min_col=1, min_row=first, max_row=last))
+        ws.add_chart(ch, "F3")
+        widths = [34, 14, 12, 12, 12, 12, 12, 13, 12]
+        for c, w in enumerate(widths, start=1):
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = f"A{first}"
 
     # ------------------------------------------------------- CrudeSlate tab
 
@@ -2048,6 +2355,7 @@ class SimpleWorkbook(DeskWorkbook):
         uplift = B["light_uplift"]
         cut = B["heavy_cut"]
         spread = "$D$4"   # gasoline - HVN spread cell above
+        scn_first = r + 1
         for i, p in enumerate(self.padds):
             r += 1
             _style(ws.cell(row=r, column=1, value=p), bold=True)
@@ -2066,6 +2374,7 @@ class SimpleWorkbook(DeskWorkbook):
                    fill=FILL_CALC, fmt="+0.0;-0.0")
             _style(ws.cell(row=r, column=6, value=f"=$D{r}*1000*{spread}/1000"),
                    fill=FILL_CALC, fmt="0.0")
+        scn_last = r
         r += 2
         ws.cell(row=r, column=1, value=(
             "Where blends become economical: switch to max-light when the naphtha "
@@ -2075,6 +2384,37 @@ class SimpleWorkbook(DeskWorkbook):
         ws.column_dimensions["A"].width = 52
         for c in "BCDEF":
             ws.column_dimensions[c].width = 16
+
+        # charts: spreads, arbs, scenario deltas — live off the price inputs
+        from openpyxl.chart import BarChart, Reference, Series
+
+        def bar(title, series_specs, cats_ref, anchor, height=7, width=11):
+            ch = BarChart()
+            ch.type = "col"
+            ch.title = title
+            ch.height, ch.width = height, width
+            if len(series_specs) == 1:
+                ch.legend = None
+            for ref, label, color in series_specs:
+                ser = Series(ref, title=label)
+                ser.graphicalProperties.solidFill = color
+                ch.series.append(ser)
+            ch.set_categories(cats_ref)
+            ws.add_chart(ch, anchor)
+
+        bar("Blend value spreads ($/bbl)",
+            [(Reference(ws, min_col=4, min_row=4, max_row=7), None, NAVY)],
+            Reference(ws, min_col=1, min_row=4, max_row=7), "H3")
+        bar("Arb netbacks ($/bbl, + = open)",
+            [(Reference(ws, min_col=4, min_row=10, max_row=12), None, GOLD)],
+            Reference(ws, min_col=1, min_row=10, max_row=12), "H17")
+        bar("Slate scenarios: net naphtha delta by PADD (kbd)",
+            [(Reference(ws, min_col=4, min_row=scn_first, max_row=scn_last),
+              "max-light", "2E8677"),
+             (Reference(ws, min_col=5, min_row=scn_first, max_row=scn_last),
+              "max-heavy", "B03A2E")],
+            Reference(ws, min_col=1, min_row=scn_first, max_row=scn_last),
+            "N3", height=7, width=13)
 
     # ---------------------------------------------------------- KitWalk tab
 
