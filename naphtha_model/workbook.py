@@ -96,6 +96,18 @@ REF_LO, REF_HI = 2, 300        # Refineries registry rows
 BOX_LO, BOX_HI = 4, 2600       # Boxes data rows
 
 
+
+
+def _axes(ch, x_title: str, y_title: str) -> None:
+    """Make chart axes visible with titles — openpyxl leaves them deleted
+    unless explicitly switched on."""
+    ch.x_axis.title = x_title
+    ch.y_axis.title = y_title
+    ch.x_axis.delete = False
+    ch.y_axis.delete = False
+    ch.x_axis.tickLblPos = "nextTo"
+    ch.y_axis.tickLblPos = "nextTo"
+
 def _banner(ws, row: int, text: str, span: int) -> None:
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=span)
     ws.row_dimensions[row].height = 20
@@ -859,8 +871,7 @@ class DeskWorkbook:
         ch = LineChart()
         ch.title = title
         ch.style = 2
-        ch.y_axis.title = y_title
-        ch.x_axis.title = "Week starting"
+        _axes(ch, "Week starting", y_title)
         ch.x_axis.number_format = "m/d"
         ch.height, ch.width = 8.5, 17
         return ch
@@ -906,6 +917,7 @@ class DeskWorkbook:
                      from_rows=True, titles_from_data=False)
         ch3.series[0].tx = None
         ch3.set_categories(cats)
+        _axes(ch3, "week", "kbd")
         ws.add_chart(ch3, "B21")
 
         ch4 = BarChart()
@@ -917,6 +929,7 @@ class DeskWorkbook:
                      from_rows=True, titles_from_data=False)
         ch4.series[0].tx = None
         ch4.set_categories(cats)
+        _axes(ch4, "week", "kbd")
         ws.add_chart(ch4, "L21")
 
         ch5 = self._line("Net naphtha by refinery — top 10 by crude capacity (kbd/week)", "kbd")
@@ -1142,176 +1155,253 @@ class SimpleWorkbook(DeskWorkbook):
     # ------------------------------------------------------------ Cover tab
 
     def _sheet_cover(self) -> None:
+        """The main dashboard: tradable takeaways — supply, outages, balance,
+        spreads/arbs — all live formulas + four charts, no digging required."""
         from datetime import datetime as _dt
 
-        from openpyxl.chart import BarChart, Reference, Series
+        from openpyxl.chart import BarChart, LineChart, Reference, Series
 
         ws = self.wb.create_sheet("Cover")
-        for c in range(1, 14):
+        for c in range(1, 16):
             ws.column_dimensions[get_column_letter(c)].width = 11
         ws.column_dimensions["A"].width = 3
 
         # masthead
         for r in range(2, 7):
-            for c in range(2, 14):
+            for c in range(2, 16):
                 ws.cell(row=r, column=c).fill = FILL_BANNER
-            ws.cell(row=7, column=2)
-        for c in range(2, 14):
+        for c in range(2, 16):
             ws.cell(row=7, column=c).fill = FILL_GOLD
         ws.row_dimensions[7].height = 4
         t = ws.cell(row=3, column=3, value="US NAPHTHA — ZERO-BASED REFINERY MODEL")
         t.font = Font(bold=True, size=20, color="FFFFFF", name="Calibri")
-        s = ws.cell(
+        st = ws.cell(
             row=5, column=3,
             value=f"{len(self.data.refineries)} refineries · unit-level build · "
                   f"PADD 1–5 · generated {_dt.now():%d %b %Y}",
         )
-        s.font = Font(size=10, color="C9A227", name="Calibri")
+        st.font = Font(size=10, color="C9A227", name="Calibri")
 
         # live KPI band
         base_l = get_column_letter(self.c_base)
         utl_l = get_column_letter(self.c_util)
-        b_typ = f"'Individual Refineries'!$A$3:$A${self.box_last}"
-        b_pad = f"'Individual Refineries'!$C$3:$C${self.box_last}"
-        b_uid = f"'Individual Refineries'!$D$3:$D${self.box_last}"
-        b_cap = f"'Individual Refineries'!$F$3:$F${self.box_last}"
-        b_utl = f"'Individual Refineries'!${utl_l}$3:${utl_l}${self.box_last}"
-        b_net = f"'Individual Refineries'!${base_l}$3:${base_l}${self.box_last}"
+        BOX = "'Individual Refineries'"
+        b_typ = f"{BOX}!$A$3:$A${self.box_last}"
+        b_pad = f"{BOX}!$C$3:$C${self.box_last}"
+        b_uid = f"{BOX}!$D$3:$D${self.box_last}"
+        b_cap = f"{BOX}!$F$3:$F${self.box_last}"
+        b_utl = f"{BOX}!${utl_l}$3:${utl_l}${self.box_last}"
+        b_net = f"{BOX}!${base_l}$3:${base_l}${self.box_last}"
         kpis = [
             ("US net naphtha (kbd)",
              f'=SUMPRODUCT(({b_typ}="TOTAL")*{b_net})', "#,##0"),
             ("PADD 3 share",
              f'=SUMPRODUCT(({b_typ}="TOTAL")*({b_pad}=3)*{b_net})'
              f'/SUMPRODUCT(({b_typ}="TOTAL")*{b_net})', "0%"),
+            ("CDU offline this wk (kbd)", "=Outages!$B$5", "#,##0"),
             ("US crude runs (kbd)",
              f'=SUMPRODUCT((({b_uid}="CDU")+({b_uid}="CRUDE-EST"))*{b_cap}*{b_utl})',
              "#,##0"),
-            ("CDU nameplate (kbd)",
-             f'=SUMPRODUCT(({b_uid}="CDU")*{b_cap})', "#,##0"),
+            ("EA balance, latest mo (kbd)",
+             f"='US Balance'!$I${self.usbal_last}", "+#,##0;-#,##0"),
             ("units modelled",
              f'=SUMPRODUCT(({b_typ}="UNIT")*1)', "#,##0"),
         ]
         for i, (label, formula, fmt) in enumerate(kpis):
             col = 3 + i * 2
             v = ws.cell(row=9, column=col, value=formula)
-            v.font = Font(bold=True, size=18, color=NAVY, name="Calibri")
+            v.font = Font(bold=True, size=16, color=NAVY, name="Calibri")
             v.number_format = fmt
             v.border = Border(top=GOLD_EDGE)
             cap = ws.cell(row=10, column=col, value=label.upper())
             cap.font = Font(size=7, color="7A8699", name="Calibri")
 
-        # hidden-ish chart feed: net naphtha by PADD
+        # chart feeds: net naphtha by PADD
         for i, p in enumerate(self.padds):
-            lbl = ws.cell(row=40 + i, column=16, value=f"PADD {p}")
-            val = ws.cell(row=40 + i, column=17,
+            lbl = ws.cell(row=60 + i, column=18, value=f"PADD {p}")
+            val = ws.cell(row=60 + i, column=19,
                           value=f'=SUMPRODUCT(({b_typ}="TOTAL")*({b_pad}={p})*{b_net})')
             lbl.font = val.font = Font(size=8, color="AAAAAA")
 
         ch1 = BarChart()
         ch1.type = "col"
         ch1.title = "Net naphtha by PADD (kbd)"
-        ch1.height, ch1.width = 7.5, 10.5
+        ch1.height, ch1.width = 7.5, 11
         ch1.legend = None
-        ser = Series(
-            Reference(ws, min_col=17, min_row=40, max_row=39 + len(self.padds)),
-            title="net naphtha",
-        )
+        ser = Series(Reference(ws, min_col=19, min_row=60, max_row=59 + len(self.padds)))
         ser.graphicalProperties.solidFill = GOLD
         ch1.series.append(ser)
-        ch1.set_categories(
-            Reference(ws, min_col=16, min_row=40, max_row=39 + len(self.padds)))
+        ch1.set_categories(Reference(ws, min_col=18, min_row=60,
+                                     max_row=59 + len(self.padds)))
+        _axes(ch1, "PADD", "kbd")
         ws.add_chart(ch1, "C12")
 
+        ot = self.wb["Outages"]
         ch2 = BarChart()
         ch2.type = "col"
-        ch2.title = "CDU capacity by PADD: nameplate vs effective vs running (kbd)"
-        ch2.height, ch2.width = 7.5, 12.5
-        eff = self.wb["Effective"]
-        r0 = self.eff_rollup_first
-        r1 = r0 + len(self.padds) - 1
-        for col, label, color in ((2, "nameplate", NAVY), (3, "effective", "5B7BA8"),
-                                  (4, "running", GOLD)):
-            ser = Series(Reference(eff, min_col=col, min_row=r0, max_row=r1),
-                         title=label)
-            ser.graphicalProperties.solidFill = color
-            ch2.series.append(ser)
-        ch2.set_categories(Reference(eff, min_col=1, min_row=r0, max_row=r1))
+        ch2.title = "CDU capacity offline — next 13 weeks (kbd)"
+        ch2.height, ch2.width = 7.5, 12
+        ch2.legend = None
+        ser = Series(Reference(ot, min_col=2, max_col=14, min_row=5, max_row=5))
+        ser.graphicalProperties.solidFill = "B03A2E"
+        ch2.series.append(ser)
+        ch2.set_categories(Reference(ot, min_col=2, max_col=14, min_row=4, max_row=4))
+        _axes(ch2, "week starting", "kbd offline")
         ws.add_chart(ch2, "I12")
 
-        # tab directory
-        _banner(ws, 28, "  MODEL MAP", 13)
+        ub = self.wb["US Balance"]
+        ch3 = LineChart()
+        ch3.title = "US naphtha imports / exports / balance (kbd, monthly)"
+        ch3.height, ch3.width = 7.5, 11
+        for colx, lab, color in ((3, "imports", "1F6FB2"), (4, "exports", "B03A2E"),
+                                 (9, "balance", GOLD)):
+            ser = Series(Reference(ub, min_col=colx, min_row=self.usbal_first,
+                                   max_row=self.usbal_last), title=lab)
+            ser.graphicalProperties.line.solidFill = color
+            ch3.series.append(ser)
+        ch3.set_categories(Reference(ub, min_col=1, min_row=self.usbal_first,
+                                     max_row=self.usbal_last))
+        _axes(ch3, "month", "kbd")
+        ws.add_chart(ch3, "C28")
+
+        eff = self.wb["Effective"]
+        ch4 = BarChart()
+        ch4.type = "col"
+        ch4.title = "CDU by PADD: nameplate vs effective vs running (kbd)"
+        ch4.height, ch4.width = 7.5, 12
+        r0 = self.eff_rollup_first
+        r1 = r0 + len(self.padds) - 1
+        for colx, label, color in ((2, "nameplate", NAVY), (3, "effective", "5B7BA8"),
+                                   (4, "running", GOLD)):
+            ser = Series(Reference(eff, min_col=colx, min_row=r0, max_row=r1),
+                         title=label)
+            ser.graphicalProperties.solidFill = color
+            ch4.series.append(ser)
+        ch4.set_categories(Reference(eff, min_col=1, min_row=r0, max_row=r1))
+        _axes(ch4, "PADD", "kbd")
+        ws.add_chart(ch4, "I28")
+
+        # THE TAPE — tradable takeaways, all live
+        _banner(ws, 44, "  THE TAPE — live takeaways", 14)
+        _hdr(ws, 45, 3, "PADD")
+        _hdr(ws, 45, 4, "net naphtha kbd")
+        _hdr(ws, 45, 5, "share")
+        for i, p in enumerate(self.padds):
+            r = 46 + i
+            _style(ws.cell(row=r, column=3, value=p))
+            _style(ws.cell(
+                row=r, column=4,
+                value=f'=SUMPRODUCT(({b_typ}="TOTAL")*({b_pad}={p})*{b_net})',
+            ), fill=FILL_CALC, fmt="#,##0.0")
+            _style(ws.cell(
+                row=r, column=5,
+                value=f'=$D{r}/SUMPRODUCT(({b_typ}="TOTAL")*{b_net})',
+            ), fill=FILL_CALC, fmt="0%")
+
+        _hdr(ws, 45, 7, "spread / arb")
+        _hdr(ws, 45, 8, "$/bbl")
+        _hdr(ws, 45, 9, "signal")
+        tape = [
+            ("Gasoline - naphtha", "='BlendEcon'!$D$4",
+             '=IF(\'BlendEcon\'!$D$4>0,"naphtha into mogas","")'),
+            ("Reformate uplift", "='BlendEcon'!$D$6", ""),
+            ("Naphtha crack (vs WTI)", "='BlendEcon'!$D$7", ""),
+            ("USGC -> Asia arb", "='BlendEcon'!$D$10", "='BlendEcon'!$E$10"),
+            ("USGC -> NWE arb", "='BlendEcon'!$D$11", "='BlendEcon'!$E$11"),
+            ("NWE -> USGC arb", "='BlendEcon'!$D$12", "='BlendEcon'!$E$12"),
+        ]
+        for i, (label, val, sig) in enumerate(tape):
+            r = 46 + i
+            _style(ws.cell(row=r, column=7, value=label))
+            _style(ws.cell(row=r, column=8, value=val), fill=FILL_CALC,
+                   fmt="+0.00;-0.00")
+            _style(ws.cell(row=r, column=9, value=sig or None), fill=FILL_CALC)
+
+        _hdr(ws, 45, 11, "balance nowcast")
+        _hdr(ws, 45, 12, "kbd")
+        now = [
+            ("Model supply", "='US Balance'!$C$4"),
+            ("+ Kpler imports", "='US Balance'!$C$5"),
+            ("- Kpler exports", "='US Balance'!$C$6"),
+            ("- Demand", "='US Balance'!$C$7"),
+            ("IMPLIED BALANCE", "='US Balance'!$C$8"),
+        ]
+        for i, (label, val) in enumerate(now):
+            r = 46 + i
+            _style(ws.cell(row=r, column=11, value=label), bold=(i == 4))
+            _style(ws.cell(row=r, column=12, value=val),
+                   fill=FILL_TOTAL if i == 4 else FILL_CALC,
+                   fmt="+#,##0.0;-#,##0.0", bold=(i == 4))
+
+        # model map
+        _banner(ws, 54, "  MODEL MAP", 14)
         guide = [
             ("Data", "imported registry, 2024 net yields, crude capacities (inputs)"),
             ("Individual Refineries", "the engine — every refinery unit by unit; net naphtha per site"),
-            ("Assumptions", "PADD yields & utilization, cut split, master dials, prices, freight"),
-            ("Nameplate", "stated unit capacities, refinery × unit, PADD totals"),
-            ("Effective", "demonstrated capacities (2017–24 max) vs nameplate vs running"),
-            ("CrudeSlate", "actual crude diet per refinery; merchant naphtha buyers flagged"),
-            ("BlendEcon", "spreads, arbs, max-light vs max-heavy — fill prices to activate"),
-            ("KitWalk", "CDU → SR naphtha → NHT → reformer → net, vs 2024 actuals"),
+            ("Assumptions", "PADD yields & utilization, dials, BBG prices, manual freight"),
+            ("Outages", "current & planned events (Snowflake landing) + weekly at-risk strip"),
+            ("Outage History", "2023+ history, TAR seasonality, planned vs unplanned stats"),
+            ("Kpler Flows", "ship tracking: trades / fixtures / flows by grade & status"),
+            ("US Balance", "EA monthly actuals + live balance nowcast"),
+            ("CrudeSlate", "actual crude diet; merchant naphtha buyers flagged"),
+            ("BlendEcon", "spreads, arbs, max-light vs max-heavy — with charts"),
+            ("KitWalk", "CDU -> SR naphtha -> NHT -> reformer -> net, vs 2024 actuals"),
+            ("Nameplate", "stated unit capacities, refinery x unit"),
+            ("Effective", "demonstrated capacities vs nameplate vs running"),
         ]
         for i, (name, desc) in enumerate(guide):
-            r = 30 + i
+            r = 56 + i
             n = ws.cell(row=r, column=3, value=name)
             n.font = Font(bold=True, size=9, color="1F5AA8",
                           underline="single", name="Calibri")
-            n.hyperlink = f"#{name}!A1"
-            d = ws.cell(row=r, column=5, value=desc)
+            n.hyperlink = f"#'{name}'!A1"
+            d = ws.cell(row=r, column=6, value=desc)
             d.font = FONT_SMALL
 
-        # legend
-        _banner(ws, 40, "  HOW TO DRIVE IT", 13)
+        # legend + finder
+        _banner(ws, 70, "  HOW TO DRIVE IT", 14)
         legend = [(FILL_INPUT, "blue — input: type here"),
-                  (FILL_OVERRIDE, "orange — manual override: applies when MODE = override; "
-                   "flip the MODE dropdown (per unit, or per refinery on the "
-                   "NET NAPHTHA row) to switch back to assumptions"),
+                  (FILL_OVERRIDE, "orange — manual override/outage: applies when MODE = override"),
                   (FILL_CALC, "grey — live formula: don't type")]
         for i, (fill, text) in enumerate(legend):
-            r = 42 + i
+            r = 72 + i
             sw = ws.cell(row=r, column=3)
             sw.fill = fill
             sw.border = BORDER
             ws.cell(row=r, column=4, value=text).font = FONT_SMALL
-        note = ws.cell(row=46, column=3, value=(
-            "Everything is live: edit any input or assumption and the boxes, "
-            "capacity views, KitWalk and BlendEcon re-price instantly."
-        ))
-        note.font = Font(size=9, italic=True, color="55617A", name="Calibri")
 
-        # refinery finder: pick an id, get the vitals + a jump link
-        _banner(ws, 48, "  REFINERY FINDER", 13)
-        pick = ws.cell(row=50, column=3, value="MOTIVA_PAR")
+        _banner(ws, 77, "  REFINERY FINDER", 14)
+        pick = ws.cell(row=79, column=3, value="MOTIVA_PAR")
         _style(pick, fill=FILL_INPUT)
         dv = DataValidation(type="list",
                             formula1=f"=Data!$A$3:$A${self.data_last_row}",
                             allow_blank=True)
         ws.add_data_validation(dv)
-        dv.add("C50")
+        dv.add("C79")
         d_id = f"Data!$A$3:$A${self.data_last_row}"
         finder = [
             ("name", f'=IFERROR(INDEX(Data!$B$3:$B${self.data_last_row},'
-                     f'MATCH($C$50,{d_id},0)),"")', None),
+                     f'MATCH($C$79,{d_id},0)),"")', None),
             ("PADD", f'=IFERROR(INDEX(Data!$D$3:$D${self.data_last_row},'
-                     f'MATCH($C$50,{d_id},0)),"")', None),
-            ("crude kbd", f"=SUMIFS(Data!$G$3:$G${self.data_last_row},{d_id},$C$50)",
+                     f'MATCH($C$79,{d_id},0)),"")', None),
+            ("crude kbd", f"=SUMIFS(Data!$G$3:$G${self.data_last_row},{d_id},$C$79)",
              "#,##0"),
             ("net naphtha kbd",
-             f'=SUMPRODUCT(({b_typ}="TOTAL")*'
-             f"('Individual Refineries'!$B$3:$B${self.box_last}=$C$50)"
+             f'=SUMPRODUCT(({b_typ}="TOTAL")*({BOX}!$B$3:$B${self.box_last}=$C$79)'
              f"*{b_net})", "0.0"),
             ("2024 actual naphtha %",
-             f"=SUMIFS(Data!$N$3:$N${self.data_last_row},{d_id},$C$50)", "0.00%"),
+             f"=SUMIFS(Data!$N$3:$N${self.data_last_row},{d_id},$C$79)", "0.00%"),
         ]
         for i, (label, formula, fmt) in enumerate(finder):
-            rr = 52 + i
+            rr = 81 + i
             ws.cell(row=rr, column=3, value=label).font = FONT_SMALL
             cell = ws.cell(row=rr, column=5, value=formula)
             cell.font = Font(bold=True, size=10, color=NAVY, name="Calibri")
             if fmt:
                 cell.number_format = fmt
-        jump = ws.cell(row=50, column=5, value=(
+        jump = ws.cell(row=79, column=5, value=(
             "=HYPERLINK(\"#'Individual Refineries'!A\""
-            "&MATCH($C$50,'Individual Refineries'!$B$1:$B$3000,0)-1,"
+            "&MATCH($C$79,'Individual Refineries'!$B$1:$B$3000,0)-1,"
             '"→ open this refinery\'s box")'
         ))
         jump.font = Font(size=10, color="1F5AA8", underline="single", name="Calibri")
@@ -1596,11 +1686,11 @@ class SimpleWorkbook(DeskWorkbook):
             self.dial_refs[label] = f"Assumptions!${vl}${r}"
         r += 2
 
-        def market_block(title, hdr_val, rows, fmt):
+        def market_block(title, hdr_val, rows, fmt, codes_hdr="notes"):
             nonlocal r
             _hdr(ws, r, col, title)
             _hdr(ws, r, col + 1, hdr_val)
-            _hdr(ws, r, col + 2, "BBG Codes")
+            _hdr(ws, r, col + 2, codes_hdr)
             hdr_row = r
             refs = {}
             for spec in rows:
@@ -1631,11 +1721,13 @@ class SimpleWorkbook(DeskWorkbook):
 
         self.price_refs = market_block(
             "Prices — live via Bloomberg BDP (needs terminal)",
-            mkt.get("header", "PX_LAST"), mkt["prices"], "0.00")
+            mkt.get("header", "PX_LAST"), mkt["prices"], "0.00",
+            codes_hdr="BBG Codes")
         self.freight_refs = market_block(
-            "Logistics / freight ($/bbl)", "$/bbl", mkt["freight"], "0.00")
+            "Logistics / freight ($/bbl) — MANUAL entries", "$/bbl",
+            mkt["freight"], "0.00")
         self.blend_refs = market_block(
-            "Blend scenario assumptions", "value",
+            "Blend scenario assumptions — MANUAL entries", "value",
             mkt["blend_scenarios"], "0.00")
         ws.column_dimensions[cl].width = 40
         ws.column_dimensions[vl].width = 12
@@ -1875,6 +1967,7 @@ class SimpleWorkbook(DeskWorkbook):
         ser.graphicalProperties.solidFill = "B03A2E"
         ch.series.append(ser)
         ch.set_categories(Reference(ws, min_col=2, max_col=1 + WEEKS, min_row=4, max_row=4))
+        _axes(ch, "week starting", "kbd offline")
         ws.add_chart(ch, f"P3")
 
         # ---- events table
@@ -2033,6 +2126,7 @@ class SimpleWorkbook(DeskWorkbook):
         ch.series.append(ser)
         ch.set_categories(Reference(ws, min_col=2, max_col=1 + len(months),
                                     min_row=4, max_row=4))
+        _axes(ch, "month", "kbd offline")
         ws.add_chart(ch, "P3")
 
         # event history detail
@@ -2073,61 +2167,135 @@ class SimpleWorkbook(DeskWorkbook):
 
     # ------------------------------------------------------ Kpler Flows tab
 
-    KPLER_ROWS = 400
+    TRADE_ROWS = 400
+    KPLER_GRADES = ["Light Naphtha", "Virgin Naphtha", "LVN", "Heavy Naphtha",
+                    "Naphtha Diluent", "Other"]
+    KPLER_STATUS = ["delivered", "scheduled", "loading", "in transit"]
 
     def _sheet_kpler(self) -> None:
-        """Landing zone for Kpler ship-tracking exports: paste (or API-wire)
-        cargoes here; the monthly aggregation and US Balance read it live."""
+        """Kpler ship-tracking landing zones: TRADES (the core dataset -
+        locations, products, direction, intra-country vs intra-region),
+        plus FIXTURES and FLOWS tables. Live aggregations by month, grade
+        and status feed the US Balance tab."""
         ws = self.wb.create_sheet("Kpler Flows")
         _banner(
             ws, 1,
-            "KPLER SHIP TRACKING — paste the Kpler naphtha flows export here "
-            "(or wire the API). import = into US, export = out. Monthly totals "
-            "aggregate live and feed the US Balance tab.", 11)
-        headers = ["date", "direction", "grade", "volume kbd", "origin",
-                   "destination", "vessel", "status", "charterer", "source",
-                   "notes"]
-        for c, h in enumerate(headers, start=1):
-            _hdr(ws, 2, c, h)
-        for r in range(3, 3 + self.KPLER_ROWS):
-            for c in range(1, 12):
-                _style(ws.cell(row=r, column=c), fill=FILL_INPUT,
-                       fmt="yyyy-mm-dd" if c == 1 else ("0.0" if c == 4 else None))
-        dv = DataValidation(type="list", formula1='"import,export"',
-                            allow_blank=True)
-        ws.add_data_validation(dv)
-        dv.add(f"B3:B{2 + self.KPLER_ROWS}")
+            "KPLER SHIP TRACKING — paste exports here. TRADES is the core set "
+            "(break down by location, product, direction, intra-country vs "
+            "intra-region); FIXTURES and FLOWS below. CAVEAT: Kpler misses "
+            "up-river legs in some regions (LatAm), so country-to-country "
+            "shipments can be absent from supply — less of a concern for the US.",
+            16,
+        )
 
-        # monthly aggregation (last 12 months, live off the table)
-        AGG = 13
-        _hdr(ws, 2, AGG, "month")
-        _hdr(ws, 2, AGG + 1, "imports kbd")
-        _hdr(ws, 2, AGG + 2, "exports kbd")
-        _hdr(ws, 2, AGG + 3, "net kbd")
-        dcol = f"$A$3:$A${2 + self.KPLER_ROWS}"
-        dircol = f"$B$3:$B${2 + self.KPLER_ROWS}"
-        vcol = f"$D$3:$D${2 + self.KPLER_ROWS}"
+        # ---------------- TRADES
+        _banner(ws, 3, "  TRADES — the core dataset", 14)
+        headers = ["date", "grade", "direction", "origin country", "origin zone",
+                   "dest country", "dest zone", "scope", "volume kbd", "status",
+                   "vessel", "charterer", "source", "notes"]
+        for c, h in enumerate(headers, start=1):
+            _hdr(ws, 4, c, h)
+        t0, t1 = 5, 4 + self.TRADE_ROWS
+        for r in range(t0, t1 + 1):
+            for c in range(1, 15):
+                _style(ws.cell(row=r, column=c), fill=FILL_INPUT,
+                       fmt="yyyy-mm-dd" if c == 1 else ("0.0" if c == 9 else None))
+        for col, options in (("B", ",".join(self.KPLER_GRADES)),
+                             ("C", "import,export,intra-US"),
+                             ("H", "international,intra-region,intra-country"),
+                             ("J", ",".join(self.KPLER_STATUS))):
+            dv = DataValidation(type="list", formula1=f'"{options}"',
+                                allow_blank=True)
+            ws.add_data_validation(dv)
+            dv.add(f"{col}{t0}:{col}{t1}")
+
+        dcol, gcol = f"$A${t0}:$A${t1}", f"$B${t0}:$B${t1}"
+        ccol, vcol = f"$C${t0}:$C${t1}", f"$I${t0}:$I${t1}"
+        scol = f"$J${t0}:$J${t1}"
+
+        # monthly imports/exports (last 12 months, live)
+        P = 16
+        _banner(ws, 3, "", 1)  # no-op to keep spacing simple
+        _hdr(ws, 4, P, "month")
+        _hdr(ws, 4, P + 1, "imports kbd")
+        _hdr(ws, 4, P + 2, "exports kbd")
+        _hdr(ws, 4, P + 3, "net kbd")
         for k in range(12):
-            r = 3 + k
-            mcell = f"${get_column_letter(AGG)}{r}"
-            _style(ws.cell(row=r, column=AGG,
-                           value=f"=EOMONTH(TODAY(),{k - 12})+1"),
+            r = 5 + k
+            mcell = f"${get_column_letter(P)}{r}"
+            _style(ws.cell(row=r, column=P, value=f"=EOMONTH(TODAY(),{k - 12})+1"),
                    fill=FILL_CALC, fmt="mmm-yy")
             for j, d in enumerate(("import", "export")):
                 _style(ws.cell(
-                    row=r, column=AGG + 1 + j,
-                    value=(f'=SUMIFS({vcol},{dircol},"{d}",{dcol},">="&{mcell},'
-                           f"{dcol},\"<\"&EOMONTH({mcell},0)+1)"),
+                    row=r, column=P + 1 + j,
+                    value=(f'=SUMIFS({vcol},{ccol},"{d}",{dcol},">="&{mcell},'
+                           f'{dcol},"<"&EOMONTH({mcell},0)+1)'),
                 ), fill=FILL_CALC, fmt="0.0")
-            _style(ws.cell(row=r, column=AGG + 3,
-                           value=f"={get_column_letter(AGG+1)}{r}"
-                                 f"-{get_column_letter(AGG+2)}{r}"),
+            _style(ws.cell(row=r, column=P + 3,
+                           value=f"={get_column_letter(P + 1)}{r}"
+                                 f"-{get_column_letter(P + 2)}{r}"),
                    fill=FILL_CALC, fmt="+0.0;-0.0")
-        widths = [11, 9, 10, 10, 14, 14, 16, 12, 12, 10, 24, 3, 10, 11, 11, 9]
+        self.kpler_cur_imports = f"'Kpler Flows'!${get_column_letter(P + 1)}$16"
+        self.kpler_cur_exports = f"'Kpler Flows'!${get_column_letter(P + 2)}$16"
+
+        # by grade (trailing 90 days)
+        _hdr(ws, 19, P, "grade (trailing 90d)")
+        _hdr(ws, 19, P + 1, "imports kbd")
+        _hdr(ws, 19, P + 2, "exports kbd")
+        for i, g in enumerate(self.KPLER_GRADES):
+            r = 20 + i
+            _style(ws.cell(row=r, column=P, value=g), fill=FILL_CALC)
+            for j, d in enumerate(("import", "export")):
+                _style(ws.cell(
+                    row=r, column=P + 1 + j,
+                    value=(f'=SUMIFS({vcol},{gcol},"{g}",{ccol},"{d}",'
+                           f'{dcol},">="&(TODAY()-90))'),
+                ), fill=FILL_CALC, fmt="0.0")
+
+        # by status (all rows)
+        _hdr(ws, 28, P, "status")
+        _hdr(ws, 28, P + 1, "total kbd")
+        for i, st in enumerate(self.KPLER_STATUS):
+            r = 29 + i
+            _style(ws.cell(row=r, column=P, value=st), fill=FILL_CALC)
+            _style(ws.cell(row=r, column=P + 1,
+                           value=f'=SUMIFS({vcol},{scol},"{st}")'),
+                   fill=FILL_CALC, fmt="0.0")
+
+        # ---------------- FIXTURES
+        f0 = t1 + 4
+        _banner(ws, f0 - 2, "  FIXTURES", 11)
+        fx_headers = ["fixture date", "laycan start", "laycan end", "vessel",
+                      "grade", "qty kbd", "origin", "destination", "status",
+                      "rate", "notes"]
+        for c, h in enumerate(fx_headers, start=1):
+            _hdr(ws, f0 - 1, c, h)
+        for r in range(f0, f0 + 100):
+            for c in range(1, 12):
+                _style(ws.cell(row=r, column=c), fill=FILL_INPUT,
+                       fmt="yyyy-mm-dd" if c <= 3 else ("0.0" if c == 6 else None))
+        dv = DataValidation(type="list", formula1=f'"{",".join(self.KPLER_STATUS)}"',
+                            allow_blank=True)
+        ws.add_data_validation(dv)
+        dv.add(f"I{f0}:I{f0 + 99}")
+
+        # ---------------- FLOWS (aggregated bilateral)
+        w0 = f0 + 104
+        _banner(ws, w0 - 2, "  FLOWS — aggregated origin -> destination", 7)
+        fl_headers = ["month", "origin zone", "dest zone", "grade", "kbd",
+                      "source", "notes"]
+        for c, h in enumerate(fl_headers, start=1):
+            _hdr(ws, w0 - 1, c, h)
+        for r in range(w0, w0 + 100):
+            for c in range(1, 8):
+                _style(ws.cell(row=r, column=c), fill=FILL_INPUT,
+                       fmt="mmm-yy" if c == 1 else ("0.0" if c == 5 else None))
+
+        widths = [11, 14, 9, 13, 12, 13, 12, 13, 10, 10, 15, 12, 10, 20, 3,
+                  10, 11, 11, 9]
         for c, w in enumerate(widths, start=1):
             ws.column_dimensions[get_column_letter(c)].width = w
-        ws.freeze_panes = "A3"
-        self.kpler_agg_col = AGG
+        ws.freeze_panes = "A5"
 
     # ------------------------------------------------------- US Balance tab
 
@@ -2149,17 +2317,14 @@ class SimpleWorkbook(DeskWorkbook):
         b_typ = f"'Individual Refineries'!$A$3:$A${self.box_last}"
         b_net = (f"'Individual Refineries'!${base_l}$3:"
                  f"${base_l}${self.box_last}")
-        kag = get_column_letter(self.kpler_agg_col)
         _banner(ws, 3, "  LIVE TIE-IN (kbd)", 6)
         ties = [
             ("Model net naphtha supply (boxes, now)",
              f'=SUMPRODUCT(({b_typ}="TOTAL")*{b_net})', "#,##0.0", FILL_CALC),
             ("Kpler imports (current month)",
-             f"='Kpler Flows'!{get_column_letter(self.kpler_agg_col + 1)}14",
-             "0.0", FILL_CALC),
+             f"={self.kpler_cur_imports}", "0.0", FILL_CALC),
             ("Kpler exports (current month)",
-             f"='Kpler Flows'!{get_column_letter(self.kpler_agg_col + 2)}14",
-             "0.0", FILL_CALC),
+             f"={self.kpler_cur_exports}", "0.0", FILL_CALC),
             ("Demand assumption (kbd; default = latest EA month)",
              None, "#,##0", FILL_INPUT),
             ("IMPLIED BALANCE (supply + imports - exports - demand)",
@@ -2198,6 +2363,7 @@ class SimpleWorkbook(DeskWorkbook):
                 _style(ws.cell(row=r, column=c, value=table[m].get(fl)),
                        fmt="#,##0" if fl == "CLOSTLV" else "0.0")
         last = first + len(months) - 1
+        self.usbal_first, self.usbal_last = first, last
         # default demand input = latest EA demand
         if months:
             ws["C7"] = table[months[-1]].get("TOTDEMO")
@@ -2215,6 +2381,7 @@ class SimpleWorkbook(DeskWorkbook):
             ser.graphicalProperties.line.solidFill = color
             ch.series.append(ser)
         ch.set_categories(Reference(ws, min_col=1, min_row=first, max_row=last))
+        _axes(ch, "month", "kbd")
         ws.add_chart(ch, "F3")
         widths = [34, 14, 12, 12, 12, 12, 12, 13, 12]
         for c, w in enumerate(widths, start=1):
@@ -2400,6 +2567,7 @@ class SimpleWorkbook(DeskWorkbook):
                 ser.graphicalProperties.solidFill = color
                 ch.series.append(ser)
             ch.set_categories(cats_ref)
+            _axes(ch, "", "$/bbl" if "bbl" in title else "kbd")
             ws.add_chart(ch, anchor)
 
         bar("Blend value spreads ($/bbl)",

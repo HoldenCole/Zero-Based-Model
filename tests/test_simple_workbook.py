@@ -55,7 +55,7 @@ def test_tab_layout(built):
                              "Nameplate", "Effective", "Data"]
     # presentation layer: charts + live KPIs on the cover, themed tabs
     cover = wb["Cover"]
-    assert len(cover._charts) == 2
+    assert len(cover._charts) == 4
     assert str(cover.cell(row=9, column=3).value).startswith("=SUMPRODUCT")
     assert wb["Individual Refineries"].sheet_view.showGridLines is False
     assert wb["Individual Refineries"].sheet_properties.tabColor is not None
@@ -96,13 +96,18 @@ def test_new_tabs_are_wired(built):
     assert n_hist > 1000
     # Kpler landing zone aggregates live; US Balance ties model + Kpler + EA
     kp = wb["Kpler Flows"]
-    assert "SUMIFS" in str(kp.cell(row=3, column=14).value)
+    assert "SUMIFS" in str(kp.cell(row=5, column=17).value)      # monthly agg
+    assert "Light Naphtha" in str(kp.cell(row=20, column=16).value)  # grade block
     ub = wb["US Balance"]
     assert "SUMPRODUCT" in str(ub["C4"].value)
     assert "'Kpler Flows'" in str(ub["C5"].value)
     n_months = sum(1 for r in range(12, 100) if ub.cell(row=r, column=1).value)
     assert n_months >= 40
     assert len(wb["BlendEcon"]._charts) == 3
+    # every chart in the book has visible, titled axes
+    for tab in ("Cover", "Outages", "Outage History", "US Balance", "BlendEcon"):
+        for ch in wb[tab]._charts:
+            assert ch.x_axis.delete is False and ch.y_axis.delete is False
     # unit mode defaults to assumption
     ir = wb["Individual Refineries"]
     modes = {ir.cell(row=r, column=9).value for r in range(3, 60)
