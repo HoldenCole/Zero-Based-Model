@@ -1,9 +1,10 @@
-"""Feed pulls: URL building and payload parsing (network mocked)."""
+"""Feed pulls: URL building, payload parsing, pagination (network mocked)."""
 
+import csv
 import json
 
-from naphtha_model.feeds import (EIA_SERIES, eia_url, parse_eia, pull_eia,
-                                 pull_iir)
+from naphtha_model.feeds import (EIA_SERIES, ea_pop_url, eia_url, parse_eia,
+                                 pull_ea, pull_eia, pull_iir)
 
 
 def test_eia_url_shape():
@@ -32,15 +33,55 @@ def test_parse_and_pull_eia(tmp_path):
     assert len(all_rows) == 2
 
 
-def test_pull_iir_detects_oev_shape(tmp_path):
-    records = [{"offlineEventKey": 1, "eventId": 2, "eventType": "Turnaround",
-                "eventStartDate": "2026-09-01", "eventEndDate": "2026-10-01",
-                "plantName": "X", "unitTypeDesc": "CDU"}]
-    raw = json.dumps(records).encode()
-    out, summary = pull_iir("https://x/?q=1", "TOK",
-                            out_json=tmp_path / "iir.json",
-                            fetch=lambda url, headers=None: raw)
-    assert out.exists() and summary["records"] == 1 and summary["is_oev"]
+def test_pull_ea_paginates_and_filters(tmp_path):
+    assert "marginal_range=1900-01-01," in ea_pop_url("K")
+    page1 = {"data": [
+        {"ReferenceDate": "2026-06-01", "FlowBreakdown": "TOTDEMO",
+         "ObservedValue": 139.0, "GeneralizedSource": "OilX",
+         "During": "[2026-07-01,9999-12-31)"},
+        {"ReferenceDate": "2022-01-01", "FlowBreakdown": "TOTDEMO",
+         "ObservedValue": 999.0, "GeneralizedSource": "Actual",
+         "During": "x"},                       # before `since` -> dropped
+    ], "token": "NEXT"}
+    page2 = {"data": [
+        {"ReferenceDate": "2026-05-01", "FlowBreakdown": "BALANCE",
+         "ObservedValue": -12.0, "GeneralizedSource": "Actual",
+         "During": "x"},
+    ]}
+
+    def fetch(url):
+        return page2 if "token=NEXT" in url else page1
+
+    out, summary = pull_ea("K", out_csv=tmp_path / "bal.csv", fetch=fetch)
+    assert summary["pages"] == 2 and summary["rows"] == 2
+    rows = list(csv.DictReader(out.open()))
+    assert {(r["month"], r["flow"]) for r in rows} == {
+        ("2026-06", "TOTDEMO"), ("2026-05", "BALANCE")}
+    assert rows[1]["source"] == "OilX"
+
+
+def test_pull_iir_paginates_no_csv(tmp_path):
+    ev = {"offlineEventKey": "1**2*", "eventId": 1, "eventType": "Planned",
+          "eventStartDate": "2026-09-01T05:00:00Z[UTC]",
+          "eventEndDate": "2026-10-01T05:00:00Z[UTC]",
+          "plantName": "X", "unitTypeDesc": "CDU",
+          "offlineCapacity": {"unitCapacity": 100, "capacityOffline": 50},
+          "plantPhysicalAddress": {"countryName": "U.S.A."}}
+    calls = []
+
+    def fetch(url, headers=None, method="GET"):
+        calls.append((url, method))
+        assert headers["Authorization"].startswith("Bearer ")
+        page = {"totalCount": 3, "offlineEvents": [ev] * (2 if "offset=0" in url else 1)}
+        return json.dumps(page).encode()
+
+    out, summary = pull_iir("TOK", out_json=tmp_path / "iir.json",
+                            page_size=2, fetch=fetch, refresh_csvs=False)
+    assert out.exists()
+    assert summary["records"] == 3 and summary["pages"] == 2
+    assert summary["is_oev"]
+    assert all(m == "POST" for _, m in calls)
+    assert "physicalAddressCountryName=U.S.A." in calls[0][0]
 
 
 def test_workbook_and_module_series_agree():

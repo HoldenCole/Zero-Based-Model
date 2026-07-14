@@ -5,3 +5,5 @@ __pycache__/
 !data/raw/*.xlsx
 !dist/*.xlsx
 .venv/
+secrets.yaml
+data/raw/iir_pull.json

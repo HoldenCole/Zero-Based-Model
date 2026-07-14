@@ -2665,56 +2665,87 @@ class SimpleWorkbook(DeskWorkbook):
             "demand source; EIA is the accuracy-anchored fallback."
         )).font = FONT_SMALL
 
-        # ---- IIR block (rows 18-26)
-        _hdr(ws, 18, 1, "IIR — OFFLINE EVENTS / CAPACITY OFFLINE "
-                        "(token-auth; tokens expire every 30 days)")
-        ws.cell(row=19, column=1, value="IIR token").font = FONT_SMALL
+        # ---- IIR block (rows 18-25) — WIRED (endpoint recovered from the
+        # desk workbook's Power Query; POST-only, so no WEBSERVICE)
+        _hdr(ws, 18, 1, "IIR — OFFLINE EVENTS, WIRED "
+                        "(Bearer token, expires every 30 days)")
+        ws.cell(row=19, column=1,
+                value="IIR token (CLI reads it from gitignored secrets.yaml)"
+                ).font = FONT_SMALL
         _style(ws.cell(row=19, column=3, value=None), fill=FILL_INPUT)
         ws.cell(row=20, column=1,
-                value="IIR query URL (paste the desk's working REST query)"
-                ).font = FONT_SMALL
-        _style(ws.cell(row=20, column=3,
-                       value="https://api.industrialinfo.com/"),
-               fill=FILL_INPUT)
-        ws.cell(row=21, column=1, value="assembled request").font = FONT_SMALL
-        _style(ws.cell(
-            row=21, column=3,
-            value=('=IF(OR($C$19="",$C$20=""),"← paste token + URL",'
-                   '$C$20&IF(ISNUMBER(FIND("?",$C$20)),"&","?")'
-                   '&"token="&$C$19)')), fill=FILL_CALC)
-        ws.cell(row=22, column=1,
-                value="raw response (eyeball, then map)").font = FONT_SMALL
-        _style(ws.cell(row=22, column=3,
-                       value='=IF(LEFT($C$21,4)="http",WEBSERVICE($C$21),"")'),
-               fill=FILL_CALC)
+                value="query (US refining, all statuses)").font = FONT_SMALL
+        ws.cell(
+            row=20, column=3,
+            value="https://api.industrialinfo.com/idb/v2.6/offlineevents/"
+                  "summary?eventStatusDesc=Ongoing&eventStatusDesc=Future"
+                  "&eventStatusDesc=Past&industryCodeDesc=Petroleum+Refining"
+                  "+%28HPI%29&physicalAddressCountryName=U.S.A."
+        ).font = FONT_SMALL
         iir_notes = [
-            "The source events DB refreshed via Power Query 'Refresh All' "
-            "with an IIR token (its Tips sheet: tokens expire every 30 days "
-            "- contact Justin Hutto). If your account uses header auth, use "
-            "Data > Get Data > From Web > Advanced (Authorization header) or "
-            "the CLI below - WEBSERVICE can't send headers.",
-            "OEV fields the pipeline maps: offlineEventKey, eventType, "
-            "eventStartDate/eventEndDate, plantName, unitTypeDesc, "
-            "offlineCapacity.unitCapacity / .capacityOffline, eventCause.",
-            "CLI: python -m naphtha_model.cli pull-iir --url <query> --token "
-            "<tok>  ->  data/raw/iir_pull.json (+ outage CSVs when the shape "
-            "matches), then rebuild the workbook to refresh Outages tabs.",
+            "The API is POST-only, so WEBSERVICE (GET) can't call it. Two "
+            "refresh paths: Power Query (Data > Get Data > From Web > "
+            "Advanced: URL above + Authorization header 'Bearer <token>', "
+            "Content-Type application/json) or the CLI below.",
+            "CLI: python -m naphtha_model.cli pull-iir  ->  pulls every US "
+            "refining event, refreshes outage_events.csv + "
+            "current_outages.csv (as-of today), then rebuild the workbook "
+            "to light up the Outages tabs.",
+            "Verified live 2026-07-14: 7,466 US records -> 5,512 events "
+            "2023+, 129/137 plants matched, current outages refreshed "
+            "(picked up the Valero Corpus Christi CDU+VDU TAR).",
+            "OEV fields mapped: offlineEventKey, eventType, eventStart/"
+            "EndDate, plantName, unitTypeDesc, offlineCapacity.unitCapacity"
+            " / .capacityOffline, eventCause.",
+            "units/summary and units/detail (capacities, shutdown dates, "
+            "future capacity) live on the same API for the capacity walk.",
         ]
         for i, n in enumerate(iir_notes):
-            ws.cell(row=23 + i, column=1, value=n).font = FONT_SMALL
+            ws.cell(row=21 + i, column=1, value=n).font = FONT_SMALL
 
-        # ---- EA block (rows 28-31)
-        _hdr(ws, 28, 1, "EA — ENERGY ASPECTS (primary demand/balance source)")
-        ea_notes = [
-            "No public EA API from this build. EA monthly balance + site "
-            "capacity land via the ingest commands into Data / US Balance; "
-            "the Assumptions DEMAND block picks up the latest EA month live.",
-            "If the desk gets EA API access (data.energyaspects.com), wire "
-            "it exactly like the EIA block above: key cell + WEBSERVICE URL "
-            "+ FILTERXML xpath.",
+        # ---- EA block (rows 27-31) — WIRED (OilX REST API)
+        _hdr(ws, 27, 1, "EA — ENERGY ASPECTS, WIRED (OilX REST API; "
+                        "UUID key in the api_key query param)")
+        ws.cell(row=28, column=1,
+                value="EA api key (CLI reads secrets.yaml)").font = FONT_SMALL
+        _style(ws.cell(row=28, column=3, value=None), fill=FILL_INPUT)
+        ws.cell(row=29, column=1, value="request URL").font = FONT_SMALL
+        ws.cell(
+            row=29, column=3,
+            value=('=IF($C$28="","← key","https://api.energyaspects.com/oilx'
+                   '/v2/balances/country/pop?api_key="&$C$28&"&product='
+                   'NAPHTHA&country=US&marginal_range=1900-01-01,")')
+        ).font = FONT_SMALL
+        ws.cell(row=30, column=1,
+                value="raw response (JSON — eyeball only)").font = FONT_SMALL
+        _style(ws.cell(
+            row=30, column=3,
+            value='=IF(LEFT($C$29,4)="http",WEBSERVICE($C$29),"")'),
+            fill=FILL_CALC)
+        ws.cell(row=31, column=1, value=(
+            "Responses are JSON (FILTERXML can't parse them), so the numbers "
+            "land via CLI:  python -m naphtha_model.cli pull-ea  ->  rewrites "
+            "the US Balance monthly table's CSV (verified: reproduces the "
+            "manual EA export exactly, plus OilX nowcast months). The "
+            "Assumptions DEMAND 'EA latest' option reads it live."
+        )).font = FONT_SMALL
+
+        # ---- Kpler block (rows 33-36) — key pending
+        _hdr(ws, 33, 1, "KPLER — SHIP TRACKING (key pending)")
+        ws.cell(row=34, column=1,
+                value="Kpler key (base64, Basic auth)").font = FONT_SMALL
+        _style(ws.cell(row=34, column=3, value=None), fill=FILL_INPUT)
+        kpler_notes = [
+            "The key supplied 2026-07-14 fails auth (401): two characters "
+            "arrived corrupted and were repaired, but it still doesn't "
+            "authenticate - likely more transcription damage. Re-copy the "
+            "exact string from the Kpler console into secrets.yaml.",
+            "Once valid: python -m naphtha_model.cli pull-kpler --endpoint "
+            "trades --params products=naphtha...  ->  data/raw/, feeding the "
+            "Kpler Flows tab (trades / fixtures / flows by grade & status).",
         ]
-        for i, n in enumerate(ea_notes):
-            ws.cell(row=29 + i, column=1, value=n).font = FONT_SMALL
+        for i, n in enumerate(kpler_notes):
+            ws.cell(row=35 + i, column=1, value=n).font = FONT_SMALL
 
         for c, w in [(1, 58), (2, 18), (3, 16), (4, 12), (5, 8), (6, 100)]:
             ws.column_dimensions[get_column_letter(c)].width = w

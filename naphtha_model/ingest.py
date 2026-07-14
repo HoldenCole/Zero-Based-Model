@@ -792,12 +792,21 @@ def _match_plant(name: str, city: str, state: str, owner: str,
 def ingest_outages(
     xlsx_path: Path, data_dir: Path = DATA_DIR, as_of: str = "2026-07-09"
 ) -> dict:
-    registry = _read_registry(data_dir / "reference" / "refineries.csv")
+    """OEVs from the desk's IIR export workbook -> outage CSVs."""
     wb = openpyxl.load_workbook(Path(xlsx_path), data_only=True, read_only=True)
     ws = wb["OEVs"]
     rows = ws.iter_rows(min_row=1, values_only=True)
     hdr = [str(h) for h in next(rows)]
-    i = {h: n for n, h in enumerate(hdr)}
+    records = [dict(zip(hdr, row)) for row in rows]
+    return ingest_outage_records(records, data_dir=data_dir, as_of=as_of)
+
+
+def ingest_outage_records(
+    records: list[dict], data_dir: Path = DATA_DIR, as_of: str = "2026-07-09"
+) -> dict:
+    """IIR OEV records (flattened dicts, xlsx export or live API pull) ->
+    outage_events.csv + current_outages.csv."""
+    registry = _read_registry(data_dir / "reference" / "refineries.csv")
 
     def d(v):  # '2023-03-25T05:00:00Z[UTC]' -> '2023-03-25'
         return str(v)[:10] if v else ""
@@ -805,43 +814,44 @@ def ingest_outages(
     plant_cache: dict = {}
     events = []
     unmatched_plants = set()
-    for row in rows:
-        if row[i["plantPhysicalAddress.countryName"]] != "U.S.A.":
+    for rec in records:
+        if rec.get("plantPhysicalAddress.countryName") not in (
+                "U.S.A.", "United States"):
             continue
-        end = d(row[i["eventEndDate"]])
+        end = d(rec.get("eventEndDate"))
         if end < "2023-01-01":
             continue
-        pid = row[i["associatedPlantId"]]
+        pid = rec.get("associatedPlantId")
         if pid not in plant_cache:
             plant_cache[pid] = _match_plant(
-                str(row[i["plantName"]] or ""),
-                str(row[i["plantPhysicalAddress.city"]] or ""),
-                str(row[i["plantPhysicalAddress.stateName"]] or ""),
-                str(row[i["plantOwnerName"]] or ""), registry)
+                str(rec.get("plantName") or ""),
+                str(rec.get("plantPhysicalAddress.city") or ""),
+                str(rec.get("plantPhysicalAddress.stateName") or ""),
+                str(rec.get("plantOwnerName") or ""), registry)
         rid = plant_cache[pid]
         if rid is None:
             unmatched_plants.add(
-                f'{row[i["plantName"]]} ({row[i["plantPhysicalAddress.city"]]}, '
-                f'{row[i["plantPhysicalAddress.stateName"]]})')
+                f'{rec.get("plantName")} ({rec.get("plantPhysicalAddress.city")}, '
+                f'{rec.get("plantPhysicalAddress.stateName")})')
         events.append({
             "refinery_id": rid or "",
-            "event_id": row[i["eventId"]],
-            "event_type": row[i["eventType"]],
-            "status": row[i["derivedEventStatusDesc"]],
-            "start": d(row[i["eventStartDate"]]),
+            "event_id": rec.get("eventId"),
+            "event_type": rec.get("eventType"),
+            "status": rec.get("derivedEventStatusDesc"),
+            "start": d(rec.get("eventStartDate")),
             "end": end,
-            "duration_days": row[i["eventDuration"]],
-            "unit_name": row[i["unitName"]],
-            "unit_type": row[i["unitTypeDesc"]],
-            "model_unit": OEV_UNIT_MAP.get(str(row[i["unitTypeDesc"]]), ""),
-            "unit_capacity": row[i["offlineCapacity.unitCapacity"]],
-            "capacity_offline": row[i["offlineCapacity.capacityOffline"]],
-            "uom": row[i["offlineCapacity.uom"]],
-            "confirmation": row[i["eventConfirmationStatus"]],
-            "cause": row[i["eventCause"]],
-            "plant_name": row[i["plantName"]],
-            "city": row[i["plantPhysicalAddress.city"]],
-            "state": row[i["plantPhysicalAddress.stateName"]],
+            "duration_days": rec.get("eventDuration"),
+            "unit_name": rec.get("unitName"),
+            "unit_type": rec.get("unitTypeDesc"),
+            "model_unit": OEV_UNIT_MAP.get(str(rec.get("unitTypeDesc")), ""),
+            "unit_capacity": rec.get("offlineCapacity.unitCapacity"),
+            "capacity_offline": rec.get("offlineCapacity.capacityOffline"),
+            "uom": rec.get("offlineCapacity.uom"),
+            "confirmation": rec.get("eventConfirmationStatus"),
+            "cause": rec.get("eventCause"),
+            "plant_name": rec.get("plantName"),
+            "city": rec.get("plantPhysicalAddress.city"),
+            "state": rec.get("plantPhysicalAddress.stateName"),
         })
 
     ev_path = data_dir / "reference" / "outage_events.csv"

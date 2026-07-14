@@ -128,8 +128,11 @@ python -m naphtha_model export --dump --out flat.xlsx     # flat value dump
 python -m naphtha_model ingest-yields data/raw/estimated_refinery_outputs_2024.xlsx
 python -m naphtha_model ingest-outages data/raw/offline_events_units_db.xlsx
 python -m naphtha_model outages --days 90 --padd 3        # live + upcoming TARs
+python -m naphtha_model pull-ea                           # EA naphtha balance -> us_naphtha_balance_monthly.csv
+python -m naphtha_model pull-iir                          # IIR US offline events -> outage CSVs (as-of today)
 python -m naphtha_model pull-eia --api-key <KEY>          # EIA weekly/monthly -> eia_feed.csv
-python -m naphtha_model pull-iir --url <QUERY> --token <TOK>  # IIR offline events -> iir_pull.json
+python -m naphtha_model pull-kpler                        # Kpler ship tracking -> data/raw/ (needs valid key)
+# keys/tokens live in the gitignored secrets.yaml at the repo root — never commit them
 python -m naphtha_model calibrate --padd 3                # model vs 2024 actuals
 
 pytest                                            # run the test suite
@@ -239,6 +242,15 @@ window.
       MNFUPUS2 petchem-naphtha demand, WGIRIUS2/WCRRIUS2/WOCLEUS2/WPULEUS3
       weekly refinery data) + `pull-eia`/`pull-iir` CLI fallbacks; demand
       source toggle Manual / EA latest / EIA feed on Assumptions
+- [x] EA API wired (`pull-ea`, OilX REST /balances/country/pop): rebuilds
+      the US naphtha monthly balance CSV live — verified to reproduce the
+      manual EA export exactly, including OilX nowcast months
+- [x] IIR API wired (`pull-iir`, idb/v2.6 offlineevents/summary, POST +
+      Bearer token, endpoints recovered from the desk workbook's Power
+      Query): refreshes outage_events.csv / current_outages.csv as-of
+      today. units/summary + units/detail available for the capacity walk
+- [ ] Kpler API: pull scaffolded (`pull-kpler`); the supplied key fails
+      auth (401, transcription damage) — needs a fresh copy of the key
 - [ ] Wire in ship-tracking / fixture feed into `data/flows/`
 - [ ] Refinery margin lens ("how does this refinery think about margins")
 - [ ] Europe, then Asia-Pacific regions

@@ -109,15 +109,40 @@ def main(argv: list[str] | None = None) -> int:
 
     p_piir = sub.add_parser(
         "pull-iir",
-        help="pull the desk's IIR offline-events query to data/raw/iir_pull.json")
-    p_piir.add_argument("--url", required=True,
-                        help="the desk's working IIR REST query URL")
-    p_piir.add_argument("--token", required=True,
-                        help="IIR API token (expires every 30 days)")
-    p_piir.add_argument("--auth", choices=["query", "bearer"], default="query",
-                        help="token as &token= query param (default) or "
-                             "Authorization: Bearer header")
+        help="pull US refinery offline events from the IIR API and refresh "
+             "the outage CSVs (token from secrets.yaml if not passed)")
+    p_piir.add_argument("--token", default=None,
+                        help="IIR Bearer token (expires every 30 days); "
+                             "default: iir_token in secrets.yaml")
+    p_piir.add_argument("--country", default="U.S.A.",
+                        help="IIR country filter (default U.S.A.; '' = world)")
+    p_piir.add_argument("--as-of", default=None,
+                        help="snapshot date for current_outages.csv "
+                             "(default: today)")
+    p_piir.add_argument("--no-csv", action="store_true",
+                        help="save raw JSON only, don't refresh outage CSVs")
     p_piir.add_argument("--out", default=None, help="output json path")
+
+    p_pea = sub.add_parser(
+        "pull-ea",
+        help="pull the EA US naphtha monthly balance into "
+             "data/reference/us_naphtha_balance_monthly.csv "
+             "(key from secrets.yaml if not passed)")
+    p_pea.add_argument("--api-key", default=None,
+                       help="EA/OilX api key; default: ea_api_key in secrets.yaml")
+    p_pea.add_argument("--since", default="2023-01",
+                       help="first month kept (default 2023-01)")
+    p_pea.add_argument("--product", default="NAPHTHA")
+    p_pea.add_argument("--country", default="US")
+
+    p_pk = sub.add_parser(
+        "pull-kpler",
+        help="pull a Kpler liquids endpoint to data/raw/ (key from "
+             "secrets.yaml)")
+    p_pk.add_argument("--key", default=None,
+                      help="base64 Kpler key; default: kpler_key in secrets.yaml")
+    p_pk.add_argument("--endpoint", default="trades")
+    p_pk.add_argument("--params", default="products=naphtha&size=100")
 
     p_exp = sub.add_parser("export", help="build the live desk Excel workbook")
     p_exp.add_argument("--out", default="naphtha_model.xlsx")
@@ -150,15 +175,36 @@ def main(argv: list[str] | None = None) -> int:
         from .feeds import pull_iir
 
         path, summary = pull_iir(
-            args.url, args.token, auth=args.auth,
+            token=args.token, country=args.country, as_of=args.as_of,
+            refresh_csvs=not args.no_csv,
             out_json=Path(args.out) if args.out else None)
-        print(f"wrote {path} ({summary['bytes']} bytes, "
-              f"{summary['records']} records)")
-        if summary["is_oev"]:
-            print("looks like IIR OEV records - wire into ingest_outages "
-                  "to refresh the outage CSVs, then rebuild the workbook")
-        elif summary["fields"]:
-            print("fields: " + ", ".join(summary["fields"]))
+        print(f"wrote {path} ({summary['records']} records, "
+              f"{summary['pages']} pages)")
+        for k, v in (summary.get("ingest") or {}).items():
+            if isinstance(v, list):
+                print(f"{k} ({len(v)}):")
+                for x in v:
+                    print(f"    {x}")
+            else:
+                print(f"{k}: {v}")
+        return 0
+
+    if args.command == "pull-ea":
+        from .feeds import pull_ea
+
+        path, summary = pull_ea(api_key=args.api_key, since=args.since,
+                                product=args.product, country=args.country)
+        print(f"wrote {path}")
+        for k, v in summary.items():
+            print(f"{k}: {v}")
+        return 0
+
+    if args.command == "pull-kpler":
+        from .feeds import pull_kpler
+
+        path, summary = pull_kpler(key=args.key, endpoint=args.endpoint,
+                                   params=args.params)
+        print(f"wrote {path}: {summary}")
         return 0
 
     if args.command == "ingest-yields":
