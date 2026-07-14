@@ -74,6 +74,7 @@ TAB_COLORS = {
     "Nameplate": "2E8677", "Effective": "2E8677",        # capacity views: teal
     "Outages": "B03A2E", "Outage History": "7A2A22",
     "Kpler Flows": "1F6FB2", "US Balance": "216E5E",
+    "Live Feeds": "B27C1F",                              # data in: amber
     "CrudeSlate": "6B8E23",                              # slate: olive
     "BlendEcon": "A23B3B",                               # economics: maroon
     "KitWalk": "7A5195",                                 # tuning: plum
@@ -98,15 +99,43 @@ BOX_LO, BOX_HI = 4, 2600       # Boxes data rows
 
 
 
-def _axes(ch, x_title: str, y_title: str) -> None:
-    """Make chart axes visible with titles — openpyxl leaves them deleted
-    unless explicitly switched on."""
+def _axes(ch, x_title: str, y_title: str, rotate: bool = False,
+          skip: int | None = None) -> None:
+    """Readable charts: visible titled axes, no gridlines, spaced bars,
+    rotated/skipped date labels on dense axes."""
+    from openpyxl.chart import BarChart
+    from openpyxl.drawing.text import (CharacterProperties, Paragraph,
+                                       ParagraphProperties, RichTextProperties)
+    from openpyxl.chart.text import RichText
+
     ch.x_axis.title = x_title
     ch.y_axis.title = y_title
     ch.x_axis.delete = False
     ch.y_axis.delete = False
-    ch.x_axis.tickLblPos = "nextTo"
+    ch.x_axis.tickLblPos = "low"
     ch.y_axis.tickLblPos = "nextTo"
+    ch.y_axis.majorGridlines = None          # kill the grid clutter
+    if isinstance(ch, BarChart):
+        ch.gapWidth = 60                     # fatter bars
+        if len(ch.series) > 1:
+            ch.overlap = -5
+    if rotate:
+        ch.x_axis.txPr = RichText(
+            bodyPr=RichTextProperties(rot=-2700000, vert="horz"),
+            p=[Paragraph(pPr=ParagraphProperties(defRPr=CharacterProperties(sz=800)),
+                         endParaRPr=CharacterProperties())],
+        )
+    if skip:
+        ch.x_axis.tickLblSkip = skip
+        ch.x_axis.tickMarkSkip = skip
+    # thicken line series and make sure every bar series has a fill
+    for ser in ch.series:
+        gp = ser.graphicalProperties
+        if not isinstance(ch, BarChart):
+            if gp.line is not None:
+                gp.line.width = 26000        # ~2pt
+        elif gp.solidFill is None:
+            gp.solidFill = NAVY
 
 def _banner(ws, row: int, text: str, span: int) -> None:
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=span)
@@ -1107,10 +1136,14 @@ class SimpleWorkbook(DeskWorkbook):
     """
 
     TAB_ORDER = ["Cover", "Assumptions", "Individual Refineries", "Outages",
-                 "Outage History", "Kpler Flows", "US Balance", "CrudeSlate",
-                 "BlendEcon", "KitWalk", "Nameplate", "Effective", "Data"]
+                 "Outage History", "Kpler Flows", "US Balance", "Live Feeds",
+                 "CrudeSlate", "BlendEcon", "KitWalk", "Nameplate",
+                 "Effective", "Data"]
 
     def build(self, out_path: Path) -> Path:
+        # Boxes sheet extent is deterministic; grids on Assumptions need it
+        # before the boxes are written (banner + units + total + blank per box)
+        self.box_last = 2 + sum(len(r.units) + 3 for r in self.data.refineries)
         self._sheet_assumptions()
         self._simple_share_block()
         self._econ_assumption_blocks()
@@ -1122,6 +1155,7 @@ class SimpleWorkbook(DeskWorkbook):
         self._sheet_outage_history()
         self._sheet_kpler()
         self._sheet_usbalance()
+        self._sheet_livefeeds()
         self._sheet_crudeslate()
         self._sheet_blendecon()
         self._sheet_kitwalk()
@@ -1246,7 +1280,7 @@ class SimpleWorkbook(DeskWorkbook):
         ser.graphicalProperties.solidFill = "B03A2E"
         ch2.series.append(ser)
         ch2.set_categories(Reference(ot, min_col=2, max_col=14, min_row=4, max_row=4))
-        _axes(ch2, "week starting", "kbd offline")
+        _axes(ch2, "week starting", "kbd offline", rotate=True)
         ws.add_chart(ch2, "I12")
 
         ub = self.wb["US Balance"]
@@ -1261,7 +1295,7 @@ class SimpleWorkbook(DeskWorkbook):
             ch3.series.append(ser)
         ch3.set_categories(Reference(ub, min_col=1, min_row=self.usbal_first,
                                      max_row=self.usbal_last))
-        _axes(ch3, "month", "kbd")
+        _axes(ch3, "month", "kbd", rotate=True, skip=3)
         ws.add_chart(ch3, "C28")
 
         eff = self.wb["Effective"]
@@ -1343,6 +1377,7 @@ class SimpleWorkbook(DeskWorkbook):
             ("Outage History", "2023+ history, TAR seasonality, planned vs unplanned stats"),
             ("Kpler Flows", "ship tracking: trades / fixtures / flows by grade & status"),
             ("US Balance", "EA monthly actuals + live balance nowcast"),
+            ("Live Feeds", "in-workbook API pulls: EIA weekly/monthly, IIR events"),
             ("CrudeSlate", "actual crude diet; merchant naphtha buyers flagged"),
             ("BlendEcon", "spreads, arbs, max-light vs max-heavy — with charts"),
             ("KitWalk", "CDU -> SR naphtha -> NHT -> reformer -> net, vs 2024 actuals"),
@@ -1723,16 +1758,184 @@ class SimpleWorkbook(DeskWorkbook):
             "Prices — live via Bloomberg BDP (needs terminal)",
             mkt.get("header", "PX_LAST"), mkt["prices"], "0.00",
             codes_hdr="BBG Codes")
-        self.freight_refs = market_block(
-            "Logistics / freight ($/bbl) — MANUAL entries", "$/bbl",
-            mkt["freight"], "0.00")
+
+        # ---- freight: entered AS QUOTED, converted to $/bbl for the model
+        _hdr(ws, r, col, "Logistics / freight — MANUAL entries (quoted rates)")
+        _hdr(ws, r, col + 1, "rate as quoted")
+        _hdr(ws, r, col + 2, "unit")
+        _hdr(ws, r, col + 3, "$/bbl used")
+        hdr_row = r
+        r += 1
+        ws.cell(row=r, column=col,
+                value="Naphtha conversion (bbl per mt)").font = FONT_SMALL
+        _style(ws.cell(row=r, column=col + 1,
+                       value=float(mkt.get("bbl_per_mt", 8.9))),
+               fill=FILL_INPUT, fmt="0.0")
+        bblmt = f"${vl}${r}"
+        self.freight_refs = {}
+        dvu = DataValidation(type="list", formula1='"$/mt,$/bbl"',
+                             allow_blank=False)
+        ws.add_data_validation(dvu)
+        for spec in mkt["freight"]:
+            r += 1
+            ws.cell(row=r, column=col, value=spec["label"]).font = FONT_SMALL
+            if spec.get("source") == "formula":
+                quoted = spec["formula"].replace("{next}", str(r + 1)) \
+                                        .replace("S", vl)
+            else:
+                quoted = spec.get("value")
+            _style(ws.cell(row=r, column=col + 1, value=quoted),
+                   fill=FILL_INPUT, fmt="0.00")
+            _style(ws.cell(row=r, column=col + 2,
+                           value=spec.get("quote_unit", "$/bbl")),
+                   fill=FILL_INPUT)
+            dvu.add(f"{tl}{r}")
+            _style(ws.cell(
+                row=r, column=col + 3,
+                value=(f'=IF(${tl}{r}="$/mt",${vl}{r}/{bblmt},${vl}{r})'),
+            ), fill=FILL_CALC, fmt="0.00")
+            if spec.get("note"):
+                ws.cell(row=r, column=col + 4,
+                        value=spec["note"]).font = FONT_SMALL
+            self.freight_refs[spec["key"]] = f"Assumptions!${nl}${r}"
+        r += 2
+
         self.blend_refs = market_block(
             "Blend scenario assumptions — MANUAL entries", "value",
             mkt["blend_scenarios"], "0.00")
+
+        # ---- demand: one number feeds the balance; three ways to set it
+        import csv as _csv
+
+        bal_path = DATA_DIR / "reference" / "us_naphtha_balance_monthly.csv"
+        months: list[str] = []
+        last_dem = None
+        if bal_path.exists():
+            rows = list(_csv.DictReader(bal_path.open()))
+            months = sorted({row["month"] for row in rows})
+            dem = {row["month"]: float(row["kbd"] or 0)
+                   for row in rows if row["flow"] == "TOTDEMO"}
+            if months:
+                last_dem = dem.get(months[-1])
+        # EA demand column on US Balance: col E, data rows start at 12
+        ea_rng = f"'US Balance'!$E$12:$E${11 + len(months)}"
+        _hdr(ws, r, col, "DEMAND — US naphtha demand used by the balance (kbd)")
+        _hdr(ws, r, col + 1, "value")
+        r += 1
+        ws.cell(row=r, column=col,
+                value="Source (Manual / EA latest / EIA feed)").font = FONT_SMALL
+        _style(ws.cell(row=r, column=col + 1, value="EA latest"),
+               fill=FILL_INPUT)
+        dvd = DataValidation(type="list",
+                             formula1='"Manual,EA latest,EIA feed"',
+                             allow_blank=False)
+        ws.add_data_validation(dvd)
+        dvd.add(f"{vl}{r}")
+        src = f"${vl}${r}"
+        r += 1
+        ws.cell(row=r, column=col, value="Manual entry (kbd)").font = FONT_SMALL
+        _style(ws.cell(row=r, column=col + 1, value=last_dem),
+               fill=FILL_INPUT, fmt="#,##0")
+        man = f"${vl}${r}"
+        r += 1
+        ws.cell(row=r, column=col,
+                value="EA latest month (live from US Balance)").font = FONT_SMALL
+        _style(ws.cell(row=r, column=col + 1,
+                       value=(f'=IF(COUNT({ea_rng})=0,"",'
+                              f"INDEX({ea_rng},COUNT({ea_rng})))")),
+               fill=FILL_CALC, fmt="#,##0.0")
+        ea = f"${vl}${r}"
+        r += 1
+        ws.cell(row=r, column=col,
+                value="EIA petchem naphtha (Live Feeds tab)").font = FONT_SMALL
+        _style(ws.cell(row=r, column=col + 1, value="='Live Feeds'!$C$10"),
+               fill=FILL_CALC, fmt="#,##0.0")
+        ws.cell(row=r, column=col + 2,
+                value="proxy: product supplied, excl. blending"
+                ).font = FONT_SMALL
+        eia = f"${vl}${r}"
+        r += 1
+        _style(ws.cell(row=r, column=col, value="DEMAND USED"),
+               fill=FILL_TOTAL, bold=True)
+        _style(ws.cell(
+            row=r, column=col + 1,
+            value=(f'=IF({src}="Manual",{man},'
+                   f'IF({src}="EA latest",IF(ISNUMBER({ea}),{ea},{man}),'
+                   f"IF(ISNUMBER({eia}),{eia},{man})))")),
+            fill=FILL_TOTAL, fmt="#,##0.0", bold=True)
+        self.demand_ref = f"Assumptions!${vl}${r}"
+        r += 2
+
+        # ---- sensitivity grids (exact: the model is linear in the dials)
+        BOX = "'Individual Refineries'"
+        base_l = get_column_letter(self.c_base)
+        net_expr = (f'SUMPRODUCT(({BOX}!$A$3:$A${self.box_last}="TOTAL")'
+                    f"*{BOX}!${base_l}$3:${base_l}${self.box_last})")
+        u0 = self.dial_refs["Utilization scaler (100% = as-is)"]
+        y0 = self.dial_refs["Naphtha yield scaler (100% = as-is)"]
+        _hdr(ws, r, col, "SENSITIVITY — US net naphtha (kbd)")
+        ws.cell(row=r, column=col + 1,
+                value="utilization scaler across, yield scaler down").font = FONT_SMALL
+        r += 1
+        base_row = r
+        ws.cell(row=r, column=col, value="base @ 100/100").font = FONT_SMALL
+        _style(ws.cell(row=r, column=col + 1,
+                       value=f"={net_expr}/{u0}/{y0}"),
+               fill=FILL_CALC, fmt="#,##0.0")
+        base_cell = f"${vl}${base_row}"
+        scalers = [0.9, 0.95, 1.0, 1.05, 1.1]
+        r += 1
+        for j, u in enumerate(scalers):
+            _hdr(ws, r, col + 1 + j, f"util {u:.0%}")
+        for yv in scalers:
+            r += 1
+            _style(ws.cell(row=r, column=col, value=f"yield {yv:.0%}"),
+                   fill=FILL_CALC)
+            for j, u in enumerate(scalers):
+                cell = ws.cell(row=r, column=col + 1 + j,
+                               value=f"={base_cell}*{u}*{yv}")
+                _style(cell, fill=FILL_TOTAL if (u == 1 and yv == 1) else FILL_CALC,
+                       fmt="#,##0")
+        r += 2
+
+        _hdr(ws, r, col, "SENSITIVITY — arbs vs freight ($/bbl)")
+        ws.cell(row=r, column=col + 1,
+                value="freight multiplier across; positive = arb OPEN").font = FONT_SMALL
+        r += 1
+        mults = [0.5, 0.75, 1.0, 1.25, 1.5]
+        for j, m in enumerate(mults):
+            _hdr(ws, r, col + 1 + j, f"{m:.0%} frt")
+        P = self.price_refs
+        arb_specs = [
+            ("USGC -> Asia",
+             f'({P["naphtha_asia"]}-{P["naphtha_usgc"]})',
+             self.freight_refs["usgc_asia"]),
+            ("USGC -> NWE",
+             f'({P["naphtha_nwe"]}-{P["naphtha_usgc"]})',
+             self.freight_refs["usgc_nwe"]),
+            ("NWE -> USGC",
+             f'({P["naphtha_usgc"]}-{P["naphtha_nwe"]})',
+             self.freight_refs["nwe_usgc"]),
+        ]
+        from openpyxl.formatting.rule import CellIsRule as _CIR
+
+        for label, legs, frt in arb_specs:
+            r += 1
+            _style(ws.cell(row=r, column=col, value=label), fill=FILL_CALC)
+            for j, m in enumerate(mults):
+                _style(ws.cell(row=r, column=col + 1 + j,
+                               value=f"={legs}-{frt}*{m}"),
+                       fill=FILL_CALC, fmt="+0.00;-0.00")
+        rng = (f"{get_column_letter(col + 1)}{r - 2}:"
+               f"{get_column_letter(col + len(mults))}{r}")
+        ws.conditional_formatting.add(
+            rng, _CIR(operator="greaterThan", formula=["0"], fill=FILL_PASS))
+
         ws.column_dimensions[cl].width = 40
         ws.column_dimensions[vl].width = 12
         ws.column_dimensions[tl].width = 14
         ws.column_dimensions[nl].width = 26
+        ws.column_dimensions[get_column_letter(col + 4)].width = 24
 
 
     LINK_FONT = Font(size=9, color="1F5AA8", underline="single", name="Calibri")
@@ -1967,7 +2170,7 @@ class SimpleWorkbook(DeskWorkbook):
         ser.graphicalProperties.solidFill = "B03A2E"
         ch.series.append(ser)
         ch.set_categories(Reference(ws, min_col=2, max_col=1 + WEEKS, min_row=4, max_row=4))
-        _axes(ch, "week starting", "kbd offline")
+        _axes(ch, "week starting", "kbd offline", rotate=True)
         ws.add_chart(ch, f"P3")
 
         # ---- events table
@@ -2126,7 +2329,7 @@ class SimpleWorkbook(DeskWorkbook):
         ch.series.append(ser)
         ch.set_categories(Reference(ws, min_col=2, max_col=1 + len(months),
                                     min_row=4, max_row=4))
-        _axes(ch, "month", "kbd offline")
+        _axes(ch, "month", "kbd offline", rotate=True, skip=3)
         ws.add_chart(ch, "P3")
 
         # event history detail
@@ -2325,8 +2528,8 @@ class SimpleWorkbook(DeskWorkbook):
              f"={self.kpler_cur_imports}", "0.0", FILL_CALC),
             ("Kpler exports (current month)",
              f"={self.kpler_cur_exports}", "0.0", FILL_CALC),
-            ("Demand assumption (kbd; default = latest EA month)",
-             None, "#,##0", FILL_INPUT),
+            ("Demand (kbd) — source picked on the Assumptions DEMAND block",
+             f"={self.demand_ref}", "#,##0.0", FILL_CALC),
             ("IMPLIED BALANCE (supply + imports - exports - demand)",
              "=$C$4+$C$5-$C$6-$C$7", "+#,##0.0;-#,##0.0", FILL_TOTAL),
         ]
@@ -2364,9 +2567,6 @@ class SimpleWorkbook(DeskWorkbook):
                        fmt="#,##0" if fl == "CLOSTLV" else "0.0")
         last = first + len(months) - 1
         self.usbal_first, self.usbal_last = first, last
-        # default demand input = latest EA demand
-        if months:
-            ws["C7"] = table[months[-1]].get("TOTDEMO")
 
         from openpyxl.chart import LineChart, Reference, Series
 
@@ -2381,12 +2581,144 @@ class SimpleWorkbook(DeskWorkbook):
             ser.graphicalProperties.line.solidFill = color
             ch.series.append(ser)
         ch.set_categories(Reference(ws, min_col=1, min_row=first, max_row=last))
-        _axes(ch, "month", "kbd")
+        _axes(ch, "month", "kbd", rotate=True, skip=3)
         ws.add_chart(ch, "F3")
         widths = [34, 14, 12, 12, 12, 12, 12, 13, 12]
         for c, w in enumerate(widths, start=1):
             ws.column_dimensions[get_column_letter(c)].width = w
         ws.freeze_panes = f"A{first}"
+
+    # ------------------------------------------------------- Live Feeds tab
+
+    # EIA series verified against eia.gov (dnav): label, seriesid, unit
+    EIA_FEED_SERIES = [
+        ("US petchem naphtha demand — product supplied (monthly)",
+         "PET.MNFUPUS2.M", "kbd"),
+        ("US gross inputs to refineries (weekly)", "PET.WGIRIUS2.W", "kbd"),
+        ("US refinery crude runs (weekly)", "PET.WCRRIUS2.W", "kbd"),
+        ("US operable refining capacity (weekly)", "PET.WOCLEUS2.W", "kbd"),
+        ("US refinery utilization (weekly)", "PET.WPULEUS3.W", "%"),
+    ]
+
+    def _sheet_livefeeds(self) -> None:
+        """API pulls that live IN the workbook: WEBSERVICE()/FILTERXML()
+        formulas hit the EIA API (free key) and the desk's IIR query so the
+        numbers refresh whenever the weekly data drops — no Python needed.
+        Keys/tokens are typed by the user and are never written by the build.
+        The Assumptions DEMAND block reads C10 (EIA naphtha petchem demand)."""
+        ws = self.wb.create_sheet("Live Feeds")
+        _banner(ws, 1,
+                "LIVE DATA FEEDS — API pulls inside the workbook: paste a key,"
+                " hit Data > Refresh All (Ctrl+Alt+F9) when the weekly data"
+                " drops.", 9)
+        notes = [
+            "WEBSERVICE/FILTERXML refresh in Windows desktop Excel. Offline / "
+            "LibreOffice / Mac they error quietly and the model keeps the "
+            "last saved numbers.",
+            "Keys & tokens are typed HERE by the user - the repo build never "
+            "writes them. Don't commit a saved copy that contains them.",
+            "Python fallback (refreshes the CSVs the build ingests):  "
+            "python -m naphtha_model.cli pull-eia --api-key ...   |   "
+            "python -m naphtha_model.cli pull-iir --url ... --token ...",
+        ]
+        for i, n in enumerate(notes):
+            ws.cell(row=3 + i, column=1, value=n).font = FONT_SMALL
+
+        # ---- EIA block (rows 7-16; Assumptions references $C$10)
+        _hdr(ws, 7, 1, "EIA — US OFFICIAL WEEKLY/MONTHLY DATA "
+                        "(free key: eia.gov/opendata/register.php)")
+        ws.cell(row=8, column=1, value="EIA API key").font = FONT_SMALL
+        _style(ws.cell(row=8, column=3, value=None), fill=FILL_INPUT)
+        ws.cell(row=8, column=4, value="xpath value / period").font = FONT_SMALL
+        _style(ws.cell(row=8, column=5, value="//row[1]/value"),
+               fill=FILL_INPUT)
+        _style(ws.cell(row=8, column=6, value="//row[1]/period"),
+               fill=FILL_INPUT)
+        for c, h in enumerate(["series", "EIA series ID", "latest", "period",
+                               "unit", "request URL (auto-built)"], start=1):
+            _hdr(ws, 9, c, h)
+        for i, (label, sid, unit) in enumerate(self.EIA_FEED_SERIES):
+            r = 10 + i
+            ws.cell(row=r, column=1, value=label).font = FONT_SMALL
+            _style(ws.cell(row=r, column=2, value=sid), fill=FILL_INPUT)
+            _style(ws.cell(
+                row=r, column=3,
+                value=(f'=IF($C$8="","← key",IFERROR(NUMBERVALUE('
+                       f"FILTERXML(WEBSERVICE($F{r}),$E$8)),"
+                       f'"refresh in Excel"))')),
+                fill=FILL_CALC, fmt="#,##0.0")
+            _style(ws.cell(
+                row=r, column=4,
+                value=(f'=IF($C$8="","",IFERROR(FILTERXML('
+                       f'WEBSERVICE($F{r}),$F$8),""))')),
+                fill=FILL_CALC)
+            _style(ws.cell(row=r, column=5, value=unit), fill=FILL_CALC)
+            ws.cell(
+                row=r, column=6,
+                value=('="https://api.eia.gov/v2/seriesid/"&$B' + str(r) +
+                       '&"?api_key="&$C$8&"&out=xml'
+                       '&sort[0][column]=period&sort[0][direction]=desc'
+                       '&length=2"')).font = FONT_SMALL
+        ws.cell(row=16, column=1, value=(
+            "MNFUPUS2 is the petchem-feedstock leg of naphtha demand "
+            "(excludes gasoline-blending pull). EA stays the primary total-"
+            "demand source; EIA is the accuracy-anchored fallback."
+        )).font = FONT_SMALL
+
+        # ---- IIR block (rows 18-26)
+        _hdr(ws, 18, 1, "IIR — OFFLINE EVENTS / CAPACITY OFFLINE "
+                        "(token-auth; tokens expire every 30 days)")
+        ws.cell(row=19, column=1, value="IIR token").font = FONT_SMALL
+        _style(ws.cell(row=19, column=3, value=None), fill=FILL_INPUT)
+        ws.cell(row=20, column=1,
+                value="IIR query URL (paste the desk's working REST query)"
+                ).font = FONT_SMALL
+        _style(ws.cell(row=20, column=3,
+                       value="https://api.industrialinfo.com/"),
+               fill=FILL_INPUT)
+        ws.cell(row=21, column=1, value="assembled request").font = FONT_SMALL
+        _style(ws.cell(
+            row=21, column=3,
+            value=('=IF(OR($C$19="",$C$20=""),"← paste token + URL",'
+                   '$C$20&IF(ISNUMBER(FIND("?",$C$20)),"&","?")'
+                   '&"token="&$C$19)')), fill=FILL_CALC)
+        ws.cell(row=22, column=1,
+                value="raw response (eyeball, then map)").font = FONT_SMALL
+        _style(ws.cell(row=22, column=3,
+                       value='=IF(LEFT($C$21,4)="http",WEBSERVICE($C$21),"")'),
+               fill=FILL_CALC)
+        iir_notes = [
+            "The source events DB refreshed via Power Query 'Refresh All' "
+            "with an IIR token (its Tips sheet: tokens expire every 30 days "
+            "- contact Justin Hutto). If your account uses header auth, use "
+            "Data > Get Data > From Web > Advanced (Authorization header) or "
+            "the CLI below - WEBSERVICE can't send headers.",
+            "OEV fields the pipeline maps: offlineEventKey, eventType, "
+            "eventStartDate/eventEndDate, plantName, unitTypeDesc, "
+            "offlineCapacity.unitCapacity / .capacityOffline, eventCause.",
+            "CLI: python -m naphtha_model.cli pull-iir --url <query> --token "
+            "<tok>  ->  data/raw/iir_pull.json (+ outage CSVs when the shape "
+            "matches), then rebuild the workbook to refresh Outages tabs.",
+        ]
+        for i, n in enumerate(iir_notes):
+            ws.cell(row=23 + i, column=1, value=n).font = FONT_SMALL
+
+        # ---- EA block (rows 28-31)
+        _hdr(ws, 28, 1, "EA — ENERGY ASPECTS (primary demand/balance source)")
+        ea_notes = [
+            "No public EA API from this build. EA monthly balance + site "
+            "capacity land via the ingest commands into Data / US Balance; "
+            "the Assumptions DEMAND block picks up the latest EA month live.",
+            "If the desk gets EA API access (data.energyaspects.com), wire "
+            "it exactly like the EIA block above: key cell + WEBSERVICE URL "
+            "+ FILTERXML xpath.",
+        ]
+        for i, n in enumerate(ea_notes):
+            ws.cell(row=29 + i, column=1, value=n).font = FONT_SMALL
+
+        for c, w in [(1, 58), (2, 18), (3, 16), (4, 12), (5, 8), (6, 100)]:
+            ws.column_dimensions[get_column_letter(c)].width = w
+        ws.freeze_panes = "A7"
 
     # ------------------------------------------------------- CrudeSlate tab
 

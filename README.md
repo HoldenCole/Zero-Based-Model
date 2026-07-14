@@ -128,6 +128,8 @@ python -m naphtha_model export --dump --out flat.xlsx     # flat value dump
 python -m naphtha_model ingest-yields data/raw/estimated_refinery_outputs_2024.xlsx
 python -m naphtha_model ingest-outages data/raw/offline_events_units_db.xlsx
 python -m naphtha_model outages --days 90 --padd 3        # live + upcoming TARs
+python -m naphtha_model pull-eia --api-key <KEY>          # EIA weekly/monthly -> eia_feed.csv
+python -m naphtha_model pull-iir --url <QUERY> --token <TOK>  # IIR offline events -> iir_pull.json
 python -m naphtha_model calibrate --padd 3                # model vs 2024 actuals
 
 pytest                                            # run the test suite
@@ -150,6 +152,7 @@ regenerates it when the underlying data/ files change.
 | Effective | demonstrated capacities (max annual throughput 2017-2024 excl. 2020) + PADD nameplate/effective/running rollup |
 | CrudeSlate | actual crude diet per refinery + purchased feedstocks (merchant naphtha buyers flagged) |
 | BlendEcon | blend value spreads, arb netbacks, max-light/max-heavy slate scenarios — activates when the Assumptions price/freight inputs are filled |
+| Live Feeds | in-workbook API pulls (WEBSERVICE/FILTERXML): EIA weekly/monthly series with a free key; IIR offline-events query slot (token). Keys are typed by the user, never shipped. Assumptions DEMAND block reads the EIA petchem-naphtha pull |
 | KitWalk | the naphtha path per refinery (CDU → SR naphtha → NHT → reformer → net) vs 2024 actual, with delta flags — the yield-tuning workbench |
 
 `export --full` builds the extended workbook described below (forward
@@ -232,6 +235,10 @@ window.
       Galveston Bay with real unit capacities and tune yields via the
       calibration view
 - [ ] Populate the PADD 3 turnaround schedule
+- [x] Live Feeds tab: EIA API pull inside the workbook (verified series:
+      MNFUPUS2 petchem-naphtha demand, WGIRIUS2/WCRRIUS2/WOCLEUS2/WPULEUS3
+      weekly refinery data) + `pull-eia`/`pull-iir` CLI fallbacks; demand
+      source toggle Manual / EA latest / EIA feed on Assumptions
 - [ ] Wire in ship-tracking / fixture feed into `data/flows/`
 - [ ] Refinery margin lens ("how does this refinery think about margins")
 - [ ] Europe, then Asia-Pacific regions

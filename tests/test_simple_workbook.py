@@ -51,8 +51,9 @@ def test_tab_layout(built):
     wb = openpyxl.load_workbook(out)
     assert wb.sheetnames == ["Cover", "Assumptions", "Individual Refineries",
                              "Outages", "Outage History", "Kpler Flows",
-                             "US Balance", "CrudeSlate", "BlendEcon", "KitWalk",
-                             "Nameplate", "Effective", "Data"]
+                             "US Balance", "Live Feeds", "CrudeSlate",
+                             "BlendEcon", "KitWalk", "Nameplate", "Effective",
+                             "Data"]
     # presentation layer: charts + live KPIs on the cover, themed tabs
     cover = wb["Cover"]
     assert len(cover._charts) == 4
@@ -108,6 +109,25 @@ def test_new_tabs_are_wired(built):
     for tab in ("Cover", "Outages", "Outage History", "US Balance", "BlendEcon"):
         for ch in wb[tab]._charts:
             assert ch.x_axis.delete is False and ch.y_axis.delete is False
+    # Live Feeds: in-workbook API pulls, no key/token ever shipped
+    lf = wb["Live Feeds"]
+    assert lf["C8"].value in (None, "")          # EIA key cell empty
+    assert lf["C19"].value in (None, "")         # IIR token cell empty
+    assert "WEBSERVICE" in str(lf["C10"].value)
+    assert "api.eia.gov/v2/seriesid" in str(lf["F10"].value)
+    assert lf["B10"].value == "PET.MNFUPUS2.M"
+    # demand toggle: US Balance reads the Assumptions DEMAND USED cell
+    assert str(ub["C7"].value).startswith("=Assumptions!")
+    a = wb["Assumptions"]
+    demand = [c for row in a.iter_rows(min_row=1, max_row=200, min_col=10,
+                                       max_col=30)
+              for c in row if c.value == "DEMAND USED"]
+    assert len(demand) == 1
+    picker = a.cell(row=demand[0].row, column=demand[0].column + 1).value
+    assert "Manual" in str(picker) and "EA latest" in str(picker)
+    # the EIA leg one row up stages the Live Feeds pull
+    eia_leg = a.cell(row=demand[0].row - 1, column=demand[0].column + 1).value
+    assert "'Live Feeds'" in str(eia_leg)
     # unit mode defaults to assumption
     ir = wb["Individual Refineries"]
     modes = {ir.cell(row=r, column=9).value for r in range(3, 60)

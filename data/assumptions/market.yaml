@@ -15,13 +15,17 @@ prices:                       # order fixed: BlendEcon references these rows
   - {key: brent,          label: Brent,                                      source: bdp, ticker: CO1 Comdty}
   - {key: wcs_diff,       label: WCS vs WTI,                                 source: bdp, ticker: GCM11635 Index}
   - {key: condensate,     label: Condensate Dif,                             source: bdp, ticker: DGWA Comdty}
+# freight rates are entered AS QUOTED (tanker routes come in $/mt); the
+# workbook converts to $/bbl via the naphtha bbl-per-mt factor and BlendEcon
+# only ever reads the converted $/bbl cells
+bbl_per_mt: 8.9
 freight:
-  - {key: usgc_asia,     label: USGC -> Asia,               source: formula, formula: "=S{next}", note: "*priced off USGC->NWE*"}
-  - {key: usgc_nwe,      label: USGC -> NWE,                source: static, value: 42.18, note: TC14}
-  - {key: nwe_usgc,      label: NWE -> USGC,                source: static, value: 20.91, note: TC2}
-  - {key: jones_act,     label: USGC -> USAC (Jones Act),   source: static, value: 15,    note: Made up for testing purposes}
-  - {key: pipeline,      label: PADD3 -> PADD2 pipeline,    source: static, value: 10.29, note: Explorer}
-  - {key: storage,       label: Storage ($/bbl/month),      source: static, value: 2,     note: Made up for testing purposes}
+  - {key: usgc_asia,     label: USGC -> Asia,               source: formula, formula: "=S{next}", quote_unit: $/mt,  note: "*priced off USGC->NWE*"}
+  - {key: usgc_nwe,      label: USGC -> NWE,                source: static, value: 42.18, quote_unit: $/mt,  note: TC14}
+  - {key: nwe_usgc,      label: NWE -> USGC,                source: static, value: 20.91, quote_unit: $/mt,  note: TC2}
+  - {key: jones_act,     label: USGC -> USAC (Jones Act),   source: static, value: 15,    quote_unit: $/bbl, note: Made up for testing purposes}
+  - {key: pipeline,      label: PADD3 -> PADD2 pipeline,    source: static, value: 10.29, quote_unit: $/bbl, note: Explorer}
+  - {key: storage,       label: Storage ($/bbl/month),      source: static, value: 2,     quote_unit: $/bbl, note: Made up for testing purposes}
 blend_scenarios:
   - {key: light_uplift,  label: "Max-light: naphtha yield uplift (pts on crude)",    value: 5, note: Made up for testing purposes}
   - {key: heavy_cut,     label: "Max-heavy: naphtha yield reduction (pts on crude)", value: 5, note: Made up for testing purposes}

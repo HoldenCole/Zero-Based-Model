@@ -98,6 +98,27 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_slate.add_argument("refinery_id")
 
+    p_peia = sub.add_parser(
+        "pull-eia",
+        help="pull EIA weekly/monthly series into data/reference/eia_feed.csv "
+             "(same series the workbook's Live Feeds tab pulls)")
+    p_peia.add_argument("--api-key", required=True,
+                        help="free key from eia.gov/opendata/register.php")
+    p_peia.add_argument("--series", nargs="*", default=None,
+                        help="EIA series ids (default: the Live Feeds set)")
+
+    p_piir = sub.add_parser(
+        "pull-iir",
+        help="pull the desk's IIR offline-events query to data/raw/iir_pull.json")
+    p_piir.add_argument("--url", required=True,
+                        help="the desk's working IIR REST query URL")
+    p_piir.add_argument("--token", required=True,
+                        help="IIR API token (expires every 30 days)")
+    p_piir.add_argument("--auth", choices=["query", "bearer"], default="query",
+                        help="token as &token= query param (default) or "
+                             "Authorization: Bearer header")
+    p_piir.add_argument("--out", default=None, help="output json path")
+
     p_exp = sub.add_parser("export", help="build the live desk Excel workbook")
     p_exp.add_argument("--out", default="naphtha_model.xlsx")
     p_exp.add_argument(
@@ -111,6 +132,34 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     args = parser.parse_args(argv)
+
+    if args.command == "pull-eia":
+        from .feeds import pull_eia
+
+        path, rows = pull_eia(args.api_key, series=args.series or None)
+        print(f"wrote {path} ({len(rows)} rows)")
+        seen = set()
+        for row in rows:                      # newest-first per series
+            if row["series"] not in seen:
+                seen.add(row["series"])
+                print(f"    {row['series']}: {row['value']} "
+                      f"{row['units']} ({row['period']})")
+        return 0
+
+    if args.command == "pull-iir":
+        from .feeds import pull_iir
+
+        path, summary = pull_iir(
+            args.url, args.token, auth=args.auth,
+            out_json=Path(args.out) if args.out else None)
+        print(f"wrote {path} ({summary['bytes']} bytes, "
+              f"{summary['records']} records)")
+        if summary["is_oev"]:
+            print("looks like IIR OEV records - wire into ingest_outages "
+                  "to refresh the outage CSVs, then rebuild the workbook")
+        elif summary["fields"]:
+            print("fields: " + ", ".join(summary["fields"]))
+        return 0
 
     if args.command == "ingest-yields":
         from .ingest import ingest_yields
